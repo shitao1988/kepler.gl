@@ -27,15 +27,11 @@ export const takeScreenshot = async (options = {
   failureThreshold: 1.00,
   failureThresholdType: 'percent'
 }) => {
-  const image = await page.screenshot(options);
-  expect(image).toMatchImageSnapshot();
+  const image = await page.screenshot();
+  expect(image).toMatchImageSnapshot(options);
 };
 
 export const detectModalClosing = () => page.waitFor(() =>
   !document.querySelector('.modal--wrapper')
 );
 
-export const setupTest = async page => {
-  await page.setViewport({ width: 1366, height: 768 });
-  await page.goto(URL, {waitUntil: 'domcontentloaded'});
-};

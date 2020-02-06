@@ -23,8 +23,7 @@ import {
   detectModalClosing,
   FILE_PATH,
   FILE_INPUT_IDENTIFIER,
-  takeScreenshot,
-  setupTest
+  takeScreenshot
 } from './utils';
 
 const TIMEOUT = 10000;
@@ -104,7 +103,7 @@ describe('Load File and Filters', () => {
     await page.click(confirmButtonClassname);
 
     await detectModalClosing();
-  });
+  }, TIMEOUT);
 
   test('Show Legend', async () => {
     await page.click('.show-legend.map-control-button');
@@ -125,6 +124,9 @@ describe('Load File and Filters', () => {
     await page.click(splitMapButton);
 
     await page.waitForSelector(closeSplitMapButton);
+
+    // wait for second map to load tiles
+    await page.waitFor(2500);
 
     await takeScreenshot();
 
@@ -163,10 +165,7 @@ describe('Load File and Filters', () => {
     // click outside polygon
     await page.mouse.click(600, 485, { button: 'left' });
 
-    await takeScreenshot({
-      failureThreshold: 1.00,
-      failureThresholdType: 'percent'
-    });
+    await takeScreenshot();
 
     await detectModalClosing();
   });

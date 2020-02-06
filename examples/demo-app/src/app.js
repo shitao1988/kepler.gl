@@ -328,17 +328,6 @@ class App extends Component {
       // We expect an InteractiveMap created by KeplerGl's MapContainer.
       // https://uber.github.io/react-map-gl/#/Documentation/api-reference/interactive-map
       const map = mapbox.getMap();
-      const {
-        location: {query = {}} = {}
-      } = this.props;
-      if (query.events !== undefined) {
-        map.on('sourcedata', () => {
-          if (map.areTilesLoaded()) {
-            window.dispatchEvent(new Event('maptilesloaded'));
-          }
-        });
-      }
-
       map.on('zoomend', e => {
         // console.log(`Map ${index} zoom level: ${e.target.style.z}`);
       });
