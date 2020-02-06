@@ -29,7 +29,10 @@ import {
 
 const TIMEOUT = 10000;
 
-beforeAll(async () => setupTest(page));
+beforeAll(async () => {
+  await page.setViewport({ width: 1366, height: 768 });
+  await page.goto(URL, {waitUntil: 'domcontentloaded'});
+});
 
 describe('Load File and Filters', () => {
   const confirmButtonClassname = '.confirm-button';

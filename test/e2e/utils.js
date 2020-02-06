@@ -35,7 +35,7 @@ export const detectModalClosing = () => page.waitFor(() =>
   !document.querySelector('.modal--wrapper')
 );
 
-export const setupTest = async (page) => {
+export const setupTest = async page => {
   await page.setViewport({ width: 1366, height: 768 });
   await page.goto(URL, {waitUntil: 'domcontentloaded'});
 };

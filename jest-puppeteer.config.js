@@ -20,7 +20,15 @@
 
 module.exports = {
   launch: {
-    headless: false,
+    headless: true,
     devtools: false
+  },
+  server: {
+    command: 'yarn start',
+    port: 8080,
+    launchTimeout: 40000,
+    waitOnScheme: {
+      delay: 30000
+    }
   }
 };
