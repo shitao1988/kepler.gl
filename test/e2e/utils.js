@@ -18,35 +18,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {useCallback} from 'react';
-import classnames from 'classnames';
-import styled from 'styled-components';
+import path from "path";
 
-const StyledDiv = styled.div`
-  color: ${props => props.active ?
-  'white' : props.theme.textColor
-  };
-`;
+export const FILE_PATH = path.join(__dirname, '../fixtures/csvall.csv');
+export const FILE_INPUT_IDENTIFIER = '.file-dialog-input';
 
-const ToolbarItem = React.memo(({active, className, icon, label, onClick}) => {
+export const takeScreenshot = async (options = {
+  failureThreshold: 1.00,
+  failureThresholdType: 'percent'
+}) => {
+  const image = await page.screenshot(options);
+  expect(image).toMatchImageSnapshot();
+};
 
-  const _onClick = useCallback((e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    onClick(e);
-  }, [onClick]);
+export const detectModalClosing = () => page.waitFor(() =>
+  !document.querySelector('.modal--wrapper')
+);
 
-  return (
-    <StyledDiv
-      active={active}
-      className={classnames('toolbar-item', className)}
-      onClick={_onClick}>
-      {icon}
-      <div className="toolbar-item__title">{label}</div>
-    </StyledDiv>
-  );
-});
-
-ToolbarItem.displayName = 'ToolbarItem';
-
-export default ToolbarItem;
+export const setupTest = async (page) => {
+  await page.setViewport({ width: 1366, height: 768 });
+  await page.goto(URL, {waitUntil: 'domcontentloaded'});
+};

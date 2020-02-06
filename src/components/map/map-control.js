@@ -22,6 +22,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createSelector} from 'reselect';
 import styled from 'styled-components';
+import classnames from 'classnames';
 
 import {Tooltip, IconRoundSmall, MapControlButton} from 'components/common/styled-components';
 import MapLayerSelector from 'components/common/map-layer-selector';
@@ -144,13 +145,14 @@ const LayerSelectorPanel = React.memo(({
 
 LayerSelectorPanel.displayName = 'LayerSelectorPanel';
 
-const MapControlPanel = React.memo(({children, header, onClick, scale = 1, isExport}) => (
+const MapControlPanel = React.memo(({children, className, header, onClick, scale = 1, isExport}) => (
   <StyledMapControlPanel
     style={{
       transform: `scale(${scale}) translate(calc(-${25 * (scale - 1)}% - ${10 *
         scale}px), calc(${25 * (scale - 1)}% + ${10 * scale}px))`,
       marginBottom: '8px'
     }}
+    className={className}
   >
     <StyledMapControlPanelHeader>
       {isExport ? (
@@ -159,7 +161,7 @@ const MapControlPanel = React.memo(({children, header, onClick, scale = 1, isExp
         <span style={{verticalAlign: 'middle'}}>{header}</span>
       )}
       {isExport ? null : (
-        <IconRoundSmall>
+        <IconRoundSmall className="close-map-control-item">
           <Close height="16px" onClick={onClick} />
         </IconRoundSmall>
       )}
@@ -187,6 +189,7 @@ const MapLegendPanel = ({layers, isActive, scale, onToggleMenuPanel, isExport}) 
     </MapControlButton>
   ) : (
     <MapControlPanel
+      className="map-legend"
       scale={scale}
       header={'Layer Legend'}
       onClick={onToggleMenuPanel}
@@ -206,7 +209,7 @@ const SplitMapButton = React.memo(({isSplit, mapIndex, onToggleSplitMap}) => (
       onToggleSplitMap(isSplit ? mapIndex : undefined);
     }}
     key={`split-${isSplit}`}
-    className="map-control-button split-map"
+    className={classnames('map-control-button', 'split-map', {'close-map': isSplit})}
     data-tip
     data-for="action-toggle"
   >
@@ -255,28 +258,35 @@ const MapDrawPanel = React.memo(({
   onToggleEditorVisibility
 }) => {
   return (
-    <div style={{position: 'relative'}}>
+    <div
+      className="map-draw-controls"
+      style={{position: 'relative'}}
+    >
       {isActive ? (
         <StyledToolbar show={isActive}>
           <ToolbarItem
+            className="map-draw-controls__edit"
             onClick={() => onSetEditorMode(EDITOR_MODES.EDIT)}
             label="select"
             icon={(<CursorClick height="22px"/>)}
             active={editor.mode === EDITOR_MODES.EDIT}
           />
           <ToolbarItem
+            className="map-draw-controls__draw-polygon"
             onClick={() => onSetEditorMode(EDITOR_MODES.DRAW_POLYGON)}
             label="polygon"
             icon={(<Polygon height="22px"/>)}
             active={editor.mode === EDITOR_MODES.DRAW_POLYGON}
           />
           <ToolbarItem
+            className="map-draw-controls__draw-rectangle"
             onClick={() => onSetEditorMode(EDITOR_MODES.DRAW_RECTANGLE)}
             label="rectangle"
             icon={(<Rectangle height="22px"/>)}
             active={editor.mode === EDITOR_MODES.DRAW_RECTANGLE}
           />
           <ToolbarItem
+            className="map-draw-controls__toggle-visibility"
             onClick={onToggleEditorVisibility}
             label={editor.visible ? 'hide' : 'show'}
             icon={editor.visible ? (<EyeSeen height="22px"/>) : (<EyeUnseen height="22px"/>)}

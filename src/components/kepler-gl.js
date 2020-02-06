@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 import React, {Component, createRef} from 'react';
+import PropTypes from 'prop-types';
 import {console as Console} from 'global/window';
 import {bindActionCreators} from 'redux';
 import styled, {ThemeProvider, withTheme} from 'styled-components';
@@ -101,6 +102,37 @@ function KeplerGlFactory(
   NotificationPanel
 ) {
   class KeplerGL extends Component {
+
+    static propTypes = {
+      // props
+      id: PropTypes.string.isRequired,
+      appName: PropTypes.string,
+      version: PropTypes.string,
+      onSaveMap: PropTypes.func,
+      onViewStateChange: PropTypes.func,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      mapboxApiAccessToken: PropTypes.string.isRequired,
+      mapboxApiUrl: PropTypes.string,
+      getMapboxRef: PropTypes.func,
+
+      // redux state
+      mapStyle: PropTypes.object,
+      mapState: PropTypes.object,
+      uiState: PropTypes.object,
+      visState: PropTypes.object,
+
+      // actions,
+      visStateActions: PropTypes.object,
+      mapStateActions: PropTypes.object,
+      mapStyleActions: PropTypes.object,
+      uiStateActions: PropTypes.object,
+
+      // size
+      sidePanelWidth: PropTypes.number,
+      theme: PropTypes.object
+    };
+
     static defaultProps = {
       mapStyles: [],
       mapStylesReplaceDefault: false,

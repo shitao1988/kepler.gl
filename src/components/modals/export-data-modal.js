@@ -136,6 +136,7 @@ const ExportDataModalFactory = () => {
               </div>
               <div className="selection">
                 <StyledFilteredOption
+                  className="unfiltered-option"
                   selected={!filtered}
                   onClick={() => onChangeExportFiltered(false)}
                 >
@@ -145,6 +146,7 @@ const ExportDataModalFactory = () => {
                   </div>
                 </StyledFilteredOption>
                 <StyledFilteredOption
+                  className="filtered-option"
                   selected={filtered}
                   onClick={() => onChangeExportFiltered(true)}
                 >

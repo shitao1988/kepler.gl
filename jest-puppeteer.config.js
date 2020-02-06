@@ -18,35 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {useCallback} from 'react';
-import classnames from 'classnames';
-import styled from 'styled-components';
-
-const StyledDiv = styled.div`
-  color: ${props => props.active ?
-  'white' : props.theme.textColor
-  };
-`;
-
-const ToolbarItem = React.memo(({active, className, icon, label, onClick}) => {
-
-  const _onClick = useCallback((e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    onClick(e);
-  }, [onClick]);
-
-  return (
-    <StyledDiv
-      active={active}
-      className={classnames('toolbar-item', className)}
-      onClick={_onClick}>
-      {icon}
-      <div className="toolbar-item__title">{label}</div>
-    </StyledDiv>
-  );
-});
-
-ToolbarItem.displayName = 'ToolbarItem';
-
-export default ToolbarItem;
+module.exports = {
+  launch: {
+    headless: false,
+    devtools: false
+  }
+};

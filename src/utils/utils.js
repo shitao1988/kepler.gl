@@ -150,3 +150,13 @@ const setPath = ([key, ...next], value, obj) => {
  */
 export const set = (path, value, obj) =>
   obj === null ? obj : setPath(path, value, obj);
+
+/**
+ * Return a new string by replacing all white spaces with '-' and converting all letters to lower case
+ * @param {string} name
+ * @return {string}
+ */
+export function toCSSClassName(name) {
+  return name.replace(/\s+|:/g, '-').toLowerCase();
+}
+

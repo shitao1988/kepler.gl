@@ -169,7 +169,11 @@ export function SaveExportDropdownFactory(
     onClose
   }) => {
     return (
-      <StyledToolbar show={show} onClose={onClose} className="save-export-dropdown">
+      <StyledToolbar
+        show={show}
+        onClose={onClose}
+        className="save-export-dropdown"
+      >
         <ClickOutsideCloseDropdown
           className="save-export-dropdown__inner"
           show={show}

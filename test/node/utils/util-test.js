@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import test from 'tape';
-import {set, toArray} from 'utils/utils';
+import {set, toArray, toCSSClassName} from 'utils/utils';
 
 test('Utils -> set', t => {
   const obj1 = {map: {map1: 'world'}};
@@ -57,6 +57,57 @@ test('Utils -> toArray', t => {
     toArray('test'),
     ['test'],
     'Should return an array with one element for a string'
+  );
+
+  t.end();
+});
+
+test('Utils -> toArray', t => {
+  t.deepEqual(
+    toArray(),
+    [],
+    'Should return an empty array for undefined value'
+  );
+
+  t.deepEqual(
+    toArray([1, 2]),
+    [1, 2],
+    'Should not change an existing array'
+  );
+
+  t.deepEqual(
+    toArray(null),
+    [],
+    'Should return an empty array for a null value'
+  );
+
+  t.deepEqual(
+    toArray('test'),
+    ['test'],
+    'Should return an array with one element for a string'
+  );
+
+  t.end();
+});
+
+test('Utils - toCSSClassName', t => {
+
+  t.equal(
+    toCSSClassName('Export Image'),
+    'export-image',
+    'Should convert Export Image to export-image'
+  );
+
+  t.equal(
+    toCSSClassName('Save    Map'),
+    'save-map',
+    'Should convert Save    Map to export-map'
+  );
+
+  t.equal(
+    toCSSClassName('Export:Image'),
+    'export-image',
+    'Should convert Export:Image to export-image'
   );
 
   t.end();

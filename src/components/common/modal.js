@@ -109,13 +109,15 @@ const FooterActionWrapper = styled.div`
 const defaultCancelButton = {
   link: true,
   large: true,
-  children: 'Cancel'
+  children: 'Cancel',
+  className: 'cancel-button'
 };
 
 const defaultConfirmButton = {
   large: true,
   width: '160px',
-  children: 'Confirm'
+  children: 'Confirm',
+  className: 'confirm-button'
 };
 
 export const ModalFooter = ({
@@ -129,7 +131,10 @@ export const ModalFooter = ({
   return (
     <StyledModalFooter className="modal--footer">
       <FooterActionWrapper>
-        <Button {...cancelButtonProps} onClick={cancel}>
+        <Button
+          {...cancelButtonProps}
+          onClick={cancel}
+        >
           {cancelButtonProps.children}
         </Button>
         <Button {...confirmButtonProps} onClick={confirm}>
@@ -203,7 +208,6 @@ class ModalDialog extends Component {
               />
             )}
           </div>
-
         </ModalContentWrapper>
       </Modal>
     );

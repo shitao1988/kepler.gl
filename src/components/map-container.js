@@ -92,6 +92,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
       onMapToggleLayer: PropTypes.func,
       onMapStyleLoaded: PropTypes.func,
       onMapRender: PropTypes.func,
+      onMapTilesLoaded: PropTypes.func,
       getMapboxRef: PropTypes.func,
       index: PropTypes.number
     };

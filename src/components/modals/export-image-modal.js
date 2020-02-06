@@ -21,7 +21,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
+import {toCSSClassName} from 'utils/utils';
 import {calculateExportImageSize} from 'utils/export-image-utils';
 import {
   EXPORT_IMG_RATIO_OPTIONS,
@@ -156,6 +156,7 @@ class ExportImageModal extends Component {
               {EXPORT_IMG_RATIO_OPTIONS.map(op => (
                 <SelectionButton
                   key={op.id}
+                  className={`ratio-${toCSSClassName(op.label)}`}
                   selected={ratio === op.id}
                   onClick={() => onChangeRatio({ratio: op.id})}
                 >
@@ -171,6 +172,7 @@ class ExportImageModal extends Component {
               {EXPORT_IMG_RESOLUTION_OPTIONS.map(op => (
                 <SelectionButton
                   key={op.id}
+                  className={`resolution-${toCSSClassName(op.label)}`}
                   selected={resolution === op.id}
                   onClick={() =>
                     op.available && onChangeResolution({resolution: op.id})

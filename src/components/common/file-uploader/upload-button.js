@@ -32,6 +32,10 @@ const Wrapper = styled.div`
     cursor: pointer;
     font-weight: 500;
   }
+  
+  input {
+    display: none;
+  }
 `;
 /*
 Inspired by https://github.com/okonet/react-dropzone/blob/master/src/index.js
@@ -62,10 +66,15 @@ export default class UploadButton extends Component {
         <input
           type="file"
           ref={this._fileInput}
-          style={{display: 'none'}}
           onChange={this._onChange}
+          className="file-dialog-input"
         />
-        <span className="file-upload__upload-button-span" onClick={this._onClick}>{this.props.children}</span>
+        <span
+          className="file-upload__upload-button-span"
+          onClick={this._onClick}
+        >
+          {this.props.children}
+        </span>
       </Wrapper>
     );
   }

@@ -24,6 +24,7 @@ import {
   ArrowRight
 } from 'components/common/icons';
 import Checkbox from 'components/common/switch';
+import classnames from 'classnames';
 
 const StyledItem = styled.div`
   display: flex;
@@ -92,7 +93,7 @@ const renderChildren = (child, index) => React.cloneElement(child, {
       }
     }
   },
-  className: 'action-panel-item'
+  className: classnames('action-panel-item', child.props.className)
 });
 
 export const ActionPanelItem = React.memo(({
