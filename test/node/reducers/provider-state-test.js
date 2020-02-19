@@ -60,7 +60,7 @@ class MockProvider {
   hasSharingUrl() {
     return true;
   }
-  async uploadFile(args) {
+  async uploadMap(args) {
     const promise = new Promise((resolve, reject) => {
       () => resolve('done!')();
     });
@@ -117,8 +117,8 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD', t => {
   );
   t.equal(
     errSpy.getCall(1).args[0],
-    'uploadFile is not a function of Cloud provider: taro',
-    'should warn when cannot find uploadFile function'
+    'uploadMap is not a function of Cloud provider: taro',
+    'should warn when cannot find uploadMap function'
   );
 
   // mapData
@@ -128,7 +128,9 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD', t => {
     exportFileToCloud({
       mapData: {data: []},
       provider: mockProvider,
-      isPublic: false
+      options: {
+        isPublic: false
+      }
     })
   );
 
@@ -138,13 +140,14 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD', t => {
   t.deepEqual(
     nextState,
     {
-      isLoading: true,
-      error: null,
+      isProviderLoading: true,
+      providerError: null,
       currentProvider: 'taro',
       successInfo: {},
-      initialState: {}
+      initialState: {},
+      mapSaved: null
     },
-    'Should set isLoading and current provider'
+    'Should set isProviderLoading and current provider'
   );
 
   t.equal(
@@ -158,9 +161,9 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD', t => {
       provider: mockProvider,
       payload: {
         mapData: {data: []},
-        blob: null,
-        fileName: null,
-        isPublic: false
+        options: {
+          isPublic: false
+        }
       }
     },
     'should call upload file with correct payload'
@@ -175,13 +178,14 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD', t => {
   t.deepEqual(
     resultState1,
     {
-      isLoading: false,
-      error: null,
+      isProviderLoading: false,
+      providerError: null,
       currentProvider: 'taro',
       initialState: {},
-      successInfo: {metaUrl: 'taro_and_blue', folderLink: undefined}
+      mapSaved: 'taro',
+      successInfo: {url: 'taro_and_blue'}
     },
-    'Should set isLoading to false and successInfo'
+    'Should set isProviderLoading to false and successInfo, mapSaved to taro'
   );
   const task2 = drainTasksForTesting();
   t.ok(task2.length === 0, 'should create 0 task');
@@ -194,10 +198,11 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD', t => {
   t.deepEqual(
     resultState2,
     {
-      isLoading: false,
-      error: 'hello',
+      isProviderLoading: false,
+      providerError: 'hello',
       currentProvider: 'taro',
       initialState: {},
+      mapSaved: null,
       successInfo: {}
     },
     'Should set isLoading to false and error'
@@ -236,7 +241,11 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD -> onSuccess : onError', t =
   const onSuccess = args => {
     t.deepEqual(
       args,
-      {response: mockResponse, provider: mockProvider},
+      {
+        response: mockResponse,
+        provider: mockProvider,
+        options: {isPublic: false}
+      },
       'should call onSuccess with arguments'
     );
     return {};
@@ -254,7 +263,10 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD -> onSuccess : onError', t =
       provider: mockProvider,
       onSuccess,
       onError,
-      closeModal: true
+      closeModal: true,
+      options: {
+        isPublic: false
+      }
     })
   );
   const [task1, ...more] = drainTasksForTesting();
@@ -275,13 +287,14 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD -> onSuccess : onError', t =
   t.deepEqual(
     nextState,
     {
-      isLoading: false,
-      error: null,
+      isProviderLoading: false,
+      providerError: null,
       currentProvider: 'taro',
+      mapSaved: 'taro',
       initialState: {},
-      successInfo: {metaUrl: 'taro_and_blue', folderLink: undefined}
+      successInfo: {url: 'taro_and_blue'}
     },
-    'Should set isLoading to false and successInfo'
+    'Should set isProviderLoading to false and successInfo'
   );
 
   const resultState1 = reducer(nextState, succeedTaskInTest(task2, undefined));
@@ -299,23 +312,37 @@ test('#providerStateReducer -> EXPORT_FILE_TO_CLOUD -> onSuccess : onError', t =
   t.ok(task6.type === 'DELAY_TASK', 'should create 1 DELAY_TASK');
 
   // toggleModal(null),
-  const resultState3 = composedReducer(resultState2, succeedTaskInTest(task4, undefined));
+  const resultState3 = composedReducer(
+    resultState2,
+    succeedTaskInTest(task4, undefined)
+  );
   t.deepEqual(
     resultState3,
     {
-      isLoading: false,
-      error: null,
+      isProviderLoading: false,
+      providerError: null,
       currentProvider: 'taro',
+      mapSaved: 'taro',
       initialState: {},
-      successInfo: {metaUrl: 'taro_and_blue', folderLink: undefined},
+      successInfo: {url: 'taro_and_blue'},
       modalId: null
     },
     'Should call toggleModal(null'
   );
-  const resultState4 = composedReducer(resultState3, succeedTaskInTest(task5, undefined));
-  t.equal(resultState4.notification.type, 'success', 'Should call addNotification with successNote');
+  const resultState4 = composedReducer(
+    resultState3,
+    succeedTaskInTest(task5, undefined)
+  );
+  t.equal(
+    resultState4.notification.type,
+    'success',
+    'Should call addNotification with successNote'
+  );
 
-  const resultState5 = composedReducer(resultState4, succeedTaskInTest(task6, undefined));
+  const resultState5 = composedReducer(
+    resultState4,
+    succeedTaskInTest(task6, undefined)
+  );
   t.equal(resultState5.remove, true, 'Should call removeNotification');
 
   t.end();
@@ -328,7 +355,9 @@ test('#providerStateReducer -> RESET_PROVIDER_STATUS', t => {
     exportFileToCloud({
       mapData: {data: []},
       provider: mockProvider,
-      isPublic: false
+      options: {
+        isPublic: false
+      }
     })
   );
   const nextState1 = reducer(nextState, resetProviderStatus());
@@ -336,27 +365,29 @@ test('#providerStateReducer -> RESET_PROVIDER_STATUS', t => {
   t.deepEqual(
     nextState1,
     {
-      isLoading: false,
-      error: null,
+      isProviderLoading: false,
+      providerError: null,
       currentProvider: 'taro',
       successInfo: {},
-      initialState: {}
+      initialState: {},
+      mapSaved: null
     },
     'Should resetProviderStatus'
   );
 
   t.end();
-})
+});
 
 test('#providerStateReducer -> SET_CLOUD_PROVIDER', t => {
   const nextState = reducer(undefined, setCloudProvider('blue'));
   t.deepEqual(
     nextState,
     {
-      isLoading: false,
-      error: null,
+      isProviderLoading: false,
+      providerError: null,
       currentProvider: 'blue',
       successInfo: {},
+      mapSaved: null,
       initialState: {}
     },
     'Should setCloudProvider'

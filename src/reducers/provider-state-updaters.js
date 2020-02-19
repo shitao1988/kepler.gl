@@ -109,7 +109,7 @@ export const exportFileToCloudUpdater = (state, action) => {
   const {
     mapData,
     provider,
-    options,
+    options = {},
     onSuccess,
     onError,
     closeModal
@@ -327,7 +327,7 @@ export const loadCloudMapSuccessUpdater = (state, action) => {
 export const resetProviderStatusUpdater = (state, action) => ({
   ...state,
   isProviderLoading: false,
-  error: null,
+  providerError: null,
   successInfo: {}
 });
 
