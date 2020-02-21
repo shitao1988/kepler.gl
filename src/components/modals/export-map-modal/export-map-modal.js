@@ -70,10 +70,10 @@ function ExportMapModalFactory(
         <StyledExportMapSection>
           <div className="description">
             <div className="title">
-              Map format
+            地图格式
             </div>
             <div className="subtitle">
-              Choose the format to export your map to
+            选择地图导出的格式
             </div>
           </div>
           <div className="selection">

@@ -183,12 +183,12 @@ const MapLegendPanel = ({layers, isActive, scale, onToggleMenuPanel, isExport}) 
       }}
     >
       <Legend height="22px" />
-      <MapLegendTooltip id="show-legend" message={'show legend'} />
+      <MapLegendTooltip id="show-legend" message={'显示图例'} />
     </MapControlButton>
   ) : (
     <MapControlPanel
       scale={scale}
-      header={'Layer Legend'}
+      header={'图层图例'}
       onClick={onToggleMenuPanel}
       isExport={isExport}
     >
@@ -214,7 +214,7 @@ const SplitMapButton = React.memo(({isSplit, mapIndex, onToggleSplitMap}) => (
     <MapControlTooltip
       id="action-toggle"
       message={
-        isSplit ? 'Close current panel' : 'Switch to dual map view'
+        isSplit ? '关闭当前面板' : '双面板模式'
       }
     />
   </MapControlButton>
@@ -235,7 +235,7 @@ const Toggle3dButton = React.memo(({dragRotate, onTogglePerspective}) => (
     <Cube3d height="22px" />
     <MapControlTooltip
       id="action-3d"
-      message={dragRotate ? 'Disable 3D Map' : '3D Map'}
+      message={dragRotate ? '取消 3D 模式' : '3D 模式'}
     />
   </MapControlButton>
 ));
@@ -260,28 +260,28 @@ const MapDrawPanel = React.memo(({
         <StyledToolbar show={isActive}>
           <ToolbarItem
             onClick={() => onSetEditorMode(EDITOR_MODES.EDIT)}
-            label="select"
+            label="选择"
             iconHeight="22px"
             icon={CursorClick}
             active={editor.mode === EDITOR_MODES.EDIT}
           />
           <ToolbarItem
             onClick={() => onSetEditorMode(EDITOR_MODES.DRAW_POLYGON)}
-            label="polygon"
+            label="多面"
             iconHeight="22px"
             icon={Polygon}
             active={editor.mode === EDITOR_MODES.DRAW_POLYGON}
           />
           <ToolbarItem
             onClick={() => onSetEditorMode(EDITOR_MODES.DRAW_RECTANGLE)}
-            label="rectangle"
+            label="矩形"
             iconHeight="22px"
             icon={Rectangle}
             active={editor.mode === EDITOR_MODES.DRAW_RECTANGLE}
           />
           <ToolbarItem
             onClick={onToggleEditorVisibility}
-            label={editor.visible ? 'hide' : 'show'}
+            label={editor.visible ? '隐藏' : '显示'}
             iconHeight="22px"
             icon={editor.visible ? EyeSeen : EyeUnseen}
             active
@@ -300,7 +300,7 @@ const MapDrawPanel = React.memo(({
         <DrawPolygon height="22px"/>
         <MapControlTooltip
           id="map-draw"
-          message="Draw on map"
+          message="标绘"
         />
       </MapControlButton>
     </div>

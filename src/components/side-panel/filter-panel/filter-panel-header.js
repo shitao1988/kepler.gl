@@ -67,7 +67,7 @@ function FilterPanelHeaderFactory() {
       </StyledChildrenContainer>
       <PanelHeaderAction
         id={filter.id}
-        tooltip="delete"
+        tooltip="删除"
         tooltipType="error"
         onClick={removeFilter}
         hoverColor={'errorColor'}

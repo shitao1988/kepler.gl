@@ -42,7 +42,7 @@ import {LAYER_BLENDINGS} from 'constants/default-settings';
 
 const LayerBlendingSelector = ({layerBlending, updateLayerBlending}) => (
   <SidePanelSection>
-    <PanelLabel>Layer Blending</PanelLabel>
+    <PanelLabel>图层混合模式</PanelLabel>
     <ItemSelector
       selectedItems={layerBlending}
       options={Object.keys(LAYER_BLENDINGS)}
@@ -84,7 +84,7 @@ export function AddDataButtonFactory() {
   const AddDataButton = ({onClick, isInactive}) => (
     <Button onClick={onClick} isInactive={!isInactive} width="105px" secondary>
       <Add height="12px" />
-      Add Data
+      添加数据
     </Button>
   );
 
@@ -246,7 +246,7 @@ function LayerManagerFactory(AddDataButton, LayerPanel, SourceDataCatalog) {
             {defaultDataset ? (
               <Button onClick={this._addEmptyNewLayer} width="105px">
                 <Add height="12px" />
-                Add Layer
+                添加图层
               </Button>
             ) : null}
           </SidePanelSection>

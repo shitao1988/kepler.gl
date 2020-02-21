@@ -112,7 +112,7 @@ export default class IconLayer extends Layer {
       id: 'iconInfo',
       template: this._layerInfoModal,
       modalProps: {
-        title: 'How to draw icons'
+        title: '如何绘制图标'
       }
     };
   }

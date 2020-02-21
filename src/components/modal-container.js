@@ -253,7 +253,7 @@ export default function ModalContainerFactory(
                 />
               );
               modalProps = {
-                title: 'Delete Dataset',
+                title: '移除数据集',
                 cssStyle: DeleteDatasetModalStyled,
                 footer: true,
                 onConfirm: () => this._deleteDataset(datasetKeyToRemove),
@@ -261,7 +261,7 @@ export default function ModalContainerFactory(
                 confirmButton: {
                   negative: true,
                   large: true,
-                  children: 'Delete'
+                  children: '移除'
                 }
               };
             }
@@ -275,7 +275,7 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: 'Add Data To Map',
+              title: '添加数据到地图',
               cssStyle: LoadDataModalStyle,
               footer: false,
               onConfirm: this._closeModal
@@ -291,14 +291,14 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: 'Export Image',
+              title: '导出为图片',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onExportImage,
               confirmButton: {
                 large: true,
                 disabled: uiState.exportImage.exporting,
-                children: 'Download'
+                children: '下载'
               }
             };
             break;
@@ -315,13 +315,13 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: 'Export Data',
+              title: '导出数据',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onExportData,
               confirmButton: {
                 large: true,
-                children: 'Export'
+                children: '导出'
               }
             };
             break;
@@ -339,13 +339,13 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: 'Export Map',
+              title: '导出地图',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onExportMap,
               confirmButton: {
                 large: true,
-                children: 'Export'
+                children: '导出'
               }
             };
             break;
@@ -361,14 +361,14 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: 'Add Custom Mapbox Style',
+              title: '添加自定义MapBox样式',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onAddCustomMapStyle,
               confirmButton: {
                 large: true,
                 disabled: !mapStyle.inputStyle.style,
-                children: 'Add Style'
+                children: '添加样式'
               }
             };
             break;
@@ -385,7 +385,7 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: 'Save Map',
+              title: '保存地图',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onSaveMap,
@@ -394,7 +394,7 @@ export default function ModalContainerFactory(
                 disabled: uiState.exportImage.exporting ||
                   !isValidMapInfo(visState.mapInfo) ||
                   !providerState.currentProvider,
-                children: 'Save'
+                children: '保存'
               }
             };
             break;
@@ -409,7 +409,7 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: 'Share URL',
+              title: '分享URL',
               onCancel: this._onCloseSaveMap
             };
             break;

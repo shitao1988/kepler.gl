@@ -89,16 +89,16 @@ const ExportHtmlMap = React.memo(({
     <StyledExportMapSection>
       <div className="description" />
       <div className="selection">
-        Export your map into an interactive html file.
+      将地图导出为交互式html文件。
       </div>
     </StyledExportMapSection>
     <ExportMapStyledExportSection className="export-map-modal__html-options">
       <div className="description">
         <div className="title">
-          Mapbox access token
+        Mapbox访问令牌
         </div>
         <div className="subtitle">
-          Use your own Mapbox access token in the html (optional)
+        在页面中使用您自己的Mapbox访问令牌(可选)
         </div>
       </div>
       <div className="selection">
@@ -112,7 +112,7 @@ const ExportHtmlMap = React.memo(({
           <StyledWarning>{TOKEN_MISUSE_WARNING}</StyledWarning>
           <span>{DISCLAIMER}</span>
           <ExportMapLink href={GITHUB_EXPORT_HTML_MAP}>
-            How to update an existing map token.
+          如何更新现有的地图令牌。
           </ExportMapLink>
         </div>
       </div>

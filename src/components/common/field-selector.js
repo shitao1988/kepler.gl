@@ -101,7 +101,7 @@ export default class FieldSelector extends Component {
     multiSelect: false,
     closeOnSelect: true,
     showToken: true,
-    placeholder: 'Select a field'
+    placeholder: '选择字段'
   };
 
   fieldsSelector = props => props.fields;

@@ -63,7 +63,7 @@ const StyledMapDropdown = styled(StyledPanelHeader)`
 function MapStyleSelectorFactory() {
   const MapStyleSelector = ({mapStyle, onChange, toggleActive, isSelecting}) => (
     <div>
-      <PanelLabel>Map style</PanelLabel>
+      <PanelLabel>底图样式</PanelLabel>
       {Object.keys(mapStyle.mapStyles).map(op => (
         <StyledMapDropdown
           className={classnames('map-dropdown-option', {
@@ -83,7 +83,7 @@ function MapStyleSelectorFactory() {
               className="map-dropdown-option__enable-config"
               id="map-enable-config"
               IconComponent={ArrowDown}
-              tooltip={'Select Base Map Style'}
+              tooltip={'选择底图样式'}
               onClick={toggleActive}
             />
           ) : null}

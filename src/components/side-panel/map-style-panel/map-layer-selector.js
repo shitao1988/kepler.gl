@@ -58,7 +58,7 @@ function LayerGroupSelectorFactory() {
   const LayerGroupSelector = ({layers, editableLayers, onChange, topLayers}) => (
     <StyledInteractionPanel className="map-style__layer-group__selector">
       <div className="layer-group__header">
-        <PanelLabel>Map Layers</PanelLabel>
+        <PanelLabel>图层</PanelLabel>
       </div>
       <PanelContent className="map-style__layer-group">
         {editableLayers.map(slug => (

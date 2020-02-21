@@ -213,7 +213,7 @@ class ItemSelector extends Component {
           options={this.props.options}
           filterOption={this.props.filterOption}
           fixedOptions={this.props.fixedOptions}
-          placeholder="Search"
+          placeholder="查询"
           onOptionSelected={this._selectItem}
           customListComponent={this.props.DropDownRenderComponent}
           customListHeaderComponent={this.props.DropdownHeaderComponent}

@@ -151,7 +151,7 @@ const LayerPanelHeader = ({
       <PanelHeaderAction
         className="layer__visibility-toggle"
         id={layerId}
-        tooltip={isVisible ? 'hide layer' : 'show layer'}
+        tooltip={isVisible ? '隐藏图层' : '显示图层'}
         onClick={onToggleVisibility}
         IconComponent={isVisible ? EyeSeen : EyeUnseen}
         active={isVisible}
@@ -169,7 +169,7 @@ const LayerPanelHeader = ({
         <PanelHeaderAction
           className="layer__remove-layer"
           id={layerId}
-          tooltip={'Remove layer'}
+          tooltip={'移除图层'}
           onClick={onRemoveLayer}
           tooltipType="error"
           IconComponent={Trash}
@@ -178,7 +178,7 @@ const LayerPanelHeader = ({
       <PanelHeaderAction
         className="layer__enable-config"
         id={layerId}
-        tooltip={'Layer settings'}
+        tooltip={'图层设定'}
         onClick={onToggleEnableConfig}
         IconComponent={ArrowDown}
       />

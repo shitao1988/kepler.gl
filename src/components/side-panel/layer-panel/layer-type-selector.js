@@ -25,7 +25,7 @@ import styled from 'styled-components';
 
 import {classList} from 'components/common/item-selector/dropdown-list';
 import ItemSelector from 'components/common/item-selector/item-selector';
-import {CLOUDFRONT} from 'constants/default-settings';
+import {CLOUDFRONT,LABELS_ZH} from 'constants/default-settings';
 
 import {SidePanelSection} from 'components/common/styled-components';
 
@@ -94,18 +94,26 @@ const DropdownListWrapper = styled.div`
   padding: 12px 0 0 12px;
 `;
 
-const LayerTypeListItem = ({value, isTile}) => (
-  <StyledListItem
-    className={classNames('layer-type-selector__item__inner', {list: !isTile})}
-  >
-    <div className="layer-type-selector__item__icon">
-      <value.icon
-        height={`${isTile ? ITEM_SIZE.large : ITEM_SIZE.small}px`}
-      />
-    </div>
-    <div className="layer-type-selector__item__label">{value.label}</div>
-  </StyledListItem>
-);
+const LayerTypeListItem = ({value, isTile}) => {
+  const labels=LABELS_ZH.filter(item => item.value === value.label);
+  const label=labels[0]?labels[0].zh:value.label;
+  return (
+    <StyledListItem
+      className={classNames('layer-type-selector__item__inner', {
+        list: !isTile
+      })}
+    >
+      <div className="layer-type-selector__item__icon">
+        <value.icon
+          height={`${isTile ? ITEM_SIZE.large : ITEM_SIZE.small}px`}
+        />
+      </div>
+      <div className="layer-type-selector__item__label">
+      {label}
+      </div>
+    </StyledListItem>
+  );
+};
 
 const LayerTypeDropdownList = props => (
   <DropdownListWrapper className={classList.list}>
@@ -149,7 +157,7 @@ const LayerTypeSelector = ({layer, layerTypeOptions, onSelect}) => (
         selectedItems={layerTypeOptions.find(op => op.id === layer.type)}
         options={layerTypeOptions}
         multiSelect={false}
-        placeholder="Select A Type"
+        placeholder="选择类型"
         onChange={onSelect}
         getOptionValue={op => op.id}
         filterOption="label"
