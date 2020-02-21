@@ -77,7 +77,8 @@ const identity = d => d;
 
 export const OVERLAY_TYPE = keymirror({
   deckgl: null,
-  mapboxgl: null
+  mapboxgl: null,
+  mapboxglMarker:null
 });
 
 export const layerColors = Object.values(DataVizColors).map(hexToRgb);

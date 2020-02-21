@@ -112,6 +112,10 @@ export default function LayerConfiguratorFactory(SourceDataSelector) {
       return this._renderScatterplotLayerConfig(props);
     }
 
+    _renderPieLayerConfig(props) {
+      return this._renderScatterplotLayerConfig(props);
+    }
+
     _renderScatterplotLayerConfig({
       layer,
       visConfiguratorProps,

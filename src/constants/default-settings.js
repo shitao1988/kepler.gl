@@ -187,6 +187,10 @@ export const LABELS_ZH = [
     zh: '弧'
   },
   {
+    value: 'Pie',
+    zh: '饼图'
+  },
+  {
     value: 'Hexbin',
     zh: '蜂窝'
   },

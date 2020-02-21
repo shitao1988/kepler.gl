@@ -19,14 +19,23 @@
 // THE SOFTWARE.
 
 import {BrushingExtension} from '@deck.gl/extensions';
-import {ScatterplotLayer} from '@deck.gl/layers';
-
-import Layer from '../base-layer';
+import PieLayerIcon from './pie-layer-icon';
+import Layer,{OVERLAY_TYPE}from '../base-layer';
+import React from 'react';
+import {Marker} from 'react-map-gl';
 import {hexToRgb} from 'utils/color-utils';
-import PointLayerIcon from './point-layer-icon';
 import {DEFAULT_LAYER_COLOR, CHANNEL_SCALES} from 'constants/default-settings';
-
 import {getTextOffsetByRadius, formatTextLabelData} from '../layer-text-label';
+
+import {
+  Chart,
+  Geom,
+  Axis,
+  Tooltip,
+  Coord,
+  Guide,
+} from "bizcharts";
+import DataSet from "@antv/data-set";
 
 export const pointPosAccessor = ({lat, lng, altitude}) => d => [
   // lng
@@ -59,7 +68,7 @@ export const pointVisConfigs = {
   }
 };
 
-export default class PointLayer extends Layer {
+export default class PieLayer extends Layer {
   constructor(props) {
     super(props);
 
@@ -67,17 +76,22 @@ export default class PointLayer extends Layer {
     this.getPositionAccessor = () => pointPosAccessor(this.config.columns);
   }
 
+  get overlayType() {
+    return OVERLAY_TYPE.mapboxglMarker;
+  }
+
   get type() {
-    return 'point';
+    return 'pie';
+  }
+
+  get layerIcon() {
+    return PieLayerIcon;
   }
 
   get isAggregated() {
     return false;
   }
 
-  get layerIcon() {
-    return PointLayerIcon;
-  }
   get requiredLayerColumns() {
     return pointRequiredColumns;
   }
@@ -130,7 +144,7 @@ export default class PointLayer extends Layer {
       const layerName = pair.defaultName;
 
       const prop = {
-        label: layerName.length ? layerName : 'Point'
+        label: layerName.length ? layerName : 'Pie'
       };
 
       // default layer color for begintrip and dropoff point
@@ -278,99 +292,99 @@ export default class PointLayer extends Layer {
 
   }
 
-  renderLayer(opts) {
-    const {
-      data,
-      gpuFilter,
-      objectHovered,
-      mapState,
-      interactionConfig
-    } = opts;
-
-    const radiusScale = this.getRadiusScaleByZoom(mapState);
-
-    const layerProps = {
-      stroked: this.config.visConfig.outline,
-      filled: this.config.visConfig.filled,
-      lineWidthScale: this.config.visConfig.thickness,
-      radiusScale,
-      ...(this.config.visConfig.fixedRadius ? {} : {radiusMaxPixels: 500})
-    };
-
-    const updateTriggers = {
-      getPosition: this.config.columns,
-      getRadius: {
-        sizeField: this.config.sizeField,
-        radiusRange: this.config.visConfig.radiusRange,
-        fixedRadius: this.config.visConfig.fixedRadius,
-        sizeScale: this.config.sizeScale
+  renderPieChart(){
+    const { DataView } = DataSet;
+    const { Html } = Guide;
+    const data = [
+      {
+        item: "事例一",
+        count: 40
       },
-      getFillColor: {
-        color: this.config.color,
-        colorField: this.config.colorField,
-        colorRange: this.config.visConfig.colorRange,
-        colorScale: this.config.colorScale
+      {
+        item: "事例二",
+        count: 21
       },
-      getLineColor: {
-        color: this.config.visConfig.strokeColor,
-        colorField: this.config.strokeColorField,
-        colorRange: this.config.visConfig.strokeColorRange,
-        colorScale: this.config.strokeColorScale
+      {
+        item: "事例三",
+        count: 17
       },
-      getFilterValue: gpuFilter.filterValueUpdateTriggers
-    };
-
-    const defaultLayerProps = this.getDefaultDeckLayerProps(opts);
-    const brushingProps = this.getBrushingExtensionProps(interactionConfig);
-    const getPixelOffset = getTextOffsetByRadius(
-      radiusScale,
-      data.getRadius,
-      mapState
-    );
-    const extensions = [...defaultLayerProps.extensions, brushingExtension];
-
-    const sharedProps = {
-      getFilterValue: data.getFilterValue,
-      extensions,
-      filterRange: defaultLayerProps.filterRange,
-      ...brushingProps
-    };
-
-    return [
-      new ScatterplotLayer({
-        ...defaultLayerProps,
-        ...brushingProps,
-        ...layerProps,
-        ...data,
-        parameters: {
-          // circles will be flat on the map when the altitude column is not used
-          depthTest: this.config.columns.altitude.fieldIdx > -1
-        },
-        updateTriggers,
-        extensions
-      }),
-      // hover layer
-      ...(this.isLayerHovered(objectHovered)
-        ? [
-            new ScatterplotLayer({
-              ...this.getDefaultHoverLayerProps(),
-              ...layerProps,
-              data: [objectHovered.object],
-              getLineColor: this.config.highlightColor,
-              getFillColor: this.config.highlightColor,
-              getRadius: data.getRadius,
-              getPosition: data.getPosition
-            })
-
-          ]
-        : []),
-      // text label layer
-      ...this.renderTextLabelLayer({
-        getPosition: data.getPosition,
-        sharedProps,
-        getPixelOffset,
-        updateTriggers
-      }, opts)
+      {
+        item: "事例四",
+        count: 13
+      },
+      {
+        item: "事例五",
+        count: 9
+      }
     ];
+    const dv = new DataView();
+    dv.source(data).transform({
+      type: "percent",
+      field: "count",
+      dimension: "item",
+      as: "percent"
+    });
+
+    return  <Chart
+    height={100}
+    width={100}
+    data={dv}
+    scale={{
+      percent: {
+        formatter: val => {
+          val = val * 100 + "%";
+          return val;
+        }
+      }
+    }}
+    padding={[0, 0, 0, 0]}
+    forceFit
+  >
+    <Coord type={"theta"} radius={0.75} innerRadius={0.6} />
+    <Axis name="percent" />
+
+    <Tooltip
+      showTitle={false}
+      itemTpl="<li><span style=&quot;background-color:{color};&quot; class=&quot;g2-tooltip-marker&quot;></span>{name}: {value}</li>"
+    />
+    <Geom
+      type="intervalStack"
+      position="percent"
+      color="item"
+      tooltip={[
+        "item*percent",
+        (item, percent) => {
+          percent = percent * 100 + "%";
+          return {
+            name: item,
+            value: percent
+          };
+        }
+      ]}
+      style={{
+        lineWidth: 1,
+        stroke: "#fff"
+      }}
+    >
+
+    </Geom>
+  </Chart>
+  }
+
+  renderLayer(opts) {
+    const {data} = opts;
+
+
+
+    return this.config.isVisible&&data.data&&data.data.map(item => {
+      return <Marker
+      latitude={item.position[1]}
+      longitude={item.position[0]}
+      offsetLeft={-50}
+      offsetTop={-50}
+    >
+      <div style={{color:"#FFF"}}>{this.renderPieChart()}</div>
+    </Marker>
+    });
   }
 }
