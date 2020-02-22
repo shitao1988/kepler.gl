@@ -39,7 +39,7 @@ export const iconPosAccessor = ({lat, lng}) => d => [
 ];
 export const iconAccessor = ({icon}) => d => d.data[icon.fieldIdx];
 
-export const iconRequiredColumns = ['lat', 'lng', 'icon'];
+export const iconRequiredColumns = [ 'lng','lat', 'icon'];
 
 export const pointVisConfigs = {
   radius: 'radius',

@@ -1,4 +1,4 @@
-import PieLayerIcon from './pie-layer-icon';
+import BarLayerIcon from './bar-layer-icon';
 import Layer, {OVERLAY_TYPE} from '../base-layer';
 import React from 'react';
 import {Marker} from 'react-map-gl';
@@ -34,7 +34,7 @@ export const pointVisConfigs = {
   }
 };
 
-export default class PieLayer extends Layer {
+export default class BarLayer extends Layer {
   constructor(props) {
     super(props);
 
@@ -47,11 +47,11 @@ export default class PieLayer extends Layer {
   }
 
   get type() {
-    return 'pie';
+    return 'bar';
   }
 
   get layerIcon() {
-    return PieLayerIcon;
+    return BarLayerIcon;
   }
 
   get isAggregated() {
@@ -107,7 +107,7 @@ export default class PieLayer extends Layer {
       const layerName = pair.defaultName;
 
       const prop = {
-        label: layerName.length ? layerName : 'Pie'
+        label: layerName.length ? layerName : 'Bar'
       };
 
       // default layer color for begintrip and dropoff point
@@ -190,9 +190,9 @@ export default class PieLayer extends Layer {
    *
    *
    * @returns
-   * @memberof PieLayer
+   * @memberof BarLayer
    */
-  renderPieChart(item, chartColumns) {
+  renderBarChart(item, chartColumns) {
     if (!chartColumns.length) {
       return null;
     }
@@ -205,49 +205,18 @@ export default class PieLayer extends Layer {
     });
 
     return (
-      <Chart
-        height={100}
-        width={100}
-        data={data}
-        scale={{
-          value: {
-            formatter: val => {
-              val = val * 100 + '%';
-              return val;
-            }
-          }
-        }}
-        padding={[0, 0, 0, 0]}
-        forceFit
-      >
-        <Coord type={'theta'} radius={0.75} innerRadius={0.6} />
-        <Axis name="value" />
-
-        <Tooltip
-          showTitle={false}
-          triggerOn="click"
-          itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
-        />
-        <Geom
-          type="intervalStack"
-          position="value"
-          color="item"
-          tooltip={[
-            'item*value',
-            (item, value) => {
-              value = value * 1.00 + '%';
-              return {
-                name: item,
-                value: value
-              };
-            }
-          ]}
-          style={{
-            lineWidth: 1,
-            stroke: '#fff'
-          }}
-        ></Geom>
-      </Chart>
+       <Chart height={100}
+       width={200} data={data} scale={{sales: {
+        tickInterval: 20
+      }}} padding={[0, 0, 30, 0]}
+      forceFit>
+       <Axis name="item" />
+       <Axis name="value" />
+       <Tooltip
+         triggerOn="click"
+       />
+       <Geom type="interval" position="item*value'" />
+     </Chart>
     );
   }
 
@@ -263,12 +232,10 @@ export default class PieLayer extends Layer {
             captureScroll={true}
             latitude={item.position[1]}
             longitude={item.position[0]}
-            offsetLeft={-50}
+            offsetLeft={-100}
             offsetTop={-50}
           >
-            <div style={{color: '#FFF'}}>
-              {this.renderPieChart(item, data.chartColumns)}
-            </div>
+           {this.renderBarChart(item, data.chartColumns)}
           </Marker>
         );
       })

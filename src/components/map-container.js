@@ -336,14 +336,8 @@ export default function MapContainerFactory(MapPopover, MapControl) {
 
     _renderMarkerOverlay() {
       const {
-        mapState,
-        mapStyle,
-        layerData,
         layerOrder,
-        layers,
-        visStateActions,
-        mapboxApiAccessToken,
-        mapboxApiUrl
+        layers
       } = this.props;
       return layerOrder
           .filter(

@@ -35,7 +35,7 @@ export const arcPosAccessor = ({lat0, lng0, lat1, lng1}) => d => [
   0
 ];
 
-export const arcRequiredColumns = ['lat0', 'lng0', 'lat1', 'lng1'];
+export const arcRequiredColumns = [ 'lng0', 'lat0', 'lng1','lat1'];
 export const arcColumnLabels = {
   lat0: 'source lat',
   lng0: 'source lng',

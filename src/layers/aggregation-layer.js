@@ -61,7 +61,7 @@ export const getFilterDataFunc = (filterRange, getFilterValue) => pt =>
 
 const getLayerColorRange = colorRange => colorRange.colors.map(hexToRgb);
 
-export const aggregateRequiredColumns = ['lat', 'lng'];
+export const aggregateRequiredColumns = [ 'lng','lat'];
 
 export default class AggregationLayer extends Layer {
   constructor(props) {

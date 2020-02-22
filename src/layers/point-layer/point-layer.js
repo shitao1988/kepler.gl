@@ -36,7 +36,7 @@ export const pointPosAccessor = ({lat, lng, altitude}) => d => [
   altitude && altitude.fieldIdx > -1 ? d.data[altitude.fieldIdx] : 0
 ];
 
-export const pointRequiredColumns = ['lat', 'lng'];
+export const pointRequiredColumns = ['lng','lat'];
 export const pointOptionalColumns = ['altitude'];
 
 const brushingExtension = new BrushingExtension();

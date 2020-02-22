@@ -51,7 +51,7 @@ export default class TextLabelPanel extends Component {
     const {updateLayerTextLabel, textLabel, fields} = this.props;
     const currentFields = textLabel.map(tl => tl.field && tl.field.name).filter(d => d);
     return (
-      <LayerConfigGroup label={'label'} collapsible>
+      <LayerConfigGroup label={'标注'} collapsible>
         <ConfigGroupCollapsibleHeader>
           <FieldSelector
             fields={fields}

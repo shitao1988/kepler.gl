@@ -191,6 +191,10 @@ export const LABELS_ZH = [
     zh: '饼图'
   },
   {
+    value: 'Bar',
+    zh: '柱状图'
+  },
+  {
     value: 'Hexbin',
     zh: '蜂窝'
   },

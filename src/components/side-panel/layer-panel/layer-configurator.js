@@ -117,45 +117,27 @@ export default function LayerConfiguratorFactory(SourceDataSelector) {
       return this._renderChartplotLayerConfig(props);
     }
 
+    _renderBarLayerConfig(props) {
+      return this._renderChartplotLayerConfig(props);
+    }
+
     _renderChartplotLayerConfig({
       layer,
       visConfiguratorProps,
       layerChannelConfigProps,
       layerConfiguratorProps
-    }){
-      return(
-<StyledLayerVisualConfigurator>
-        {/* Fill Color */}
-        <LayerConfigGroup
-            {...layer.visConfigSettings.filled}
-            {...visConfiguratorProps}
-            collapsible
-          >
-            {layer.config.colorField ? (
-              <LayerColorRangeSelector {...visConfiguratorProps} />
-            ) : (
-              <LayerColorSelector {...layerConfiguratorProps} />
-            )}
-            <ConfigGroupCollapsibleContent>
-              <ChannelByValueSelector
-                channel={layer.visualChannels.color}
-                {...layerChannelConfigProps}
-              />
-              <VisConfigSlider
-                {...LAYER_VIS_CONFIGS.opacity}
-                {...visConfiguratorProps}
-              />
-            </ConfigGroupCollapsibleContent>
-          </LayerConfigGroup>
+    }) {
+      return (
+        <StyledLayerVisualConfigurator>
           <ChartColumnPanel
-           fields={visConfiguratorProps.fields}
-           updateLayerChartColumns={this.props.updateLayerChartColumns}
-           chartColumns={layer.config.chartColumns}
-           colorPalette={visConfiguratorProps.colorPalette}
-           setColorPaletteUI={visConfiguratorProps.setColorPaletteUI}></ChartColumnPanel>
-      </StyledLayerVisualConfigurator>
-      )
-      
+            fields={visConfiguratorProps.fields}
+            updateLayerChartColumns={this.props.updateLayerChartColumns}
+            chartColumns={layer.config.chartColumns}
+            colorPalette={visConfiguratorProps.colorPalette}
+            setColorPaletteUI={visConfiguratorProps.setColorPaletteUI}
+          ></ChartColumnPanel>
+        </StyledLayerVisualConfigurator>
+      );
     }
 
     _renderScatterplotLayerConfig({
@@ -376,8 +358,7 @@ export default function LayerConfiguratorFactory(SourceDataSelector) {
       const {
         visConfig: {enable3d}
       } = config;
-      const elevationByDescription =
-        'off, 高度基于点的数量';
+      const elevationByDescription = 'off, 高度基于点的数量';
       const colorByDescription = 'off, 颜色基于点的数量';
 
       return (
