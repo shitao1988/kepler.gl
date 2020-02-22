@@ -34,6 +34,7 @@ import ItemSelector from 'components/common/item-selector/item-selector';
 import VisConfigByFieldSelector from './vis-config-by-field-selector';
 import LayerColumnConfig from './layer-column-config';
 import LayerTypeSelector from './layer-type-selector';
+import ChartColumnPanel from './chart-column-panel';
 import DimensionScaleSelector from './dimension-scale-selector';
 import ColorSelector from './color-selector';
 import SourceDataSelectorFactory from 'components/side-panel/common/source-data-selector';
@@ -113,7 +114,48 @@ export default function LayerConfiguratorFactory(SourceDataSelector) {
     }
 
     _renderPieLayerConfig(props) {
-      return this._renderScatterplotLayerConfig(props);
+      return this._renderChartplotLayerConfig(props);
+    }
+
+    _renderChartplotLayerConfig({
+      layer,
+      visConfiguratorProps,
+      layerChannelConfigProps,
+      layerConfiguratorProps
+    }){
+      return(
+<StyledLayerVisualConfigurator>
+        {/* Fill Color */}
+        <LayerConfigGroup
+            {...layer.visConfigSettings.filled}
+            {...visConfiguratorProps}
+            collapsible
+          >
+            {layer.config.colorField ? (
+              <LayerColorRangeSelector {...visConfiguratorProps} />
+            ) : (
+              <LayerColorSelector {...layerConfiguratorProps} />
+            )}
+            <ConfigGroupCollapsibleContent>
+              <ChannelByValueSelector
+                channel={layer.visualChannels.color}
+                {...layerChannelConfigProps}
+              />
+              <VisConfigSlider
+                {...LAYER_VIS_CONFIGS.opacity}
+                {...visConfiguratorProps}
+              />
+            </ConfigGroupCollapsibleContent>
+          </LayerConfigGroup>
+          <ChartColumnPanel
+           fields={visConfiguratorProps.fields}
+           updateLayerChartColumns={this.props.updateLayerChartColumns}
+           chartColumns={layer.config.chartColumns}
+           colorPalette={visConfiguratorProps.colorPalette}
+           setColorPaletteUI={visConfiguratorProps.setColorPaletteUI}></ChartColumnPanel>
+      </StyledLayerVisualConfigurator>
+      )
+      
     }
 
     _renderScatterplotLayerConfig({

@@ -320,7 +320,7 @@ export default class Layer {
       visConfig: {},
 
       textLabel: [DEFAULT_TEXT_LABEL],
-
+      chartColumns:[],
       colorUI: {
         color: DEFAULT_COLOR_UI,
         colorRange: DEFAULT_COLOR_UI

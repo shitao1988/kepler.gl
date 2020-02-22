@@ -1,41 +1,10 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-import {BrushingExtension} from '@deck.gl/extensions';
 import PieLayerIcon from './pie-layer-icon';
-import Layer,{OVERLAY_TYPE}from '../base-layer';
+import Layer, {OVERLAY_TYPE} from '../base-layer';
 import React from 'react';
 import {Marker} from 'react-map-gl';
 import {hexToRgb} from 'utils/color-utils';
 import {DEFAULT_LAYER_COLOR, CHANNEL_SCALES} from 'constants/default-settings';
-import {getTextOffsetByRadius, formatTextLabelData} from '../layer-text-label';
-
-import {
-  Chart,
-  Geom,
-  Axis,
-  Tooltip,
-  Coord,
-  Guide,
-} from "bizcharts";
-import DataSet from "@antv/data-set";
+import {Chart, Geom, Axis, Tooltip, Coord} from 'bizcharts';
 
 export const pointPosAccessor = ({lat, lng, altitude}) => d => [
   // lng
@@ -47,8 +16,6 @@ export const pointPosAccessor = ({lat, lng, altitude}) => d => [
 
 export const pointRequiredColumns = ['lat', 'lng'];
 export const pointOptionalColumns = ['altitude'];
-
-const brushingExtension = new BrushingExtension();
 
 export const pointVisConfigs = {
   radius: 'radius',
@@ -202,85 +169,16 @@ export default class PieLayer extends Layer {
   }
 
   formatLayerData(datasets, oldLayerData) {
-    const {
-      colorScale,
-      colorDomain,
-      colorField,
-      strokeColorField,
-      strokeColorScale,
-      strokeColorDomain,
-      color,
-      sizeField,
-      sizeScale,
-      sizeDomain,
-      textLabel,
-      visConfig: {
-        radiusRange,
-        fixedRadius,
-        colorRange,
-        strokeColorRange,
-        strokeColor
-      }
-    } = this.config;
+    const {chartColumns} = this.config;
 
     const {gpuFilter} = datasets[this.config.dataId];
-    const {data, triggerChanged} = this.updateData(
-      datasets,
-      oldLayerData
-    );
+    const {data, triggerChanged} = this.updateData(datasets, oldLayerData);
     const getPosition = this.getPositionAccessor();
-    // point color
-
-    const cScale =
-      colorField &&
-      this.getVisChannelScale(
-        colorScale,
-        colorDomain,
-        colorRange.colors.map(hexToRgb)
-      );
-
-    // stroke color
-    const scScale =
-      strokeColorField &&
-      this.getVisChannelScale(
-        strokeColorScale,
-        strokeColorDomain,
-        strokeColorRange.colors.map(hexToRgb)
-      );
-
-    // point radius
-    const rScale =
-      sizeField &&
-      this.getVisChannelScale(sizeScale, sizeDomain, radiusRange, fixedRadius);
-
-    const getRadius = rScale
-      ? d => this.getEncodedChannelValue(rScale, d.data, sizeField, 0)
-      : 1;
-
-    const getFillColor = cScale
-      ? d => this.getEncodedChannelValue(cScale, d.data, colorField)
-      : color;
-
-    const getLineColor = scScale
-      ? d => this.getEncodedChannelValue(scScale, d.data, strokeColorField)
-      : strokeColor || color;
-
-    // get all distinct characters in the text labels
-    const textLabels = formatTextLabelData({
-      textLabel,
-      triggerChanged,
-      oldLayerData,
-      data
-    });
-
     return {
       data,
       getPosition,
-      getFillColor,
-      getLineColor,
       getFilterValue: gpuFilter.filterValueAccessor(),
-      getRadius,
-      textLabels
+      chartColumns
     };
   }
   /* eslint-enable complexity */
@@ -289,102 +187,94 @@ export default class PieLayer extends Layer {
     const getPosition = this.getPositionAccessor();
     const bounds = this.getPointsBounds(allData, d => getPosition({data: d}));
     this.updateMeta({bounds});
-
   }
 
-  renderPieChart(){
-    const { DataView } = DataSet;
-    const { Html } = Guide;
-    const data = [
-      {
-        item: "事例一",
-        count: 40
-      },
-      {
-        item: "事例二",
-        count: 21
-      },
-      {
-        item: "事例三",
-        count: 17
-      },
-      {
-        item: "事例四",
-        count: 13
-      },
-      {
-        item: "事例五",
-        count: 9
-      }
-    ];
-    const dv = new DataView();
-    dv.source(data).transform({
-      type: "percent",
-      field: "count",
-      dimension: "item",
-      as: "percent"
+
+  /**
+   *
+   *
+   * @returns
+   * @memberof PieLayer
+   */
+  renderPieChart(item, chartColumns) {
+    if (!chartColumns.length) {
+      return null;
+    }
+
+    const data = chartColumns.map(col => {
+      return {
+        item: col.field.name,
+        value: item.data[col.field.tableFieldIndex-1]||0
+      };
     });
 
-    return  <Chart
-    height={100}
-    width={100}
-    data={dv}
-    scale={{
-      percent: {
-        formatter: val => {
-          val = val * 100 + "%";
-          return val;
-        }
-      }
-    }}
-    padding={[0, 0, 0, 0]}
-    forceFit
-  >
-    <Coord type={"theta"} radius={0.75} innerRadius={0.6} />
-    <Axis name="percent" />
+    return (
+      <Chart
+        height={100}
+        width={100}
+        data={data}
+        scale={{
+          value: {
+            formatter: val => {
+              val = val * 100 + '%';
+              return val;
+            }
+          }
+        }}
+        padding={[0, 0, 0, 0]}
+        forceFit
+      >
+        <Coord type={'theta'} radius={0.75} innerRadius={0.6} />
+        <Axis name="value" />
 
-    <Tooltip
-      showTitle={false}
-      itemTpl="<li><span style=&quot;background-color:{color};&quot; class=&quot;g2-tooltip-marker&quot;></span>{name}: {value}</li>"
-    />
-    <Geom
-      type="intervalStack"
-      position="percent"
-      color="item"
-      tooltip={[
-        "item*percent",
-        (item, percent) => {
-          percent = percent * 100 + "%";
-          return {
-            name: item,
-            value: percent
-          };
-        }
-      ]}
-      style={{
-        lineWidth: 1,
-        stroke: "#fff"
-      }}
-    >
-
-    </Geom>
-  </Chart>
+        <Tooltip
+          showTitle={false}
+          triggerOn="click"
+          itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+        />
+        <Geom
+          type="intervalStack"
+          position="value"
+          color="item"
+          tooltip={[
+            'item*value',
+            (item, value) => {
+              value = value * 1.00 + '%';
+              return {
+                name: item,
+                value: value
+              };
+            }
+          ]}
+          style={{
+            lineWidth: 1,
+            stroke: '#fff'
+          }}
+        ></Geom>
+      </Chart>
+    );
   }
 
   renderLayer(opts) {
     const {data} = opts;
-
-
-
-    return this.config.isVisible&&data.data&&data.data.map(item => {
-      return <Marker
-      latitude={item.position[1]}
-      longitude={item.position[0]}
-      offsetLeft={-50}
-      offsetTop={-50}
-    >
-      <div style={{color:"#FFF"}}>{this.renderPieChart()}</div>
-    </Marker>
-    });
+    return (
+      this.config.isVisible &&
+      data.data &&
+      data.data.map(item => {
+        return (
+          <Marker
+            captureScroll={true}
+            latitude={item.position[1]}
+            longitude={item.position[0]}
+            offsetLeft={-50}
+            offsetTop={-50}
+          >
+            <div style={{color: '#FFF'}}>
+              {this.renderPieChart(item, data.chartColumns)}
+            </div>
+          </Marker>
+        );
+      })
+    );
   }
 }
