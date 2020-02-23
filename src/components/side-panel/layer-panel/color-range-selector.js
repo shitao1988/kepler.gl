@@ -69,19 +69,22 @@ const StyledPaletteConfig = styled.div`
 
 const CONFIG_SETTINGS = {
   type: {
+    label: '类型',
     type: 'select',
     options: ALL_TYPES
   },
   steps: {
+    label: '级别',
     type: 'select',
     options: ALL_STEPS
   },
   reversed: {
+    label: '色带反转',
     type: 'switch',
     options: [true, false]
   },
   custom: {
-    label: 'Custom Palette',
+    label: '自定义调色板',
     type: 'switch',
     options: [true, false]
   }

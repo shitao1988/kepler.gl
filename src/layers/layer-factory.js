@@ -48,7 +48,7 @@ export const DEFAULT_TEXT_LABEL = {
 export const DEFAULT_COLOR_RANGE = DefaultColorRange;
 
 export const DEFAULT_CUSTOM_PALETTE = {
-  name: 'Custom Palette',
+  name: '自定义调色板',
   type: 'custom',
   category: 'Custom',
   colors: []

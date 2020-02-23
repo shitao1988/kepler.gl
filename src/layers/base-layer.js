@@ -299,7 +299,7 @@ export default class Layer {
   getDefaultLayerConfig(props = {}) {
     return {
       dataId: props.dataId || null,
-      label: props.label || 'new layer',
+      label: props.label || '新图层',
       color: props.color || colorMaker.next().value,
       columns: props.columns || null,
       isVisible: props.isVisible || false,
@@ -622,7 +622,7 @@ export default class Layer {
     const {colors} = visConfig[prop];
     const customPalette = {
       ...colorUI[prop].customPalette,
-      name: 'Custom Palette',
+      name: '自定义调色板',
       colors: [...colors]
     };
     this.updateLayerConfig({

@@ -187,11 +187,11 @@ export const LABELS_ZH = [
     zh: '弧'
   },
   {
-    value: 'Pie',
+    value: 'pie',
     zh: '饼图'
   },
   {
-    value: 'Bar',
+    value: 'bar',
     zh: '柱状图'
   },
   {

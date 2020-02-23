@@ -57,7 +57,7 @@ export const FieldListItemFactory = (showToken = true) => {
   return FieldListItem;
 };
 
-const SuggestedFieldHeader = () => <div>Suggested Field</div>;
+const SuggestedFieldHeader = () => <div>建议字段</div>;
 
 const FieldType = PropTypes.oneOfType([
   PropTypes.arrayOf(PropTypes.string),
