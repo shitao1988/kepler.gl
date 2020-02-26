@@ -67,7 +67,7 @@ export default class VisConfigByFieldSelector extends Component {
         <SidePanelSection>
           <PanelLabelWrapper>
             <PanelLabel>
-              {this.props.label || `${capitalizeFirstLetter(property)} 基于`}
+              {this.props.label || `基于`}
             </PanelLabel>
             {description && (
               <InfoHelper

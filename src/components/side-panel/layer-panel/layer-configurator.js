@@ -1071,7 +1071,7 @@ export const ChannelByValueSelector = ({
   const scaleOptions = layer.getScaleOptions(channel.key);
   const showScale =
     !layer.isAggregated && layer.config[scale] && scaleOptions.length > 1;
-  const defaultDescription = `根据选择的字段计算 ${property} `;
+  const defaultDescription = `根据选择的字段计算 `;
 
   return (
     <VisConfigByFieldSelector

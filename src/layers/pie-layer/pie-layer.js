@@ -15,6 +15,10 @@ export const pointPosAccessor = ({lat, lng, altitude}) => d => [
 ];
 
 export const pointRequiredColumns = ['lng','lat'];
+export const columnLabels = {
+  lat: '维度',
+  lng: '经度'
+};
 
 export const pointVisConfigs = {
   radius: 'radius',
@@ -53,7 +57,9 @@ export default class PieLayer extends Layer {
   get layerIcon() {
     return PieLayerIcon;
   }
-
+  get columnLabels() {
+    return columnLabels;
+  }
   get isAggregated() {
     return false;
   }

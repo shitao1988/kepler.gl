@@ -143,7 +143,7 @@ export function layerColorUIChange(oldLayer, prop, newConfig) {
 export function updateLayerBlending(mode) {
   return {
     type: ActionTypes.UPDATE_LAYER_BLENDING,
-    mode
+    mode:mode==='正常'?'normal':mode==='添加式融合'?'additive':'subtractive'
   };
 }
 

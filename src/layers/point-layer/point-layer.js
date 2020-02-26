@@ -39,6 +39,15 @@ export const pointPosAccessor = ({lat, lng, altitude}) => d => [
 export const pointRequiredColumns = ['lng','lat'];
 export const pointOptionalColumns = ['altitude'];
 
+
+export const columnLabels = {
+  lat: '维度',
+  lng: '经度',
+  altitude: '高程',
+};
+
+
+
 const brushingExtension = new BrushingExtension();
 
 export const pointVisConfigs = {
@@ -82,6 +91,11 @@ export default class PointLayer extends Layer {
     return pointRequiredColumns;
   }
 
+  get columnLabels() {
+    return columnLabels;
+  }
+  
+
   get optionalColumns() {
     return pointOptionalColumns;
   }
@@ -89,6 +103,8 @@ export default class PointLayer extends Layer {
   get columnPairs() {
     return this.defaultPointColumnPairs;
   }
+
+  
 
   get noneLayerDataAffectingProps() {
     return [...super.noneLayerDataAffectingProps, 'radius'];

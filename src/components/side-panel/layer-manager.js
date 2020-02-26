@@ -44,8 +44,9 @@ const LayerBlendingSelector = ({layerBlending, updateLayerBlending}) => (
   <SidePanelSection>
     <PanelLabel>图层混合模式</PanelLabel>
     <ItemSelector
-      selectedItems={layerBlending}
-      options={Object.keys(LAYER_BLENDINGS)}
+      selectedItems={layerBlending==='normal'?'正常':layerBlending==='additive'?'添加式融合':'相减式融合'}
+      //options={Object.keys(LAYER_BLENDINGS)}
+      options={['添加式融合','正常','相减式融合']}
       multiSelect={false}
       searchable={false}
       onChange={updateLayerBlending}

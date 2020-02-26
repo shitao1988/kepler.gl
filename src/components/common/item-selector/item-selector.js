@@ -113,7 +113,7 @@ class ItemSelector extends Component {
     fixedOptions: null,
     inputTheme: 'primary',
     multiSelect: true,
-    placeholder: 'Enter a value',
+    placeholder: '请输入',
     closeOnSelect: true,
     searchable: true,
     dropdownHeader: null,
