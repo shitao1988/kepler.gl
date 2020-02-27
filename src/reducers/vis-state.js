@@ -47,8 +47,6 @@ const actionHandler = {
 
   [ActionTypes.LAYER_TEXT_LABEL_CHANGE]: visStateUpdaters.layerTextLabelChangeUpdater,
 
-  [ActionTypes.LAYER_CHART_COLUMN_CHANGE]: visStateUpdaters.layerChartColumChangeUpdater,
-
   [ActionTypes.LAYER_VISUAL_CHANNEL_CHANGE]: visStateUpdaters.layerVisualChannelChangeUpdater,
 
   [ActionTypes.LAYER_COLOR_UI_CHANGE]: visStateUpdaters.layerColorUIChangeUpdater,

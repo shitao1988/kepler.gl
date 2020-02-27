@@ -76,7 +76,7 @@ export class FeatureActionPanel extends PureComponent {
         }}
       >
         <ActionPanel>
-          <ActionPanelItem label="图层" Icon={Layers}>
+          <ActionPanelItem label="layers" Icon={Layers}>
             {layers.map((layer, index) => (
               <ActionPanelItem
                 key={index}
@@ -90,7 +90,7 @@ export class FeatureActionPanel extends PureComponent {
             ))}
           </ActionPanelItem>
           <ActionPanelItem
-            label="删除"
+            label="delete"
             className="delete-panel-item"
             Icon={Trash}
             onClick={onDeleteFeature}

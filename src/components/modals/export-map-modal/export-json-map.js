@@ -62,20 +62,16 @@ const ExportJsonMap = React.memo(({config = {}}) => (
     <StyledExportMapSection>
       <div className="description" />
       <div className="selection">
-      将当前地图数据和配置导出到单个Json文件中
+        Export current map data and config into a single Json file. You can later open the same map
+        by uploading this file to kepler.gl.
       </div>
     </StyledExportMapSection>
     <StyledJsonExportSection className="export-map-modal__json-options">
       <div className="description">
-
-        <div className="title">
-        地图配置
-        </div>
+        <div className="title">Map Config</div>
         <div className="subtitle">
           {MAP_CONFIG_DESCRIPTION}
-          <ExportMapLink href={GITHUB_ADD_DATA_TO_MAP}>
-          添加数据
-          </ExportMapLink>.
+          <ExportMapLink href={GITHUB_ADD_DATA_TO_MAP}>addDataToMap</ExportMapLink>.
         </div>
       </div>
       <div className="selection">

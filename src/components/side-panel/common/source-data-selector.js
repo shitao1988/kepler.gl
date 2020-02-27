@@ -25,7 +25,7 @@ import {PanelLabel, SidePanelSection} from 'components/common/styled-components'
 import ItemSelector from 'components/common/item-selector/item-selector';
 import DatasetTagFactory from 'components/side-panel/common/dataset-tag';
 
-const defaultPlaceHolder = '选择数据源';
+const defaultPlaceHolder = 'Select A Data Source';
 
 SourceDataSelectorFactory.deps = [DatasetTagFactory];
 

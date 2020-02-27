@@ -38,15 +38,12 @@ export const gridVisConfigs = {
   enable3d: 'enable3d'
 };
 
-
-
-
 export default class GridLayer extends AggregationLayer {
   constructor(props) {
     super(props);
 
     this.registerVisConfig(gridVisConfigs);
-    this.visConfigSettings.worldUnitSize.label = '网格大小 (km)';
+    this.visConfigSettings.worldUnitSize.label = 'Grid Size (km)';
   }
 
   get type() {

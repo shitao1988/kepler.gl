@@ -315,17 +315,17 @@ class CustomPalette extends Component {
         </SortableContainer>
         {/* Add Step Button */}
         <Button className="add-step__button" link onClick={this._onColorAdd}>
-          + 添加颜色
+          + Add Step
         </Button>
         <StyledLine />
         {/* Cancel or Confirm Buttons */}
         <StyledButtonContainer>
           <Button className="confirm-apply__button" link onClick={this._onApply}>
-            确定
+            Confirm
           </Button>
           <Button link onClick={this.props.onCancel}>
             {' '}
-            取消
+            Cancel
           </Button>
         </StyledButtonContainer>
         {this.props.showSketcher !== false ? (

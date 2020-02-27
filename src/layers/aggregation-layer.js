@@ -46,11 +46,7 @@ export const getFilterDataFunc = (filterRange, getFilterValue) => pt =>
 
 const getLayerColorRange = colorRange => colorRange.colors.map(hexToRgb);
 
-export const pointRequiredColumns = ['lng','lat'];
-export const columnLabels = {
-  lat: '维度',
-  lng: '经度'
-};
+export const aggregateRequiredColumns = ['lat', 'lng'];
 
 export default class AggregationLayer extends Layer {
   constructor(props) {
@@ -65,11 +61,7 @@ export default class AggregationLayer extends Layer {
   }
 
   get requiredLayerColumns() {
-    return pointRequiredColumns;
-  }
-
-  get columnLabels() {
-    return columnLabels;
+    return aggregateRequiredColumns;
   }
 
   get columnPairs() {
@@ -97,7 +89,7 @@ export default class AggregationLayer extends Layer {
       color: {
         aggregation: 'colorAggregation',
         channelScaleType: CHANNEL_SCALES.colorAggr,
-        defaultMeasure: '点数量',
+        defaultMeasure: 'Point Count',
         domain: 'colorDomain',
         field: 'colorField',
         key: 'color',
@@ -109,7 +101,7 @@ export default class AggregationLayer extends Layer {
         aggregation: 'sizeAggregation',
         channelScaleType: CHANNEL_SCALES.sizeAggr,
         condition: config => config.visConfig.enable3d,
-        defaultMeasure: '点数量',
+        defaultMeasure: 'Point Count',
         domain: 'sizeDomain',
         field: 'sizeField',
         key: 'size',

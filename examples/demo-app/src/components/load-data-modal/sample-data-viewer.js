@@ -121,7 +121,7 @@ const SampleMap = ({sample, onClick}) => (
         {sample.imageUrl && <img src={sample.imageUrl} />}
       </div>
       <div className="sample-map__title">{sample.label}</div>
-      <div className="sample-map__size">{`${numFormat(sample.size)} 行`}</div>
+      <div className="sample-map__size">{`${numFormat(sample.size)} rows`}</div>
       <StyledImageCaption className="sample-map__image__caption">
         {sample.description}
       </StyledImageCaption>

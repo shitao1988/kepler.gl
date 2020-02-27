@@ -124,18 +124,19 @@ const IconInfoModalFactory = (svgIcons = []) => {
     <div className="icon-info-modal">
       <div className="icon-info-modal__description">
         <span>
-          在csv文件中，创建一个图标列。
-          如果不想在某些点上显示图标，可以将值为空。当列命名为{' '}
+          In your csv, create a column, put the name of the icon you want to draw in it. You can
+          leave the cell empty if you do not want the icon to show for some points. When the column
+          is named{' '}
         </span>
         <code>icon</code>
-        <span> 将自动为创建一个图标层</span>
+        <span> kepler.gl will automatically create a icon layer for you.</span>
       </div>
       <div className="icon-info-modal__example">
-        <StyledTitle>示例:</StyledTitle>
-        <ExampleTable/>
+        <StyledTitle>Example:</StyledTitle>
+        <ExampleTable />
       </div>
       <div className="icon-info-modal__icons">
-        <StyledTitle>图标</StyledTitle>
+        <StyledTitle>Icons</StyledTitle>
         <IconTable className="icon-info-modal__icons__table">
           {svgIcons.map(icon => (
             <IconItem key={icon.id} icon={icon} />

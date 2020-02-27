@@ -33,7 +33,7 @@ const StyledDataRowCount = styled.div`
 export default function DatasetInfoFactory() {
   const DatasetInfo = ({dataset}) => (
     <StyledDataRowCount className="source-data-rows">
-      {`${numFormat(dataset.allData.length)} 行`}
+      {`${numFormat(dataset.allData.length)} rows`}
     </StyledDataRowCount>
   );
 

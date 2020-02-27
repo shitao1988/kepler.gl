@@ -23,7 +23,7 @@ import {createSelector} from 'reselect';
 
 import {geoJsonFromData, prefixGpuField, gpuFilterToMapboxFilter} from './mapbox-utils';
 
-export const mapboxRequiredColumns = [ 'lng','lat'];
+export const mapboxRequiredColumns = ['lat', 'lng'];
 
 export const pointColResolver = ({lat, lng}) => `${lat.fieldIdx}-${lng.fieldIdx}`;
 

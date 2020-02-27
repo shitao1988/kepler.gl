@@ -69,8 +69,7 @@ const identity = d => d;
 
 export const OVERLAY_TYPE = keymirror({
   deckgl: null,
-  mapboxgl: null,
-  mapboxglMarker:null
+  mapboxgl: null
 });
 
 export const layerColors = Object.values(DataVizColors).map(hexToRgb);
@@ -290,7 +289,7 @@ export default class Layer {
   getDefaultLayerConfig(props = {}) {
     return {
       dataId: props.dataId || null,
-      label: props.label || '新图层',
+      label: props.label || 'new layer',
       color: props.color || colorMaker.next().value,
       columns: props.columns || null,
       isVisible: props.isVisible || false,
@@ -311,7 +310,7 @@ export default class Layer {
       visConfig: {},
 
       textLabel: [DEFAULT_TEXT_LABEL],
-      chartColumns:[],
+
       colorUI: {
         color: DEFAULT_COLOR_UI,
         colorRange: DEFAULT_COLOR_UI
@@ -582,7 +581,7 @@ export default class Layer {
     const {colors} = visConfig[prop];
     const customPalette = {
       ...colorUI[prop].customPalette,
-      name: '自定义调色板',
+      name: 'Custom Palette',
       colors: [...colors]
     };
     this.updateLayerConfig({

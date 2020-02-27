@@ -48,7 +48,7 @@ export const DEFAULT_TEXT_LABEL = {
 export const DEFAULT_COLOR_RANGE = DefaultColorRange;
 
 export const DEFAULT_CUSTOM_PALETTE = {
-  name: '自定义调色板',
+  name: 'Custom Palette',
   type: 'custom',
   category: 'Custom',
   colors: []
@@ -74,7 +74,7 @@ export const LAYER_VIS_CONFIGS = {
   thickness: {
     type: 'number',
     defaultValue: 2,
-    label: '笔触宽度',
+    label: 'Stroke Width',
     isRanged: false,
     range: [0, 100],
     step: 0.1,
@@ -84,7 +84,7 @@ export const LAYER_VIS_CONFIGS = {
   strokeWidthRange: {
     type: 'number',
     defaultValue: [0, 10],
-    label: '笔触宽度范围',
+    label: 'Stroke Width Range',
     isRanged: true,
     range: [0, 200],
     step: 0.1,
@@ -94,7 +94,7 @@ export const LAYER_VIS_CONFIGS = {
   trailLength: {
     type: 'number',
     defaultValue: 180,
-    label: '路径宽度',
+    label: 'Stroke Width',
     isRanged: false,
     range: [1, 1000],
     step: 1,
@@ -105,7 +105,7 @@ export const LAYER_VIS_CONFIGS = {
   radius: {
     type: 'number',
     defaultValue: 10,
-    label: '半径',
+    label: 'Radius',
     isRanged: false,
     range: [0, 100],
     step: 0.1,
@@ -115,8 +115,8 @@ export const LAYER_VIS_CONFIGS = {
   fixedRadius: {
     defaultValue: false,
     type: 'boolean',
-    label: '固定半径为米',
-    description: '将半径映射到绝对半径（米），例如 5至5米',
+    label: 'Fixed Radius to meter',
+    description: 'Map radius to absolute radius in meters, e.g. 5 to 5 meters',
     group: PROPERTY_GROUPS.radius,
     property: 'fixedRadius'
   },
@@ -126,13 +126,13 @@ export const LAYER_VIS_CONFIGS = {
     isRanged: true,
     range: [0, 500],
     step: 0.1,
-    label: '半径范围',
+    label: 'Radius Range',
     group: PROPERTY_GROUPS.radius,
     property: 'radiusRange'
   },
   clusterRadius: {
     type: 'number',
-    label: '集聚半径(像素)',
+    label: 'Cluster Radius in Pixels',
     defaultValue: 40,
     isRanged: false,
     range: [1, 500],
@@ -142,7 +142,7 @@ export const LAYER_VIS_CONFIGS = {
   },
   clusterRadiusRange: {
     type: 'number',
-    label: '半径范围(像素)',
+    label: 'Radius Range in pixels',
     defaultValue: [1, 40],
     isRanged: true,
     range: [1, 150],
@@ -153,7 +153,7 @@ export const LAYER_VIS_CONFIGS = {
   opacity: {
     type: 'number',
     defaultValue: DEFAULT_LAYER_OPACITY,
-    label: '透明度',
+    label: 'Opacity',
     isRanged: false,
     range: [0, 1],
     step: 0.01,
@@ -163,7 +163,7 @@ export const LAYER_VIS_CONFIGS = {
   coverage: {
     type: 'number',
     defaultValue: 1,
-    label: '范围',
+    label: 'Coverage',
     isRanged: false,
     range: [0, 1],
     step: 0.01,
@@ -174,34 +174,34 @@ export const LAYER_VIS_CONFIGS = {
   outline: {
     type: 'boolean',
     defaultValue: false,
-    label: '边框',
+    label: 'Outline',
     group: PROPERTY_GROUPS.display,
     property: 'outline'
   },
   colorRange: {
     type: 'color-range-select',
     defaultValue: DefaultColorRange,
-    label: '色域',
+    label: 'Color range',
     group: PROPERTY_GROUPS.color,
     property: 'colorRange'
   },
   strokeColorRange: {
     type: 'color-range-select',
     defaultValue: DefaultColorRange,
-    label: '笔触色域',
+    label: 'Stroke Color range',
     group: PROPERTY_GROUPS.color,
     property: 'strokeColorRange'
   },
   targetColor: {
     type: 'color-select',
-    label: '目标颜色',
+    label: 'Target Color',
     defaultValue: null,
     group: PROPERTY_GROUPS.color,
     property: 'targetColor'
   },
   strokeColor: {
     type: 'color-select',
-    label: '笔触颜色',
+    label: 'Stroke Color',
     defaultValue: null,
     group: PROPERTY_GROUPS.color,
     property: 'strokeColor'
@@ -209,7 +209,7 @@ export const LAYER_VIS_CONFIGS = {
   aggregation: {
     type: 'select',
     defaultValue: AGGREGATION_TYPES.average,
-    label: '颜色聚合',
+    label: 'Color Aggregation',
     // aggregation options are based on color field types
     options: Object.keys(AGGREGATION_TYPES),
     group: PROPERTY_GROUPS.color,
@@ -219,7 +219,7 @@ export const LAYER_VIS_CONFIGS = {
   sizeAggregation: {
     type: 'select',
     defaultValue: AGGREGATION_TYPES.average,
-    label: '高度聚合',
+    label: 'Height Aggregation',
     // aggregation options are based on color field types
     options: Object.keys(AGGREGATION_TYPES),
     group: PROPERTY_GROUPS.height,
@@ -262,7 +262,7 @@ export const LAYER_VIS_CONFIGS = {
   resolution: {
     type: 'number',
     defaultValue: 8,
-    label: '分辨率范围',
+    label: 'Resolution range',
     isRanged: false,
     range: [0, 13],
     step: 1,
@@ -272,7 +272,7 @@ export const LAYER_VIS_CONFIGS = {
   sizeScale: {
     type: 'number',
     defaultValue: 10,
-    label: '大小',
+    label: 'Size Scale',
     isRanged: false,
     range: [1, 1000],
     step: 1,
@@ -305,7 +305,7 @@ export const LAYER_VIS_CONFIGS = {
   elevationScale: {
     type: 'number',
     defaultValue: 5,
-    label: '高程比例',
+    label: 'Elevation Scale',
     isRanged: false,
     range: [0, 100],
     step: 0.1,
@@ -315,7 +315,7 @@ export const LAYER_VIS_CONFIGS = {
   elevationRange: {
     type: 'number',
     defaultValue: [0, 500],
-    label: '高度比例',
+    label: 'Height Scale',
     isRanged: true,
     range: [0, 1000],
     step: 0.01,
@@ -325,7 +325,7 @@ export const LAYER_VIS_CONFIGS = {
   coverageRange: {
     type: 'number',
     defaultValue: [0, 1],
-    label: '覆盖范围',
+    label: 'Coverage Range',
     isRanged: true,
     range: [0, 1],
     step: 0.01,
@@ -336,29 +336,29 @@ export const LAYER_VIS_CONFIGS = {
   'hi-precision': {
     type: 'boolean',
     defaultValue: false,
-    label: '高精度渲染',
+    label: 'High Precision Rendering',
     group: PROPERTY_GROUPS.precision,
     property: 'hi-precision',
-    description: '高精度将导致性能下降'
+    description: 'High precision will result in slower performance'
   },
   enable3d: {
     type: 'boolean',
     defaultValue: false,
-    label: '高度',
+    label: 'Height',
     group: PROPERTY_GROUPS.height,
     property: 'enable3d',
-    description: '单击地图右上角按钮切换到三维视图'
+    description: 'Click button at top right of the map to switch to 3d view'
   },
   stroked: {
     type: 'boolean',
-    label: '笔触',
+    label: 'Stroke',
     defaultValue: true,
     group: PROPERTY_GROUPS.display,
     property: 'stroked'
   },
   filled: {
     type: 'boolean',
-    label: '填充',
+    label: 'Fill',
     defaultValue: false,
     group: PROPERTY_GROUPS.display,
     property: 'filled'
@@ -366,14 +366,14 @@ export const LAYER_VIS_CONFIGS = {
   extruded: {
     type: 'boolean',
     defaultValue: false,
-    label: '面高度',
+    label: 'Enable Polygon Height',
     group: PROPERTY_GROUPS.display,
     property: 'extruded'
   },
   wireframe: {
     type: 'boolean',
     defaultValue: false,
-    label: '显示线框',
+    label: 'Show Wireframe',
     group: PROPERTY_GROUPS.display,
     property: 'wireframe'
   },
@@ -381,7 +381,7 @@ export const LAYER_VIS_CONFIGS = {
   weight: {
     type: 'number',
     defaultValue: 1,
-    label: '权重',
+    label: 'Weight Intensity',
     isRanged: false,
     range: [0.01, 500],
     step: 0.01,
@@ -392,7 +392,7 @@ export const LAYER_VIS_CONFIGS = {
   heatmapRadius: {
     type: 'number',
     defaultValue: 20,
-    label: '半径',
+    label: 'Radius',
     isRanged: false,
     range: [0, 100],
     step: 0.1,
@@ -408,7 +408,7 @@ export const LAYER_TEXT_CONFIGS = {
     value0: 1,
     step: 1,
     isRanged: false,
-    label: '大小',
+    label: 'Font size',
     showInput: true
   },
   textAnchor: {

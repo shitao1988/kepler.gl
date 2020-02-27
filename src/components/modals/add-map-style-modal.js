@@ -179,36 +179,34 @@ function AddMapStyleModalFactory() {
             <StyledModalVerticalPanel>
               <StyledModalSection>
                 <div className="modal-section-title">
-                  1. mapbox访问令牌
+                  1. Publish your style at mapbox or provide access token
                 </div>
                 <div className="modal-section-subtitle">
-                可以在
-                  <InlineLink
-                    target="_blank"
-                    href="https://www.mapbox.com/studio/styles/"
-                  >
+                  You can create your own map style at
+                  <InlineLink target="_blank" href="https://www.mapbox.com/studio/styles/">
                     {' '}
                     mapbox
                   </InlineLink>{' '}
-                  中创建自己的地图样式然后
+                  and
                   <InlineLink
                     target="_blank"
                     href="https://www.mapbox.com/help/studio-manual-publish/"
                   >
                     {' '}
-                    发布
+                    publish
                   </InlineLink>{' '}
                   it.
                 </div>
                 <div className="modal-section-subtitle">
-                填写你的
+                  To use private style, paste your
                   <InlineLink
                     target="_blank"
                     href="https://www.mapbox.com/help/how-access-tokens-work/"
                   >
                     {' '}
-                    访问令牌
+                    access token
                   </InlineLink>{' '}
+                  here. *kepler.gl is a client-side application, data stays in your browser..
                 </div>
                 <InputLight
                   type="text"
@@ -218,15 +216,15 @@ function AddMapStyleModalFactory() {
                 />
               </StyledModalSection>
               <StyledModalSection>
-                <div className="modal-section-title">2. 复制样式地址</div>
+                <div className="modal-section-title">2. Paste style url</div>
                 <div className="modal-section-subtitle">
-                示例
+                  What is a
                   <InlineLink
                     target="_blank"
                     href="https://www.mapbox.com/help/studio-manual-publish/#style-url"
                   >
                     {' '}
-                    样式
+                    style URL
                   </InlineLink>
                 </div>
                 <InputLight
@@ -237,7 +235,7 @@ function AddMapStyleModalFactory() {
                 />
               </StyledModalSection>
               <StyledModalSection>
-                <div className="modal-section-title">3. 样式名称</div>
+                <div className="modal-section-title">3. Name your style</div>
                 <InputLight
                   type="text"
                   value={inputStyle.label || ''}

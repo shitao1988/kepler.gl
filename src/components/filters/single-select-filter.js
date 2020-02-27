@@ -28,7 +28,7 @@ export default function SingleSelectFilterFactory() {
       <PanelLabel>Value equals</PanelLabel>
       <ItemSelector
         selectedItems={filter.value}
-        placeholder="选择值"
+        placeholder="Select a Value"
         options={filter.domain}
         multiSelect={false}
         searchable={false}

@@ -67,7 +67,6 @@ const ActionTypes = keyMirror({
   LAYER_TYPE_CHANGE: null,
   LAYER_VIS_CONFIG_CHANGE: null,
   LAYER_TEXT_LABEL_CHANGE: null,
-  LAYER_CHART_COLUMN_CHANGE: null,
   LAYER_HOVER: null,
   LAYER_CLICK: null,
   MAP_CLICK: null,

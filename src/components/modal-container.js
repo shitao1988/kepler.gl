@@ -249,7 +249,7 @@ export default function ModalContainerFactory(
                 <DeleteDatasetModal dataset={datasets[datasetKeyToRemove]} layers={layers} />
               );
               modalProps = {
-                title: '移除数据集',
+                title: 'Delete Dataset',
                 cssStyle: DeleteDatasetModalStyled,
                 footer: true,
                 onConfirm: () => this._deleteDataset(datasetKeyToRemove),
@@ -257,7 +257,7 @@ export default function ModalContainerFactory(
                 confirmButton: {
                   negative: true,
                   large: true,
-                  children: '移除'
+                  children: 'Delete'
                 }
               };
             }
@@ -271,7 +271,7 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: '添加数据到地图',
+              title: 'Add Data To Map',
               cssStyle: LoadDataModalStyle,
               footer: false,
               onConfirm: this._closeModal
@@ -287,14 +287,14 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: '导出为图片',
+              title: 'Export Image',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onExportImage,
               confirmButton: {
                 large: true,
                 disabled: uiState.exportImage.exporting,
-                children: '下载'
+                children: 'Download'
               }
             };
             break;
@@ -311,13 +311,13 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: '导出数据',
+              title: 'Export Data',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onExportData,
               confirmButton: {
                 large: true,
-                children: '导出'
+                children: 'Export'
               }
             };
             break;
@@ -338,13 +338,13 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: '导出地图',
+              title: 'Export Map',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onExportMap,
               confirmButton: {
                 large: true,
-                children: '导出'
+                children: 'Export'
               }
             };
             break;
@@ -360,14 +360,14 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: '添加自定义MapBox样式',
+              title: 'Add Custom Mapbox Style',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onAddCustomMapStyle,
               confirmButton: {
                 large: true,
                 disabled: !mapStyle.inputStyle.style,
-                children: '添加样式'
+                children: 'Add Style'
               }
             };
             break;
@@ -384,7 +384,7 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: '保存地图',
+              title: 'Save Map',
               footer: true,
               onCancel: this._closeModal,
               onConfirm: this._onSaveMap,
@@ -394,7 +394,7 @@ export default function ModalContainerFactory(
                   uiState.exportImage.exporting ||
                   !isValidMapInfo(visState.mapInfo) ||
                   !providerState.currentProvider,
-                children: '保存'
+                children: 'Save'
               }
             };
             break;
@@ -409,7 +409,7 @@ export default function ModalContainerFactory(
               />
             );
             modalProps = {
-              title: '分享URL',
+              title: 'Share URL',
               onCancel: this._onCloseSaveMap
             };
             break;

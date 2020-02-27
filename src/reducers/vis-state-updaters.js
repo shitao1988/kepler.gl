@@ -337,30 +337,6 @@ export function layerTextLabelChangeUpdater(state, action) {
   });
 }
 
-
-export function layerChartColumChangeUpdater(state, action) {
-  const {oldLayer, idx, prop, value} = action;
-  const {chartColumns} = oldLayer.config;
-
-  let newChartColumns = chartColumns.slice();
-  if (!chartColumns[idx] && idx === chartColumns.length) {
-    // if idx is set to length, add empty text label
-    newChartColumns = [...chartColumns, DEFAULT_TEXT_LABEL];
-  }
-
-  if (idx === 'all' && prop === 'fields') {
-    newChartColumns = addOrRemoveTextLabels(value, chartColumns);
-  } else {
-    newChartColumns = updateTextLabelPropAndValue(idx, prop, value, newChartColumns);
-  }
-
-  // update text label prop and value
-  return layerConfigChangeUpdater(state, {
-    oldLayer,
-    newConfig: {chartColumns: newChartColumns}
-  });
-}
-
 /**
  * Update layer type. Previews layer config will be copied if applicable.
  * @memberof visStateUpdaters

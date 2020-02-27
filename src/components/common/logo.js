@@ -31,9 +31,8 @@ const LogoTitle = styled.div`
 const LogoName = styled.div`
   .logo__link {
     color: ${props => props.theme.activeColor};
-    font-size: 24px;
+    font-size: 14px;
     font-weight: 600;
-    line-height: 24px;
     letter-spacing: 1.17px;
   }
 `;

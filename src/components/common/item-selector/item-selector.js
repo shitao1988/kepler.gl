@@ -107,7 +107,7 @@ class ItemSelector extends Component {
     fixedOptions: null,
     inputTheme: 'primary',
     multiSelect: true,
-    placeholder: '请输入',
+    placeholder: 'Enter a value',
     closeOnSelect: true,
     searchable: true,
     dropdownHeader: null,
@@ -207,7 +207,7 @@ class ItemSelector extends Component {
           options={this.props.options}
           filterOption={this.props.filterOption}
           fixedOptions={this.props.fixedOptions}
-          placeholder="查询"
+          placeholder="Search"
           onOptionSelected={this._selectItem}
           customListComponent={this.props.DropDownRenderComponent}
           customListHeaderComponent={this.props.DropdownHeaderComponent}

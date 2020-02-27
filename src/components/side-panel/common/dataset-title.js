@@ -69,7 +69,7 @@ const ShowDataTable = ({id, showDatasetTable = nop}) => (
       }}
     />
     <Tooltip id={`data-table-${id}`} effect="solid">
-      <span>显示表格</span>
+      <span>Show data table</span>
     </Tooltip>
   </DataTagAction>
 );
@@ -88,7 +88,7 @@ const RemoveDataset = ({datasetKey, removeDataset = nop}) => (
       }}
     />
     <Tooltip id={`delete-${datasetKey}`} effect="solid" type="error">
-      <span>移除数据集</span>
+      <span>Remove dataset</span>
     </Tooltip>
   </DataTagAction>
 );

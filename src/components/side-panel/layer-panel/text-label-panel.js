@@ -51,7 +51,7 @@ export default class TextLabelPanel extends Component {
     const {updateLayerTextLabel, textLabel, fields} = this.props;
     const currentFields = textLabel.map(tl => tl.field && tl.field.name).filter(d => d);
     return (
-      <LayerConfigGroup label={'标注'} collapsible>
+      <LayerConfigGroup label={'label'} collapsible>
         <ConfigGroupCollapsibleHeader>
           <FieldSelector
             fields={fields}
@@ -63,18 +63,18 @@ export default class TextLabelPanel extends Component {
         <ConfigGroupCollapsibleContent>
           {textLabel.map((tl, idx) => (
             <div key={tl.field ? tl.field.name : `null-${idx}`}>
-              <PanelLabel>{`标注 ${idx + 1}`}</PanelLabel>
+              <PanelLabel>{`Label ${idx + 1}`}</PanelLabel>
               <SidePanelSection>
                 <FieldSelector
                   fields={fields}
-                  value={(tl.field && tl.field.name) || '选择属性'}
-                  placeholder={'空'}
+                  value={(tl.field && tl.field.name) || 'Select a field'}
+                  placeholder={'empty'}
                   onSelect={v => updateLayerTextLabel(idx, 'field', v)}
                   erasable
                 />
               </SidePanelSection>
               <SidePanelSection>
-                <PanelLabel>{`字体大小`}</PanelLabel>
+                <PanelLabel>{`Font size`}</PanelLabel>
                 <RangeSlider
                   {...LAYER_TEXT_CONFIGS.fontSize}
                   value1={tl.size}
@@ -83,7 +83,7 @@ export default class TextLabelPanel extends Component {
                 />
               </SidePanelSection>
               <SidePanelSection>
-                <PanelLabel>{`字体颜色`}</PanelLabel>
+                <PanelLabel>{`Font color`}</PanelLabel>
                 <ColorSelector
                   colorSets={[
                     {
@@ -96,7 +96,7 @@ export default class TextLabelPanel extends Component {
               <SidePanelSection>
                 <SpaceBetweenFlexbox>
                   <SBFlexboxItem>
-                    <PanelLabel>{`文字角度`}</PanelLabel>
+                    <PanelLabel>{`Text anchor`}</PanelLabel>
                     <ItemSelector
                       {...LAYER_TEXT_CONFIGS.textAnchor}
                       selectedItems={tl.anchor}
@@ -104,7 +104,7 @@ export default class TextLabelPanel extends Component {
                     />
                   </SBFlexboxItem>
                   <SBFlexboxItem>
-                    <PanelLabel>{`对齐方式`}</PanelLabel>
+                    <PanelLabel>{`Alignment`}</PanelLabel>
                     <ItemSelector
                       {...LAYER_TEXT_CONFIGS.textAlignment}
                       selectedItems={tl.alignment}
@@ -118,7 +118,7 @@ export default class TextLabelPanel extends Component {
           <SidePanelSection>
             <Button link onClick={val => updateLayerTextLabel(textLabel.length)}>
               <Add height="12px" />
-              添加更多标注
+              Add More Label
             </Button>
           </SidePanelSection>
         </ConfigGroupCollapsibleContent>

@@ -94,10 +94,6 @@ export const StyledConfigGroupHeader = styled.div`
   justify-content: space-between;
   margin-bottom: 12px;
 
-  .field-selector {
-    flex: 2;
-  }
-
   :hover {
     cursor: pointer;
     .layer-config-group__label {

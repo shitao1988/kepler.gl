@@ -42,11 +42,10 @@ import {LAYER_BLENDINGS} from 'constants/default-settings';
 
 const LayerBlendingSelector = ({layerBlending, updateLayerBlending}) => (
   <SidePanelSection>
-    <PanelLabel>图层混合模式</PanelLabel>
+    <PanelLabel>Layer Blending</PanelLabel>
     <ItemSelector
-      selectedItems={layerBlending==='normal'?'正常':layerBlending==='additive'?'添加式融合':'相减式融合'}
-      //options={Object.keys(LAYER_BLENDINGS)}
-      options={['添加式融合','正常','相减式融合']}
+      selectedItems={layerBlending}
+      options={Object.keys(LAYER_BLENDINGS)}
       multiSelect={false}
       searchable={false}
       onChange={updateLayerBlending}
@@ -85,7 +84,7 @@ export function AddDataButtonFactory() {
   const AddDataButton = ({onClick, isInactive}) => (
     <Button onClick={onClick} isInactive={!isInactive} width="105px" secondary>
       <Add height="12px" />
-      添加数据
+      Add Data
     </Button>
   );
 
@@ -120,7 +119,6 @@ function LayerManagerFactory(AddDataButton, LayerPanel, SourceDataCatalog) {
       layerColorUIChange: PropTypes.func.isRequired,
       layerConfigChange: PropTypes.func.isRequired,
       layerTextLabelChange: PropTypes.func.isRequired,
-      layerChartColumnsChange:PropTypes.func.isRequired,
       layerVisualChannelConfigChange: PropTypes.func.isRequired,
       layerTypeChange: PropTypes.func.isRequired,
       layerVisConfigChange: PropTypes.func.isRequired,
@@ -181,7 +179,6 @@ function LayerManagerFactory(AddDataButton, LayerPanel, SourceDataCatalog) {
         layerTypeChange: this.props.layerTypeChange,
         layerVisConfigChange: this.props.layerVisConfigChange,
         layerTextLabelChange: this.props.layerTextLabelChange,
-        layerChartColumnsChange: this.props.layerChartColumnsChange,
         removeLayer: this.props.removeLayer
       };
 
@@ -232,7 +229,7 @@ function LayerManagerFactory(AddDataButton, LayerPanel, SourceDataCatalog) {
             {defaultDataset ? (
               <Button onClick={this._addEmptyNewLayer} width="105px">
                 <Add height="12px" />
-                添加图层
+                Add Layer
               </Button>
             ) : null}
           </SidePanelSection>

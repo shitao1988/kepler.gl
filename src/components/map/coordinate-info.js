@@ -32,7 +32,7 @@ const CoordinateInfoFactory = () => {
     <div>
       <StyledLayerName className="map-popover__layer-name">
         <CursorClick height="12px" />
-        坐标
+        Coordinate
       </StyledLayerName>
       <table>
         <tbody>

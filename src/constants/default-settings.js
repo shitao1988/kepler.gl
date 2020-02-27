@@ -104,7 +104,7 @@ export const SHARE_MAP_ID = 'shareMap';
 import {Layers, FilterFunnel, Settings, CursorClick} from 'components/common/icons';
 import {getHTMLMapModeTileUrl} from 'utils/utils';
 
-export const KEPLER_GL_NAME = '大数据可视化';
+export const KEPLER_GL_NAME = 'kepler.gl';
 
 // __PACKAGE_VERSION__ is automatically injected by Babel/Webpack during the building process
 // Since we are injecting this during the build process with babel
@@ -144,87 +144,28 @@ export const THEME = keyMirror({
 export const SIDEBAR_PANELS = [
   {
     id: 'layer',
-    label: '图层',
+    label: 'Layers',
     iconComponent: Layers
   },
   {
     id: 'filter',
-    label: '筛选',
+    label: 'Filters',
     iconComponent: FilterFunnel
   },
   {
     id: 'interaction',
-    label: '交互',
+    label: 'Interactions',
     iconComponent: CursorClick
   },
   {
     id: 'map',
-    label: '底图',
+    label: 'Base map',
     iconComponent: Settings
   }
 ];
 
 // backward compatibility
 export const PANELS = SIDEBAR_PANELS;
-
-export const LABELS_ZH = [
-  {
-    value: 'grid',
-    zh: '网格'
-  },
-  {
-    value: 'point',
-    zh: '点'
-  },
-  {
-    value: 'line',
-    zh: '线'
-  },
-  {
-    value: 'arc',
-    zh: '弧'
-  },
-  {
-    value: 'pie',
-    zh: '饼图'
-  },
-  {
-    value: 'bar',
-    zh: '柱状图'
-  },
-  {
-    value: 'Hexbin',
-    zh: '蜂窝'
-  },
-  {
-    value: 'heatmap',
-    zh: '热力图'
-  },
-  {
-    value: 'Polygon',
-    zh: '多边形'
-  },
-  {
-    value: 'cluster',
-    zh: '集聚'
-  },
-  {
-    value: 'icon',
-    zh: '图标'
-  },
-  {
-    value: 'H3',
-    zh: 'H3'
-  },
-  {
-    value: '3D',
-    zh: '3D模型'
-  },
-  {
-    value: 'Trip',
-    zh: '路径'
-  }
-];
 
 // MAP STYLES
 

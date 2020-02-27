@@ -90,7 +90,7 @@ function FilterManagerFactory(SourceDataCatalog, FilterPanel) {
           </SidePanelSection>
           <Button inactive={hadEmptyFilter || !hadDataset} width="105px" onClick={this._addFilter}>
             <Add height="12px" />
-            添加筛选
+            Add Filter
           </Button>
         </div>
       );

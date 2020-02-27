@@ -34,7 +34,7 @@ export const DeleteDatasetModal = ({dataset = {}, layers = []}) => {
     <div className="delete-dataset-modal">
       <DatasetLabel dataset={dataset} />
       <StyledMsg className="delete-dataset-msg">
-        {`删除此数据将影响 ${currDatasetLayers.length} 个图层`}
+        {`you are going to delete this dataset. It will affect ${currDatasetLayers.length} layers`}
       </StyledMsg>
     </div>
   );
