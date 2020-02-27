@@ -27,7 +27,7 @@ import {BRUSH_CONFIG} from 'utils/interaction-utils';
 function BrushConfigFactory() {
   const BrushConfig = ({config, onChange}) => (
     <SidePanelSection>
-      <PanelLabel>Brush Radius (km)</PanelLabel>
+      <PanelLabel>笔刷半径 (km)</PanelLabel>
       <RangeSlider
         range={BRUSH_CONFIG.range}
         value0={0}

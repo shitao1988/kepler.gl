@@ -66,7 +66,7 @@ function LayerGroupSelectorFactory() {
               <PanelHeaderAction
                 className="layer-group__visibility-toggle"
                 id={`${slug}-toggle`}
-                tooltip={layers[slug] ? 'hide' : 'show'}
+                tooltip={layers[slug] ? '隐藏' : '显示'}
                 onClick={() =>
                   onChange({
                     visibleLayerGroups: {
@@ -84,7 +84,7 @@ function LayerGroupSelectorFactory() {
             <CenterFlexbox className="layer-group__bring-top">
               <PanelHeaderAction
                 id={`${slug}-top`}
-                tooltip="Move to top of data layers"
+                tooltip="移至数据层顶部"
                 disabled={!layers[slug]}
                 IconComponent={Upload}
                 active={topLayers[slug]}

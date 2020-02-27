@@ -84,7 +84,7 @@ const ExportHtmlMap = React.memo(({
       </div>
     </StyledExportMapSection>
     <ExportMapStyledExportSection className="export-map-modal__html-options">
-      <div className="description">
+    <div className="description">
         <div className="title">
         Mapbox访问令牌
         </div>
@@ -118,6 +118,7 @@ const ExportHtmlMap = React.memo(({
               <p>Allow users to {mode.label} the map</p>
             </BigStyledTile>
           ))}
+        </div>
         </div>
       </ExportMapStyledExportSection>
     </div>

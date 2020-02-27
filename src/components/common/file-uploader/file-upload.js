@@ -41,13 +41,11 @@ import {media} from 'styles/media-breakpoints';
 // it requires multiple files to be present.
 const defaultValidFileExt = ['csv', 'json', 'geojson'];
 
-const MESSAGE = ' Drag & Drop Your File(s) Here';
+const MESSAGE = ' 将文件拖到此处';
 const CHROME_MSG =
-  '*Chrome user: Limit file size to 250mb, if need to upload larger file, try Safari';
-const DISCLAIMER =
-  '*kepler.gl is a client-side application with no server backend. Data lives only on your machine/browser. ' +
-  'No information or map data is sent to any server.';
-const CONFIG_UPLOAD_MESSAGE = `Upload **CSV**, **GeoJson** or saved map **Json**. Read more about [**supported file formats**](${GUIDES_FILE_FORMAT}).`;
+  '*Chrome 用户: 文件大小限制为250mb，如果需要上传更大的文件，请尝试使用Safari';
+const DISCLAIMER ='';
+const CONFIG_UPLOAD_MESSAGE = `上传 **CSV**, **GeoJson** 或者保存的地图配置 **Json**. 详情请看 [**支持的文件类型**](${GUIDES_FILE_FORMAT}).`;
 
 const fileIconColor = '#D3D8E0';
 
@@ -240,7 +238,7 @@ class FileUpload extends Component {
     } else if (this.props.fileLoading && files.length) {
       return (
         <StyledMessage className="file-uploader__message">
-          <div className="loading-action">Uploading</div>
+          <div className="loading-action">上传中</div>
           <div>
             {files.map((f, i) => (
               <PositiveMsg key={i}>{f.name}</PositiveMsg>
@@ -290,8 +288,8 @@ class FileUpload extends Component {
               {!files.length ? (
                 <StyledDragFileWrapper>
                   <MsgWrapper>{MESSAGE}</MsgWrapper>
-                  <span className="file-upload-or">or</span>
-                  <UploadButton onUpload={this._handleFileInput}>browse your files</UploadButton>
+                  <span className="file-upload-or">或</span>
+                  <UploadButton onUpload={this._handleFileInput}>点击上传</UploadButton>
                 </StyledDragFileWrapper>
               ) : null}
               <StyledDisclaimer>{DISCLAIMER}</StyledDisclaimer>

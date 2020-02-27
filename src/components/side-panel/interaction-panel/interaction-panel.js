@@ -92,7 +92,7 @@ function InteractionPanelFactory(TooltipConfig, BrushConfig) {
                 <config.iconComponent height="12px" />
               </div>
               <div className="interaction-panel__header__title">
-                <PanelHeaderTitle>{config.id}</PanelHeaderTitle>
+                <PanelHeaderTitle>{config.label}</PanelHeaderTitle>
               </div>
             </PanelHeaderContent>
             <div className="interaction-panel__header__actions">

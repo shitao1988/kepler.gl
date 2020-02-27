@@ -56,7 +56,7 @@ export const LOADING_METHODS_NAMES = keyMirror({
 export const LOADING_METHODS = [
   {
     id: LOADING_METHODS_NAMES.upload,
-    label: 'Load Your Data',
+    label: '添加本地数据',
     options: [
       {
         id: QUERY_OPTIONS.csv,
@@ -79,11 +79,11 @@ export const LOADING_METHODS = [
   },
   {
     id: LOADING_METHODS_NAMES.remote,
-    label: 'Load Map using URL'
+    label: '添加在线数据'
   },
   {
     id: LOADING_METHODS_NAMES.sample,
-    label: 'Sample Data',
+    label: '示例数据',
     options: [
       // Dynamically populated
     ]

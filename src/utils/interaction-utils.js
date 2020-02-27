@@ -30,6 +30,7 @@ export function getDefaultInteraction() {
   return {
     tooltip: {
       id: 'tooltip',
+      label:'提示框',
       enabled: true,
       iconComponent: Messages,
       config: {
@@ -38,6 +39,7 @@ export function getDefaultInteraction() {
     },
     brush: {
       id: 'brush',
+      label:'笔刷',
       enabled: false,
       iconComponent: Crosshairs,
       config: {
@@ -47,6 +49,7 @@ export function getDefaultInteraction() {
     },
     coordinate: {
       id: 'coordinate',
+      label:'坐标',
       enabled: false,
       iconComponent: CursorClick,
       position: null

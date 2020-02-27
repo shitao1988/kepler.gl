@@ -109,13 +109,13 @@ const FooterActionWrapper = styled.div`
 const defaultCancelButton = {
   link: true,
   large: true,
-  children: 'Cancel'
+  children: '取消'
 };
 
 const defaultConfirmButton = {
   large: true,
   width: '160px',
-  children: 'Confirm'
+  children: '确定'
 };
 
 export const ModalFooter = ({cancel, confirm, cancelButton, confirmButton}) => {

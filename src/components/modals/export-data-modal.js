@@ -46,7 +46,7 @@ const propTypes = {
 const getDataRowCount = (datasets, selectedDataset, filtered) => {
   const selectedData = datasets[selectedDataset];
   if (!selectedData) {
-    return `${Object.keys(datasets).length} Files `;
+    return `${Object.keys(datasets).length} 个文件 `;
   }
   const {allData, filteredIdxCPU} = selectedData;
 
@@ -56,7 +56,7 @@ const getDataRowCount = (datasets, selectedDataset, filtered) => {
 
   const rowCount = filtered ? filteredIdxCPU.length : allData.length;
 
-  return `${rowCount.toLocaleString()} Rows`;
+  return `${rowCount.toLocaleString()} 行`;
 };
 
 const ExportDataModalFactory = () => {

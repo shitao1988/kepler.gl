@@ -644,13 +644,13 @@ export const EXPORT_IMG_RATIOS = keyMirror({
 export const EXPORT_IMG_RATIO_OPTIONS = [
   {
     id: EXPORT_IMG_RATIOS.SCREEN,
-    label: 'Original Screen',
+    label: '原始画面',
     getSize: (screenW, screenH) => ({width: screenW, height: screenH})
   },
   {
     id: EXPORT_IMG_RATIOS.CUSTOM,
     hidden: true,
-    label: 'Custom',
+    label: '自定义',
     getSize: (mapW, mapH) => ({width: mapW, height: mapH})
   },
   {
