@@ -79,8 +79,8 @@ export default class LayerColumnConfig extends Component {
         <SidePanelSection>
           <div className="layer-config__column">
             <TopRow>
-              <PanelLabel>Columns</PanelLabel>
-              <PanelLabel>Required*</PanelLabel>
+              <PanelLabel>列</PanelLabel>
+              <PanelLabel>必须*</PanelLabel>
             </TopRow>
             {Object.keys(columns).map(key => (
               <ColumnSelector

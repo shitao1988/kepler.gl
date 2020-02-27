@@ -45,7 +45,7 @@ export default class HexagonLayer extends AggregationLayer {
     super(props);
 
     this.registerVisConfig(hexagonVisConfigs);
-    this.visConfigSettings.worldUnitSize.label = 'Hexagon Radius (km)';
+    this.visConfigSettings.worldUnitSize.label = '六边形半径 (km)';
   }
 
   get type() {

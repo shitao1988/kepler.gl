@@ -18,24 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React from 'react';
-import styled from 'styled-components';
-import {format} from 'd3-format';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import Base from 'components/common/icons/base';
 
-const numFormat = format(',');
+class BarLayerIcon extends Component {
+  static propTypes = {
+    height: PropTypes.string,
+    colors: PropTypes.arrayOf(PropTypes.string)
+  };
 
-const StyledDataRowCount = styled.div`
-  font-size: 11px;
-  color: ${props => props.theme.subtextColor};
-  padding-left: 19px;
-`;
+  static defaultProps = {
+    height: '16px',
+    viewBox: '-50 -50 1100 1100',
+    predefinedClassName: 'bar-layer-icon',
+    totalColor: 6
+  };
 
-export default function DatasetInfoFactory() {
-  const DatasetInfo = ({dataset}) => (
-    <StyledDataRowCount className="source-data-rows">
-      {`${numFormat(dataset.allData.length)} 行`}
-    </StyledDataRowCount>
-  );
+  render() {
+    return (
+      <Base {...this.props}>
+       <path d="M888 792H200V168c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v688c0 4.4 3.6 8 8 8h752c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-600-80h56c4.4 0 8-3.6 8-8V560c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v144c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V384c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v320c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V462c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v242c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V304c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v400c0 4.4 3.6 8 8 8z"></path>
+      </Base>
+    );
+  }
+};
 
-  return DatasetInfo;
-}
+export default BarLayerIcon;

@@ -1,7 +1,7 @@
 {
-  "name": "kepler.gl",
+  "name": "@shitao1988/swsk-kepler-gl",
   "author": "Shan He <shan@uber.com>",
-  "version": "2.0.0",
+  "version": "2.0.0.1",
   "description": "kepler.gl is a webgl based application to visualize large scale location data in the browser",
   "license": "MIT",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/keplergl/kepler.gl.git"
+    "url": "https://github.com/shitao1988/swsk-kepler-gl.git"
   },
   "scripts": {
     "install:example": "cd examples/demo-app && yarn --ignore-engines",
@@ -41,7 +41,7 @@
     "start:custom-theme": "npm run install-and-start -- examples/custom-theme start-local",
     "start:node-app": "npm run install-and-start -- examples/node-app start-local",
     "start:web": "npm run install-and-start -- website start",
-    "build": "rm -fr dist && babel src --out-dir dist --source-maps inline",
+    "build": "babel src --out-dir dist --source-maps inline",
     "build:umd": "webpack --config ./webpack/umd.js --progress --env.prod",
     "analyze": "npm run analyze:bundle",
     "analyze:bundle": "webpack --config ./webpack/bundle.js --progress --env.prod",
@@ -88,6 +88,7 @@
     "@turf/bbox": "^6.0.1",
     "@turf/boolean-within": "^6.0.1",
     "@turf/helpers": "^6.1.4",
+    "bizcharts": "^3.5.7",
     "classnames": "^2.2.1",
     "colorbrewer": "^1.0.0",
     "d3-array": "^1.2.0",
@@ -136,6 +137,7 @@
     "react-vis": "^1.8.0",
     "redux": "^3.0.4",
     "redux-actions": "^2.2.1",
+    "redux-logger": "^3.0.6",
     "reselect": "^3.0.1",
     "supercluster": "^6.0.1",
     "type-analyzer": "0.2.5",

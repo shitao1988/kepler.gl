@@ -56,8 +56,8 @@ function ExportMapModalFactory(ExportHtmlMap, ExportJsonMap) {
         <div style={style}>
           <StyledExportMapSection>
             <div className="description">
-              <div className="title">Map format</div>
-              <div className="subtitle">Choose the format to export your map to</div>
+              <div className="title">地图格式</div>
+              <div className="subtitle">选择地图导出的格式</div>
             </div>
             <div className="selection">
               {EXPORT_MAP_FORMAT_OPTIONS.map(op => (

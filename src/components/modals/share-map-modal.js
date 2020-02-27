@@ -189,7 +189,7 @@ export default function ShareMapUrlModalFactory() {
               {sharingLink && (
                 <StyledExportSection>
                   <div className="description">
-                    <div className="title">Share Url</div>
+                    <div className="title">分享URL</div>
                   </div>
                   <div className="selection">
                     <SharingUrl key={0} url={sharingLink} />

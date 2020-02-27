@@ -27,27 +27,27 @@ export function CustomPanelHeaderFactory(...deps) {
   PanelHeader.defaultProps = {
     ...PanelHeader.defaultProps,
     actionItems: [
-      {
-        id: 'bug',
-        iconComponent: Icons.Bug,
-        href: GITHUB_BUG_REPORT,
-        blank: true,
-        tooltip: 'Bug Report',
-        onClick: () => {}
-      },
+      // {
+      //   id: 'bug',
+      //   iconComponent: Icons.Bug,
+      //   href: GITHUB_BUG_REPORT,
+      //   blank: true,
+      //   tooltip: 'Bug Report',
+      //   onClick: () => {}
+      // },
       {
         id: 'docs',
         iconComponent: Icons.Docs,
         href: GITHUB_USER_GUIDE,
         blank: true,
-        tooltip: 'User Guide',
+        tooltip: '用户指南',
         onClick: () => {}
       },
       defaultActionItems.find(item => item.id === 'storage'),
       {
         ...defaultActionItems.find(item => item.id === 'save'),
         label: null,
-        tooltip: 'Share'
+        tooltip: '分享'
       }
     ]
   };

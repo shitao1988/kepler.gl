@@ -70,40 +70,41 @@ const exportHtmlPropTypes = {
   onEditUserMapboxAccessToken: PropTypes.func.isRequired
 };
 
-const ExportHtmlMap = React.memo(
-  ({onChangeExportMapHTMLMode = NO_OP, onEditUserMapboxAccessToken = NO_OP, options = {}}) => (
-    <div>
-      <StyledExportMapSection>
-        <div className="description" />
-        <div className="selection">Export your map into an interactive html file.</div>
-      </StyledExportMapSection>
-      <ExportMapStyledExportSection className="export-map-modal__html-options">
-        <div className="description">
-          <div className="title">Mapbox access token</div>
-          <div className="subtitle">Use your own Mapbox access token in the html (optional)</div>
+
+const ExportHtmlMap = React.memo(({
+  onChangeExportMapHTMLMode = NO_OP,
+  onEditUserMapboxAccessToken = NO_OP,
+  options = {}
+}) => (
+  <div>
+    <StyledExportMapSection>
+      <div className="description" />
+      <div className="selection">
+      将地图导出为交互式html文件。
+      </div>
+    </StyledExportMapSection>
+    <ExportMapStyledExportSection className="export-map-modal__html-options">
+      <div className="description">
+        <div className="title">
+        Mapbox访问令牌
         </div>
-        <div className="selection">
-          <StyledInput
-            onChange={e => onEditUserMapboxAccessToken(e.target.value)}
-            type="text"
-            placeholder="Paste your Mapbox access token"
-            value={options ? options.userMapboxToken : ''}
-          />
-          <div className="disclaimer">
-            <StyledWarning>{TOKEN_MISUSE_WARNING}</StyledWarning>
-            <span>{DISCLAIMER}</span>
-            <ExportMapLink href={GITHUB_EXPORT_HTML_MAP}>
-              How to update an existing map token.
-            </ExportMapLink>
-          </div>
+        <div className="subtitle">
+        在页面中使用您自己的Mapbox访问令牌(可选)
         </div>
-      </ExportMapStyledExportSection>
-      <ExportMapStyledExportSection>
-        <div className="description">
-          <div className="title">Map Mode</div>
-          <div className="subtitle">
-            Select the app mode. More <a href={GITHUB_EXPORT_HTML_MAP_MODES}>info</a>
-          </div>
+      </div>
+      <div className="selection">
+        <StyledInput
+          onChange={e => onEditUserMapboxAccessToken(e.target.value)}
+          type="text"
+          placeholder="Paste your Mapbox access token"
+          value={options ? options.userMapboxToken : ''}
+        />
+        <div className="disclaimer">
+          <StyledWarning>{TOKEN_MISUSE_WARNING}</StyledWarning>
+          <span>{DISCLAIMER}</span>
+          <ExportMapLink href={GITHUB_EXPORT_HTML_MAP}>
+          如何更新现有的地图令牌。
+          </ExportMapLink>
         </div>
         <div className="selection">
           {EXPORT_HTML_MAP_MODE_OPTIONS.map(mode => (

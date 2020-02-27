@@ -164,31 +164,31 @@ export const SaveExportDropdownFactory = PanelHeaderDropdown => {
   SaveExportDropdown.defaultProps = {
     items: [
       {
-        label: 'Export Image',
+        label: '导出图片',
         icon: Picture,
         key: 'image',
         onClick: props => props.onExportImage
       },
       {
-        label: 'Export Data',
+        label: '导出数据',
         icon: DataTable,
         key: 'data',
         onClick: props => props.onExportData
       },
       {
-        label: 'Export Map',
+        label: '导出地图',
         icon: MapIcon,
         key: 'map',
         onClick: props => props.onExportMap
       },
       {
-        label: 'Save Map',
+        label: '保存地图',
         icon: Save2,
         key: 'save',
         onClick: props => props.onSaveMap
       },
       {
-        label: 'Share Map URL',
+        label: '分享URL',
         icon: Share,
         key: 'save',
         onClick: props => props.onShareMap
@@ -214,13 +214,13 @@ export const CloudStorageDropdownFactory = PanelHeaderDropdown => {
   CloudStorageDropdown.defaultProps = {
     items: [
       {
-        label: 'Save',
+        label: '保存',
         icon: Save2,
         key: 'data',
         onClick: props => props.onSaveToStorage
       },
       {
-        label: 'Settings',
+        label: '设置',
         icon: Gear,
         key: 'settings',
         onClick: props => props.onExportData
@@ -256,7 +256,7 @@ function PanelHeaderFactory(SaveExportDropdown, CloudStorageDropdown) {
         {
           id: 'storage',
           iconComponent: Db,
-          tooltip: 'Cloud Storage',
+          tooltip: '云存储',
           onClick: () => {},
           dropdownComponent: CloudStorageDropdown
         },
@@ -264,7 +264,7 @@ function PanelHeaderFactory(SaveExportDropdown, CloudStorageDropdown) {
           id: 'save',
           iconComponent: Save,
           onClick: () => {},
-          label: 'Share',
+          label: '分享',
           dropdownComponent: SaveExportDropdown
         }
       ]

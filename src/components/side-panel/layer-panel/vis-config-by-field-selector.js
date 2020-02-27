@@ -57,7 +57,7 @@ export default class VisConfigByFieldSelector extends Component {
         <SidePanelSection>
           <PanelLabelWrapper>
             <PanelLabel>
-              {this.props.label || `${capitalizeFirstLetter(property)} based on`}
+              {this.props.label || `基于`}
             </PanelLabel>
             {description && (
               <InfoHelper description={description} id={`${this.props.id}-${property}`} />
@@ -76,7 +76,7 @@ export default class VisConfigByFieldSelector extends Component {
             <DimensionScaleSelector
               scaleType={this.props.scaleType}
               options={scaleOptions}
-              label={`${property} scale`}
+              label={`${property} 范围`}
               onSelect={this.props.updateScale}
               disabled={scaleOptions.length < 2}
             />

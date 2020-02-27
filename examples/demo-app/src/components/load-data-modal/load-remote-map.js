@@ -141,7 +141,7 @@ class LoadRemoteMap extends Component {
             <StyledInput
               onChange={this.onMapUrlChange}
               type="text"
-              placeholder="File Url"
+              placeholder="文件 Url"
               value={this.state.dataUrl}
               error={this.props.error}
             />

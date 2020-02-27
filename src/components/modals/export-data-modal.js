@@ -86,8 +86,10 @@ const ExportDataModalFactory = () => {
           <div>
             <StyledExportSection>
               <div className="description">
-                <div className="title">Dataset</div>
-                <div className="subtitle">Choose the datasets you want to export</div>
+                <div className="title">数据集</div>
+                <div className="subtitle">
+                选择要导出的数据集
+                </div>
               </div>
               <div className="selection">
                 <select value={selectedDataset} onChange={this._onSelectDataset}>
@@ -101,8 +103,10 @@ const ExportDataModalFactory = () => {
             </StyledExportSection>
             <StyledExportSection>
               <div className="description">
-                <div className="title">Data Type</div>
-                <div className="subtitle">Choose the type of data you want to export</div>
+                <div className="title">数据类型</div>
+                <div className="subtitle">
+                选择要导出的数据类型
+                </div>
               </div>
               <div className="selection">
                 {EXPORT_DATA_TYPE_OPTIONS.map(op => (
@@ -119,9 +123,9 @@ const ExportDataModalFactory = () => {
             </StyledExportSection>
             <StyledExportSection>
               <div className="description">
-                <div className="title">Filter Data</div>
+                <div className="title">数据筛选</div>
                 <div className="subtitle">
-                  You can choose exporting original data or filtered data
+                选择导出原始数据或筛选后的数据
                 </div>
               </div>
               <div className="selection">
@@ -129,7 +133,7 @@ const ExportDataModalFactory = () => {
                   selected={!filtered}
                   onClick={() => onChangeExportFiltered(false)}
                 >
-                  <div className="filtered-title">Unfiltered Data</div>
+                  <div className="filtered-title">未筛选的数据</div>
                   <div className="filtered-subtitle">
                     {getDataRowCount(datasets, selectedDataset, false)}
                   </div>
@@ -138,7 +142,7 @@ const ExportDataModalFactory = () => {
                   selected={filtered}
                   onClick={() => onChangeExportFiltered(true)}
                 >
-                  <div className="filtered-title">Filtered Data</div>
+                  <div className="filtered-title">筛选的数据</div>
                   <div className="filtered-subtitle">
                     {getDataRowCount(datasets, selectedDataset, true)}
                   </div>

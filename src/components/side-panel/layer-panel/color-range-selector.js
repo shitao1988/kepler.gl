@@ -69,19 +69,22 @@ const StyledPaletteConfig = styled.div`
 
 const CONFIG_SETTINGS = {
   type: {
+    label: '类型',
     type: 'select',
     options: ALL_TYPES
   },
   steps: {
+    label: '级别',
     type: 'select',
     options: ALL_STEPS
   },
   reversed: {
+    label: '色带反转',
     type: 'switch',
     options: [true, false]
   },
   custom: {
-    label: 'Custom Palette',
+    label: '自定义调色板',
     type: 'switch',
     options: [true, false]
   }
@@ -120,7 +123,21 @@ export default class ColorRangeSelect extends Component {
     }
   );
 
-  _updateConfig = ({key, value}) => {
+  _updateConfig = ({key, label}) => {
+    let value =
+      label === '所有'
+        ? 'all'
+        : label === '自定义'
+        ? 'custom'
+        : label === '连续色板'
+        ? 'sequential'
+        : label === '单一色板'
+        ? 'singlehue'
+        : label === '离散色板'
+        ? 'diverging'
+        : label === '分类色板'
+        ? 'qualitative'
+        : label;
     this._setColorRangeConfig({[key]: value});
   };
 
@@ -143,6 +160,27 @@ export default class ColorRangeSelect extends Component {
     });
   };
 
+  _getLabels=options=>{
+    return options.map(opt => {
+    });
+  }
+
+  _getLabel=opt=>{
+    return opt === 'all'
+    ? '所有'
+    : opt === 'custom'
+    ? '自定义'
+    : opt === 'sequential'
+    ? '连续色板'
+    : opt === 'singlehue'
+    ? '单一色板'
+    : opt === 'diverging'
+    ? '离散色板'
+    : opt === 'qualitative'
+    ? '分类色板'
+    : opt;
+  }
+
   _onToggleSketcher = val => {
     this.props.setColorPaletteUI({
       showSketcher: val
@@ -163,7 +201,8 @@ export default class ColorRangeSelect extends Component {
               label={CONFIG_SETTINGS[key].label || key}
               config={CONFIG_SETTINGS[key]}
               value={colorRangeConfig[key]}
-              onChange={value => this._updateConfig({key, value})}
+              onChange={label => this._updateConfig({key, label})}
+              renderLabel={this._getLabel}
             />
           ))}
         </StyledColorConfig>
@@ -199,8 +238,8 @@ export const PaletteConfig = ({label, value, config: {type, options}, onChange})
     {type === 'select' && (
       <div className="color-palette__config__select">
         <ItemSelector
-          selectedItems={value}
-          options={options}
+          selectedItems={renderLabel(value)}
+          options={options.map(opt => {return renderLabel(opt)})}
           multiSelect={false}
           searchable={false}
           onChange={onChange}

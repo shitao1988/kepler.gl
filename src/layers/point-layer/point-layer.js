@@ -36,8 +36,17 @@ export const pointPosAccessor = ({lat, lng, altitude}) => d => [
   altitude && altitude.fieldIdx > -1 ? d.data[altitude.fieldIdx] : 0
 ];
 
-export const pointRequiredColumns = ['lat', 'lng'];
+export const pointRequiredColumns = ['lng','lat'];
 export const pointOptionalColumns = ['altitude'];
+
+
+export const columnLabels = {
+  lat: '维度',
+  lng: '经度',
+  altitude: '高程',
+};
+
+
 
 const brushingExtension = new BrushingExtension();
 
@@ -53,7 +62,7 @@ export const pointVisConfigs = {
   radiusRange: 'radiusRange',
   filled: {
     type: 'boolean',
-    label: 'Fill Color',
+    label: '填充色',
     defaultValue: true,
     property: 'filled'
   }
@@ -82,6 +91,11 @@ export default class PointLayer extends Layer {
     return pointRequiredColumns;
   }
 
+  get columnLabels() {
+    return columnLabels;
+  }
+  
+
   get optionalColumns() {
     return pointOptionalColumns;
   }
@@ -89,6 +103,8 @@ export default class PointLayer extends Layer {
   get columnPairs() {
     return this.defaultPointColumnPairs;
   }
+
+  
 
   get noneLayerDataAffectingProps() {
     return [...super.noneLayerDataAffectingProps, 'radius'];

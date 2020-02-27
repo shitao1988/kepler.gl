@@ -36,7 +36,7 @@ export const SVG_ICON_URL = `${CLOUDFRONT}/icons/svg-icons.json`;
 export const iconPosAccessor = ({lat, lng}) => d => [d.data[lng.fieldIdx], d.data[lat.fieldIdx]];
 export const iconAccessor = ({icon}) => d => d.data[icon.fieldIdx];
 
-export const iconRequiredColumns = ['lat', 'lng', 'icon'];
+export const iconRequiredColumns = [ 'lng','lat', 'icon'];
 
 export const pointVisConfigs = {
   radius: 'radius',
@@ -105,7 +105,7 @@ export default class IconLayer extends Layer {
       id: 'iconInfo',
       template: this._layerInfoModal,
       modalProps: {
-        title: 'How to draw icons'
+        title: '如何绘制图标'
       }
     };
   }

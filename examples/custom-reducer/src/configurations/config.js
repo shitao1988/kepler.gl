@@ -127,8 +127,8 @@ export default {
     mapState: {
       bearing: 0,
       dragRotate: false,
-      latitude: 37.76544453921235,
-      longitude: -122.46289885132524,
+      latitude: 31.5544453921235,
+      longitude: 120.31677,
       pitch: 0,
       zoom: 12.032736770460689,
       isSplit: false

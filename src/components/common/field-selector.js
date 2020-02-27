@@ -55,7 +55,7 @@ export const FieldListItemFactory = (showToken = true) => {
   return FieldListItem;
 };
 
-const SuggestedFieldHeader = () => <div>Suggested Field</div>;
+const SuggestedFieldHeader = () => <div>建议字段</div>;
 
 const FieldType = PropTypes.oneOfType([
   PropTypes.arrayOf(PropTypes.string),
@@ -96,7 +96,7 @@ export default class FieldSelector extends Component {
     multiSelect: false,
     closeOnSelect: true,
     showToken: true,
-    placeholder: 'Select a field'
+    placeholder: '选择字段'
   };
 
   fieldsSelector = props => props.fields;

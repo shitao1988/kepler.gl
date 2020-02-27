@@ -85,8 +85,8 @@ const ExportImageModalFactory = () => {
         <StyledModalContent className="export-image-modal">
           <ImageOptionList>
             <div className="image-option-section">
-              <div className="image-option-section-title">Ratio</div>
-              Choose the ratio for various usages.
+              <div className="image-option-section-title">比例</div>
+              选择比例
               <div className="button-list">
                 {EXPORT_IMG_RATIO_OPTIONS.filter(op => !op.hidden).map(op => (
                   <SelectionButton
@@ -100,8 +100,8 @@ const ExportImageModalFactory = () => {
               </div>
             </div>
             <div className="image-option-section">
-              <div className="image-option-section-title">Resolution</div>
-              High resolution is better for prints.
+              <div className="image-option-section-title">分辨率</div>
+              适合打印的高分辨率
               <div className="button-list">
                 {EXPORT_IMG_RESOLUTION_OPTIONS.map(op => (
                   <SelectionButton
@@ -115,12 +115,12 @@ const ExportImageModalFactory = () => {
               </div>
             </div>
             <div className="image-option-section">
-              <div className="image-option-section-title">Map Legend</div>
+              <div className="image-option-section-title">图例</div>
               <Switch
                 type="checkbox"
                 id="add-map-legend"
                 checked={legend}
-                label="Add legend on map"
+                label="添加图例到地图"
                 onChange={() => onUpdateSetting({legend: !legend})}
               />
             </div>

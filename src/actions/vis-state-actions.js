@@ -57,6 +57,15 @@ export function layerTextLabelChange(oldLayer, idx, prop, value) {
   };
 }
 
+export function layerChartColumnsChange(oldLayer, idx, prop, value) {
+  return {
+    type: ActionTypes.LAYER_CHART_COLUMN_CHANGE,
+    oldLayer,
+    idx,
+    prop,
+    value
+  };
+}
 /**
  * Update layer type. Previews layer config will be copied if applicable.
  * @memberof visStateActions
@@ -134,7 +143,7 @@ export function layerColorUIChange(oldLayer, prop, newConfig) {
 export function updateLayerBlending(mode) {
   return {
     type: ActionTypes.UPDATE_LAYER_BLENDING,
-    mode
+    mode:mode==='正常'?'normal':mode==='添加式融合'?'additive':'subtractive'
   };
 }
 

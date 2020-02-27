@@ -50,14 +50,12 @@ function MapManagerFactory(MapStyleSelector, LayerGroupSelector) {
     colorSetSelector = createSelector(
       this.buildingColorSelector,
       this.setColorSelector,
-      (selectedColor, setColor) => [
-        {
-          selectedColor,
-          setColor,
-          isRange: false,
-          label: '3D Building Color'
-        }
-      ]
+      (selectedColor, setColor) => ([{
+        selectedColor,
+        setColor,
+        isRange: false,
+        label: '3D 建筑颜色'
+      }])
     );
 
     _updateConfig = newProp => {
@@ -102,7 +100,7 @@ function MapManagerFactory(MapStyleSelector, LayerGroupSelector) {
             </SidePanelSection>
             <Button onClick={this.props.showAddMapStyleModal} secondary>
               <Add height="12px" />
-              Add Map Style
+              添加地图样式
             </Button>
           </div>
         </div>

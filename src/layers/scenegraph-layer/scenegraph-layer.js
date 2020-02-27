@@ -26,7 +26,7 @@ import Layer from '../base-layer';
 import ScenegraphLayerIcon from './scenegraph-layer-icon';
 import ScenegraphInfoModalFactory from './scenegraph-info-modal';
 
-export const scenegraphRequiredColumns = ['lat', 'lng'];
+export const scenegraphRequiredColumns = [ 'lng','lat'];
 export const scenegraphOptionalColumns = ['altitude'];
 
 function fetch(url, {propName, layer}) {
