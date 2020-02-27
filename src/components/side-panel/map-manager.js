@@ -96,10 +96,7 @@ function MapManagerFactory(MapStyleSelector, LayerGroupSelector) {
               />
             ) : null}
             <SidePanelSection>
-              <ColorSelector
-                colorSets={colorSets}
-                disabled={!hasBuildingLayer}
-              />
+              <ColorSelector colorSets={colorSets} disabled={!hasBuildingLayer} />
             </SidePanelSection>
             <Button onClick={this.props.showAddMapStyleModal} secondary>
               <Add height="12px" />

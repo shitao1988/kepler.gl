@@ -36,7 +36,7 @@ export {
   default as PanelHeaderFactory,
   SaveExportDropdownFactory,
   PanelHeaderDropdownFactory
-} from './side-panel/panel-header'
+} from './side-panel/panel-header';
 export {CollapseButtonFactory, default as SidebarFactory} from './side-panel/side-bar';
 export {default as PanelToggleFactory} from './side-panel/panel-toggle';
 
@@ -61,6 +61,7 @@ export {default as TooltipConfigFactory} from './side-panel/interaction-panel/to
 export {default as MapManagerFactory} from './side-panel/map-manager';
 export {default as LayerGroupSelectorFactory} from './side-panel/map-style-panel/map-layer-selector';
 export {default as MapStyleSelectorFactory} from './side-panel/map-style-panel/map-style-selector';
+export {default as CustomPanelsFactory} from './side-panel/custom-panel';
 
 // // map container factories
 export {default as MapPopoverFactory} from './map/map-popover';
@@ -93,10 +94,7 @@ export {default as TimeRangeFilterFactory} from './filters/time-range-filter';
 export {default as RangeFilterFactory} from './filters/range-filter';
 
 // Injector
-export {
-  injector,
-  withState
-} from './injector'
+export {injector, withState} from './injector';
 
 // Common Components
 export {default as FileUpload} from './common/file-uploader/file-upload';

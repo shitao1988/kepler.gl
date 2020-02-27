@@ -20,24 +20,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyledExportSection,
-  StyledType
-} from 'components/common/styled-components';
-import {
-  StyledExportMapSection,
-  StyledWarning,
-  ExportMapLink
-} from './components';
+import {StyledExportSection, StyledType} from 'components/common/styled-components';
+import {StyledExportMapSection, StyledWarning, ExportMapLink} from './components';
 import {
   DISCLAIMER,
   EXPORT_HTML_MAP_MODE_OPTIONS,
   TOKEN_MISUSE_WARNING
 } from 'constants/default-settings';
-import {
-  GITHUB_EXPORT_HTML_MAP,
-  GITHUB_EXPORT_HTML_MAP_MODES
-} from 'constants/user-guides';
+import {GITHUB_EXPORT_HTML_MAP, GITHUB_EXPORT_HTML_MAP_MODES} from 'constants/user-guides';
 import styled from 'styled-components';
 
 const NO_OP = () => {};
@@ -53,7 +43,7 @@ const ExportMapStyledExportSection = styled(StyledExportSection)`
 const StyledInput = styled.input`
   width: 100%;
   padding: ${props => props.theme.inputPadding};
-  color: ${props => props.error ? 'red' : props.theme.titleColorLT};
+  color: ${props => (props.error ? 'red' : props.theme.titleColorLT)};
   height: ${props => props.theme.inputBoxHeight};
   outline: 0;
   font-size: ${props => props.theme.inputFontSize};
@@ -79,6 +69,7 @@ const exportHtmlPropTypes = {
   options: PropTypes.object,
   onEditUserMapboxAccessToken: PropTypes.func.isRequired
 };
+
 
 const ExportHtmlMap = React.memo(({
   onChangeExportMapHTMLMode = NO_OP,
@@ -115,33 +106,23 @@ const ExportHtmlMap = React.memo(({
           如何更新现有的地图令牌。
           </ExportMapLink>
         </div>
-      </div>
-    </ExportMapStyledExportSection>
-    <ExportMapStyledExportSection>
-      <div className="description">
-        <div className="title">
-          Map Mode
+        <div className="selection">
+          {EXPORT_HTML_MAP_MODE_OPTIONS.map(mode => (
+            <BigStyledTile
+              key={mode.id}
+              selected={options.mode === mode.id}
+              available={mode.available}
+              onClick={() => mode.available && onChangeExportMapHTMLMode(mode.id)}
+            >
+              <img src={mode.url} alt="" />
+              <p>Allow users to {mode.label} the map</p>
+            </BigStyledTile>
+          ))}
         </div>
-        <div className="subtitle">
-          Select the app mode. More <a href={GITHUB_EXPORT_HTML_MAP_MODES}>info</a>
-        </div>
-      </div>
-      <div className="selection">
-        {EXPORT_HTML_MAP_MODE_OPTIONS.map(mode =>
-          <BigStyledTile
-            key={mode.id}
-            selected={options.mode === mode.id}
-            available={mode.available}
-            onClick={() => mode.available && onChangeExportMapHTMLMode(mode.id)}
-          >
-            <img src={mode.url} alt=""/>
-            <p>Allow users to {mode.label} the map</p>
-          </BigStyledTile>
-        )}
-      </div>
-    </ExportMapStyledExportSection>
-  </div>
-));
+      </ExportMapStyledExportSection>
+    </div>
+  )
+);
 
 ExportHtmlMap.propTypes = exportHtmlPropTypes;
 
@@ -150,4 +131,3 @@ ExportHtmlMap.displayName = 'ExportHtmlMap';
 const ExportHtmlMapFactory = () => ExportHtmlMap;
 
 export default ExportHtmlMapFactory;
-

@@ -134,8 +134,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
           (accu, layer, idx) => ({
             ...accu,
             [layer.id]:
-              layer.shouldRenderLayer(layerData[idx]) &&
-              this._isVisibleMapLayer(layer, mapLayers)
+              layer.shouldRenderLayer(layerData[idx]) && this._isVisibleMapLayer(layer, mapLayers)
           }),
           {}
         )
@@ -237,11 +236,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
       let layerHoverProp = null;
       let position = {x: mousePosition[0], y: mousePosition[1]};
 
-      if (
-        interactionConfig.tooltip.enabled &&
-        objectInfo &&
-        objectInfo.picked
-      ) {
+      if (interactionConfig.tooltip.enabled && objectInfo && objectInfo.picked) {
         // if anything hovered
         const {object, layer: overlay} = objectInfo;
 
@@ -255,8 +250,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
           } = layer;
           const {allData, fields} = datasets[dataId];
           const data = layer.getHoverData(object, allData);
-          const fieldsToShow =
-            interactionConfig.tooltip.config.fieldsToShow[dataId];
+          const fieldsToShow = interactionConfig.tooltip.config.fieldsToShow[dataId];
 
           layerHoverProp = {
             data,
@@ -279,8 +273,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
             {...position}
             layerHoverProp={layerHoverProp}
             coordinate={
-              interactionConfig.coordinate.enabled &&
-              ((pinned || {}).coordinate || coordinate)
+              interactionConfig.coordinate.enabled && ((pinned || {}).coordinate || coordinate)
             }
             freezed={Boolean(clicked || pinned)}
             onClose={this._onCloseMapPopover}
@@ -294,8 +287,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
     /* eslint-enable complexity */
 
     _getHoverXY(viewport, lngLat) {
-      const screenCoord =
-        !viewport || !lngLat ? null : viewport.project(lngLat);
+      const screenCoord = !viewport || !lngLat ? null : viewport.project(lngLat);
       return screenCoord && {x: screenCoord[0], y: screenCoord[1]};
     }
 
@@ -367,9 +359,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
           .slice()
           .reverse()
           .filter(
-            idx =>
-              layers[idx].overlayType === OVERLAY_TYPE.deckgl &&
-              layersToRender[layers[idx].id]
+            idx => layers[idx].overlayType === OVERLAY_TYPE.deckgl && layersToRender[layers[idx].id]
           )
           .reduce(this._renderLayer, []);
       }
@@ -530,11 +520,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
           </MapComponent>
           {mapStyle.topMapStyle && (
             <div style={MAP_STYLE.top}>
-              <MapComponent
-                {...mapProps}
-                key="top"
-                mapStyle={mapStyle.topMapStyle}
-              />
+              <MapComponent {...mapProps} key="top" mapStyle={mapStyle.topMapStyle} />
             </div>
           )}
           {this._renderMapPopover(layersToRender)}

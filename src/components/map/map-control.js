@@ -112,12 +112,7 @@ const MapLegendTooltip = ({id, message}) => (
   </Tooltip>
 );
 
-const LayerSelectorPanel = React.memo(({
-  items,
-  onMapToggleLayer,
-  isActive,
-  toggleMenuPanel
-}) =>
+const LayerSelectorPanel = React.memo(({items, onMapToggleLayer, isActive, toggleMenuPanel}) =>
   !isActive ? (
     <MapControlButton
       key={1}
@@ -192,9 +187,9 @@ const MapLegendPanel = ({layers, isActive, scale, onToggleMenuPanel, isExport}) 
       onClick={onToggleMenuPanel}
       isExport={isExport}
     >
-      <MapLegend layers={layers}/>
+      <MapLegend layers={layers} />
     </MapControlPanel>
-);
+  );
 
 MapLegendPanel.displayName = 'MapControlPanel';
 
@@ -216,6 +211,7 @@ const SplitMapButton = React.memo(({isSplit, mapIndex, onToggleSplitMap}) => (
       message={
         isSplit ? '关闭当前面板' : '双面板模式'
       }
+
     />
   </MapControlButton>
 ));
@@ -307,6 +303,7 @@ const MapDrawPanel = React.memo(({
   );
 });
 
+
 MapDrawPanel.displayName = 'MapDrawPanel';
 
 const MapControlFactory = () => {
@@ -345,7 +342,7 @@ const MapControlFactory = () => {
       this.layerSelector,
       this.layersToRenderSelector,
       (layers, layersToRender) =>
-         layers
+        layers
           .filter(l => l.config.isVisible)
           .map(layer => ({
             id: layer.id,
@@ -409,10 +406,7 @@ const MapControlFactory = () => {
           {/* 3D Map */}
           {toggle3d.show ? (
             <ActionPanel className="toggle-3d" key={2}>
-              <Toggle3dButton
-                dragRotate={dragRotate}
-                onTogglePerspective={onTogglePerspective}
-              />
+              <Toggle3dButton dragRotate={dragRotate} onTogglePerspective={onTogglePerspective} />
             </ActionPanel>
           ) : null}
 

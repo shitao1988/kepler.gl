@@ -49,17 +49,11 @@ import {
   featureToFilterValue,
   updateFilterDataId
 } from 'utils/filter-utils';
-import {
-  setFilterGpuMode,
-  assignGpuChannel
-} from 'utils/gpu-filter-utils';
+import {setFilterGpuMode, assignGpuChannel} from 'utils/gpu-filter-utils';
 import {createNewDataEntry} from 'utils/dataset-utils';
 import {set, toArray} from 'utils/utils';
 
-import {
-  findDefaultLayer,
-  calculateLayerData
-} from 'utils/layer-utils/layer-utils';
+import {findDefaultLayer, calculateLayerData} from 'utils/layer-utils/layer-utils';
 
 import {
   mergeFilters,
@@ -80,9 +74,7 @@ import {Layer, LayerClasses} from 'layers';
 import {processFileToLoad} from 'utils/file-utils';
 import {DEFAULT_TEXT_LABEL} from 'layers/layer-factory';
 
-import {
-  EDITOR_MODES
-} from 'constants/default-settings';
+import {EDITOR_MODES} from 'constants/default-settings';
 
 // react-palm
 // disable capture exception for react-palm call to withTask
@@ -263,11 +255,7 @@ export function layerConfigChangeUpdater(state, action) {
   // let newLayer;
   if (newLayer.shouldCalculateLayerData(props)) {
     const oldLayerData = state.layerData[idx];
-    const updateLayerDataResult = calculateLayerData(
-      newLayer,
-      state,
-      oldLayerData
-    );
+    const updateLayerDataResult = calculateLayerData(newLayer, state, oldLayerData);
 
     layerData = updateLayerDataResult.layerData;
     newLayer = updateLayerDataResult.layer;
@@ -288,19 +276,13 @@ export function layerConfigChangeUpdater(state, action) {
 function addOrRemoveTextLabels(newFields, textLabel) {
   let newTextLabel = textLabel.slice();
 
-  const currentFields = textLabel
-    .map(tl => tl.field && tl.field.name)
-    .filter(d => d);
+  const currentFields = textLabel.map(tl => tl.field && tl.field.name).filter(d => d);
 
   const addFields = newFields.filter(f => !currentFields.includes(f.name));
-  const deleteFields = currentFields.filter(
-    f => !newFields.find(fd => fd.name === f)
-  );
+  const deleteFields = currentFields.filter(f => !newFields.find(fd => fd.name === f));
 
   // delete
-  newTextLabel = newTextLabel.filter(
-    tl => tl.field && !deleteFields.includes(tl.field.name)
-  );
+  newTextLabel = newTextLabel.filter(tl => tl.field && !deleteFields.includes(tl.field.name));
   newTextLabel = !newTextLabel.length ? [DEFAULT_TEXT_LABEL] : newTextLabel;
 
   // add
@@ -323,9 +305,7 @@ function updateTextLabelPropAndValue(idx, prop, value, textLabel) {
   let newTextLabel = textLabel.slice();
 
   if (prop && (value || textLabel.length === 1)) {
-    newTextLabel = textLabel.map((tl, i) =>
-      i === idx ? {...tl, [prop]: value} : tl
-    );
+    newTextLabel = textLabel.map((tl, i) => (i === idx ? {...tl, [prop]: value} : tl));
   } else if (prop === 'field' && value === null && textLabel.length > 1) {
     // remove label when field value is set to null
     newTextLabel.splice(idx, 1);
@@ -494,11 +474,7 @@ export function layerVisConfigChangeUpdater(state, action) {
 
   if (newLayer.shouldCalculateLayerData(props)) {
     const oldLayerData = state.layerData[idx];
-    const {layerData, layer} = calculateLayerData(
-      newLayer,
-      state,
-      oldLayerData
-    );
+    const {layerData, layer} = calculateLayerData(newLayer, state, oldLayerData);
     return updateStateWithLayerAndData(state, {layerData, layer, idx});
   }
 
@@ -560,12 +536,7 @@ export function interactionConfigChangeUpdater(state, action) {
  * @public
  */
 export function setFilterUpdater(state, action) {
-  const {
-    idx,
-    prop,
-    value,
-    valueIndex = 0
-  } = action;
+  const {idx, prop, value, valueIndex = 0} = action;
 
   const oldFilter = state.filters[idx];
   let newFilter = set([prop], value, oldFilter);
@@ -590,10 +561,7 @@ export function setFilterUpdater(state, action) {
       // TODO: Next PR for UI filter name will only update filter name but it won't have side effects
       // we are gonna use pair of datasets and fieldIdx to update the filter
       const datasetId = newFilter.dataId[valueIndex];
-      const {
-        filter: updatedFilter,
-        dataset: newDataset
-      } = applyFilterFieldName(
+      const {filter: updatedFilter, dataset: newDataset} = applyFilterFieldName(
         newFilter,
         state.datasets[datasetId],
         value,
@@ -623,7 +591,12 @@ export function setFilterUpdater(state, action) {
 
       const layerDataIds = uniq(
         layerIdDifference
-          .map(lid => get(state.layers.find(l => l.id === lid), ['config', 'dataId']))
+          .map(lid =>
+            get(
+              state.layers.find(l => l.id === lid),
+              ['config', 'dataId']
+            )
+          )
           .filter(d => d)
       );
 
@@ -633,7 +606,12 @@ export function setFilterUpdater(state, action) {
       // Update newFilter dataIds
       const newDataIds = uniq(
         newFilter.layerId
-          .map(lid => get(state.layers.find(l => l.id === lid), ['config', 'dataId']))
+          .map(lid =>
+            get(
+              state.layers.find(l => l.id === lid),
+              ['config', 'dataId']
+            )
+          )
           .filter(d => d)
       );
 
@@ -699,10 +677,7 @@ export const setFilterPlotUpdater = (state, {idx, newProp}) => {
     if (plotType) {
       newFilter = {
         ...newFilter,
-        ...getFilterPlot(
-          {...newFilter, plotType},
-          state.datasets[newFilter.dataId].allData
-        ),
+        ...getFilterPlot({...newFilter, plotType}, state.datasets[newFilter.dataId].allData),
         plotType
       };
     }
@@ -739,10 +714,7 @@ export const addFilterUpdater = (state, action) =>
  * @param {Object} action.prop
  * @param {Object} action.newConfig
  */
-export const layerColorUIChangeUpdater = (
-  state,
-  {oldLayer, prop, newConfig}
-) => {
+export const layerColorUIChangeUpdater = (state, {oldLayer, prop, newConfig}) => {
   const newLayer = oldLayer.updateLayerColorUI(prop, newConfig);
   return {
     ...state,
@@ -761,9 +733,7 @@ export const layerColorUIChangeUpdater = (
  */
 export const toggleFilterAnimationUpdater = (state, action) => ({
   ...state,
-  filters: state.filters.map((f, i) =>
-    i === action.idx ? {...f, isAnimating: !f.isAnimating} : f
-  )
+  filters: state.filters.map((f, i) => (i === action.idx ? {...f, isAnimating: !f.isAnimating} : f))
 });
 
 /**
@@ -778,9 +748,7 @@ export const toggleFilterAnimationUpdater = (state, action) => ({
  */
 export const updateFilterAnimationSpeedUpdater = (state, action) => ({
   ...state,
-  filters: state.filters.map((f, i) =>
-    i === action.idx ? {...f, speed: action.speed} : f
-  )
+  filters: state.filters.map((f, i) => (i === action.idx ? {...f, speed: action.speed} : f))
 });
 
 /**
@@ -883,10 +851,13 @@ export const removeFilterUpdater = (state, action) => {
   ];
 
   const filteredDatasets = applyFiltersToDatasets(dataId, state.datasets, newFilters, state.layers);
-  const newEditor = getFilterIdInFeature(state.editor.selectedFeature) === id ? {
-    ...state.editor,
-    selectedFeature: null
-  } : state.editor;
+  const newEditor =
+    getFilterIdInFeature(state.editor.selectedFeature) === id
+      ? {
+          ...state.editor,
+          selectedFeature: null
+        }
+      : state.editor;
 
   let newState = set(['filters'], newFilters, state);
   newState = set(['datasets'], filteredDatasets, newState);
@@ -939,13 +910,8 @@ export const removeLayerUpdater = (state, {idx}) => {
   const newState = {
     ...state,
     layers: [...layers.slice(0, idx), ...layers.slice(idx + 1, layers.length)],
-    layerData: [
-      ...layerData.slice(0, idx),
-      ...layerData.slice(idx + 1, layerData.length)
-    ],
-    layerOrder: state.layerOrder
-      .filter(i => i !== idx)
-      .map(pid => (pid > idx ? pid - 1 : pid)),
+    layerData: [...layerData.slice(0, idx), ...layerData.slice(idx + 1, layerData.length)],
+    layerOrder: state.layerOrder.filter(i => i !== idx).map(pid => (pid > idx ? pid - 1 : pid)),
     clicked: layerToRemove.isLayerHovered(clicked) ? undefined : clicked,
     hoverInfo: layerToRemove.isLayerHovered(hoverInfo) ? undefined : hoverInfo,
     splitMaps: newMaps
@@ -1014,9 +980,7 @@ export const removeDatasetUpdater = (state, action) => {
   );
 
   // remove filters
-  const filters = state.filters.filter(
-    filter => !filter.dataId.includes(datasetKey)
-  );
+  const filters = state.filters.filter(filter => !filter.dataId.includes(datasetKey));
 
   // update interactionConfig
   let {interactionConfig} = state;
@@ -1089,10 +1053,7 @@ export const resetMapConfigUpdater = state => ({
  * @returns {Object} nextState
  * @public
  */
-export const receiveMapConfigUpdater = (
-  state,
-  {payload: {config = {}, options = {}}}
-) => {
+export const receiveMapConfigUpdater = (state, {payload: {config = {}, options = {}}}) => {
   if (!config.visState) {
     return state;
   }
@@ -1300,9 +1261,7 @@ export const updateVisDataUpdater = (state, action) => {
   // merge state with saved splitMaps
   mergedState = mergeSplitMaps(mergedState, splitMapsToBeMerged);
 
-  let newLayers = mergedState.layers.filter(
-    l => l.config.dataId in newDataEntries
-  );
+  let newLayers = mergedState.layers.filter(l => l.config.dataId in newDataEntries);
 
   if (!newLayers.length) {
     // no layer merged, find defaults
@@ -1313,9 +1272,7 @@ export const updateVisDataUpdater = (state, action) => {
 
   if (mergedState.splitMaps.length) {
     // if map is split, add new layers to splitMaps
-    newLayers = mergedState.layers.filter(
-      l => l.config.dataId in newDataEntries
-    );
+    newLayers = mergedState.layers.filter(l => l.config.dataId in newDataEntries);
     mergedState = {
       ...mergedState,
       splitMaps: addNewLayersToSplitMap(mergedState.splitMaps, newLayers)
@@ -1327,17 +1284,13 @@ export const updateVisDataUpdater = (state, action) => {
 
   // if no tooltips merged add default tooltips
   Object.keys(newDataEntries).forEach(dataId => {
-    const tooltipFields =
-      mergedState.interactionConfig.tooltip.config.fieldsToShow[dataId];
+    const tooltipFields = mergedState.interactionConfig.tooltip.config.fieldsToShow[dataId];
     if (!Array.isArray(tooltipFields) || !tooltipFields.length) {
       mergedState = addDefaultTooltips(mergedState, newDataEntries[dataId]);
     }
   });
 
-  let updatedState = updateAllLayerDomainData(
-    mergedState,
-    Object.keys(newDataEntries)
-  );
+  let updatedState = updateAllLayerDomainData(mergedState, Object.keys(newDataEntries));
 
   // register layer animation domain,
   // need to be called after layer data is calculated
@@ -1441,7 +1394,6 @@ export const loadFilesErrUpdater = (state, {error}) => ({
  * @public
  */
 export const applyCPUFilterUpdater = (state, {dataId}) => {
-
   // apply cpuFilter
   const dataIds = toArray(dataId);
 
@@ -1473,10 +1425,7 @@ export const setMapInfoUpdater = (state, action) => ({
  */
 export function addDefaultLayers(state, datasets) {
   const defaultLayers = Object.values(datasets).reduce(
-    (accu, dataset) => [
-      ...accu,
-      ...(findDefaultLayer(dataset, state.layerClasses) || [])
-    ],
+    (accu, dataset) => [...accu, ...(findDefaultLayer(dataset, state.layerClasses) || [])],
     []
   );
 
@@ -1524,21 +1473,13 @@ export function updateAllLayerDomainData(state, dataId, updatedFilter) {
 
   state.layers.forEach((oldLayer, i) => {
     if (oldLayer.config.dataId && dataIds.includes(oldLayer.config.dataId)) {
-
       // No need to recalculate layer domain if filter has fixed domain
       const newLayer =
         updatedFilter && updatedFilter.fixedDomain
           ? oldLayer
-          : oldLayer.updateLayerDomain(
-              state.datasets,
-              updatedFilter
-            );
+          : oldLayer.updateLayerDomain(state.datasets, updatedFilter);
 
-      const {layerData, layer} = calculateLayerData(
-        newLayer,
-        state,
-        state.layerData[i]
-      );
+      const {layerData, layer} = calculateLayerData(newLayer, state, state.layerData[i]);
 
       // console.log('LayerData', layerData);
       newLayers.push(layer);
@@ -1620,7 +1561,6 @@ export const setEditorModeUpdater = (state, {mode}) => ({
  * @return {Object} nextState
  */
 export function setFeaturesUpdater(state, {features = []}) {
-
   const lastFeature = features.length && features[features.length - 1];
 
   const newState = {
@@ -1629,8 +1569,7 @@ export function setFeaturesUpdater(state, {features = []}) {
       ...state.editor,
       // only save none filter features to editor
       features: features.filter(f => !getFilterIdInFeature(f)),
-      mode: lastFeature && lastFeature.properties.isClosed ?
-        EDITOR_MODES.EDIT : state.editor.mode
+      mode: lastFeature && lastFeature.properties.isClosed ? EDITOR_MODES.EDIT : state.editor.mode
     }
   };
 
@@ -1653,7 +1592,7 @@ export function setFeaturesUpdater(state, {features = []}) {
     return setFilterUpdater(newState, {idx: filterIdx, prop: 'value', value: featureValue});
   }
 
-  return newState
+  return newState;
 }
 
 /**
@@ -1679,7 +1618,6 @@ export const setSelectedFeatureUpdater = (state, {feature}) => ({
  * @return {Object} nextState
  */
 export function deleteFeatureUpdater(state, {feature}) {
-
   if (!feature) {
     return state;
   }
@@ -1693,8 +1631,7 @@ export function deleteFeatureUpdater(state, {feature}) {
   };
 
   if (getFilterIdInFeature(feature)) {
-    const filterIdx = newState.filters
-      .findIndex(f => f.id === getFilterIdInFeature(feature));
+    const filterIdx = newState.filters.findIndex(f => f.id === getFilterIdInFeature(feature));
 
     return filterIdx > -1 ? removeFilterUpdater(newState, {idx: filterIdx}) : newState;
   }
@@ -1740,7 +1677,8 @@ export function setPolygonFilterLayerUpdater(state, payload) {
       const noneFilterFeature = {
         ...feature,
         properties: {
-          ...feature.properties, filterId: null
+          ...feature.properties,
+          filterId: null
         }
       };
 
@@ -1758,14 +1696,11 @@ export function setPolygonFilterLayerUpdater(state, payload) {
     const isLayerIncluded = layerId.includes(layer.id);
     const filter = state.filters[filterIdx];
 
-    newLayerId = isLayerIncluded ?
-     // if layer is included, remove it
-      filter.layerId.filter(l => l !== layer.id) : [
-        ...filter.layerId,
-        layer.id
-      ];
+    newLayerId = isLayerIncluded
+      ? // if layer is included, remove it
+        filter.layerId.filter(l => l !== layer.id)
+      : [...filter.layerId, layer.id];
   } else {
-
     // if we haven't create the polygon filter, create it
     const newFilter = generatePolygonFilter([], feature);
     filterIdx = state.filters.length;
@@ -1782,7 +1717,7 @@ export function setPolygonFilterLayerUpdater(state, payload) {
     };
   }
 
-  return setFilterUpdater(newState, {idx: filterIdx, prop: 'layerId', value: newLayerId})
+  return setFilterUpdater(newState, {idx: filterIdx, prop: 'layerId', value: newLayerId});
 }
 
 /**
@@ -1798,5 +1733,5 @@ export function toggleEditorVisibility(state, {visible}) {
       ...state.editor,
       visible: !state.editor.visible
     }
-  }
+  };
 }

@@ -164,8 +164,7 @@ function AddMapStyleModalFactory() {
     render() {
       const {inputStyle, mapState, mapboxApiUrl} = this.props;
 
-      const mapboxApiAccessToken =
-        inputStyle.accessToken || this.props.mapboxApiAccessToken;
+      const mapboxApiAccessToken = inputStyle.accessToken || this.props.mapboxApiAccessToken;
       const mapProps = {
         ...mapState,
         mapboxApiUrl,
@@ -214,9 +213,7 @@ function AddMapStyleModalFactory() {
                 <InputLight
                   type="text"
                   value={inputStyle.accessToken || ''}
-                  onChange={({target: {value}}) =>
-                    this.props.inputMapStyle({accessToken: value})
-                  }
+                  onChange={({target: {value}}) => this.props.inputMapStyle({accessToken: value})}
                   placeholder="e.g. pk.abcdefg.xxxxxx"
                 />
               </StyledModalSection>
@@ -235,9 +232,7 @@ function AddMapStyleModalFactory() {
                 <InputLight
                   type="text"
                   value={inputStyle.url || ''}
-                  onChange={({target: {value}}) =>
-                    this.props.inputMapStyle({url: value})
-                  }
+                  onChange={({target: {value}}) => this.props.inputMapStyle({url: value})}
                   placeholder="e.g. mapbox://styles/uberdataviz/abcdefghijklmnopq"
                 />
               </StyledModalSection>
@@ -246,9 +241,7 @@ function AddMapStyleModalFactory() {
                 <InputLight
                   type="text"
                   value={inputStyle.label || ''}
-                  onChange={({target: {value}}) =>
-                    this.props.inputMapStyle({label: value})
-                  }
+                  onChange={({target: {value}}) => this.props.inputMapStyle({label: value})}
                 />
               </StyledModalSection>
             </StyledModalVerticalPanel>

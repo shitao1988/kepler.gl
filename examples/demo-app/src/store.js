@@ -40,6 +40,7 @@ export const middlewares = enhanceReduxMiddleware([
   routerMiddleware(browserHistory)
 ]);
 
+
 export const enhancers = [applyMiddleware(...middlewares)];
 
 const initialState = {};
@@ -59,11 +60,7 @@ if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
       '@@kepler.gl/LAYER_HOVER'
     ]
   })
-};
+}
 */
 
-export default createStore(
-  reducers,
-  initialState,
-  composeEnhancers(...enhancers)
-);
+export default createStore(reducers, initialState, composeEnhancers(...enhancers));

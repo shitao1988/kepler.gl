@@ -62,8 +62,7 @@ const getDataRowCount = (datasets, selectedDataset, filtered) => {
 const ExportDataModalFactory = () => {
   class ExportDataModal extends Component {
     componentDidMount() {
-      const toCPUFilter =
-        this.props.selectedDataset || Object.keys(this.props.datasets);
+      const toCPUFilter = this.props.selectedDataset || Object.keys(this.props.datasets);
       this.props.applyCPUFilter(toCPUFilter);
     }
 
@@ -93,10 +92,7 @@ const ExportDataModalFactory = () => {
                 </div>
               </div>
               <div className="selection">
-                <select
-                  value={selectedDataset}
-                  onChange={this._onSelectDataset}
-                >
+                <select value={selectedDataset} onChange={this._onSelectDataset}>
                   {['All'].concat(Object.keys(datasets)).map(d => (
                     <option key={d} value={d}>
                       {(datasets[d] && datasets[d].label) || d}
@@ -118,9 +114,7 @@ const ExportDataModalFactory = () => {
                     key={op.id}
                     selected={dataType === op.id}
                     available={op.available}
-                    onClick={() =>
-                      op.available && onChangeExportDataType(op.id)
-                    }
+                    onClick={() => op.available && onChangeExportDataType(op.id)}
                   >
                     <FileType ext={op.label} height="80px" fontSize="11px" />
                   </StyledType>
