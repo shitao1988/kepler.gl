@@ -1,4 +1,3 @@
-
 // Copyright (c) 2020 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 import {getDistanceScales} from 'viewport-mercator-project';
 import {notNullorUndefined} from 'utils/data-utils';
 import uniq from 'lodash.uniq';
@@ -25,13 +25,10 @@ import uniq from 'lodash.uniq';
 export const defaultPadding = 20;
 
 export function getTextOffsetByRadius(radiusScale, getRadius, mapState) {
-
   return textLabel => {
     const distanceScale = getDistanceScales(mapState);
-    const xMult =
-      textLabel.anchor === 'middle' ? 0 : textLabel.anchor === 'start' ? 1 : -1;
-    const yMult =
-      textLabel.alignment === 'center' ? 0 : textLabel.alignment === 'bottom' ? 1 : -1;
+    const xMult = textLabel.anchor === 'middle' ? 0 : textLabel.anchor === 'start' ? 1 : -1;
+    const yMult = textLabel.alignment === 'center' ? 0 : textLabel.alignment === 'bottom' ? 1 : -1;
 
     const sizeOffset =
       textLabel.alignment === 'center'
@@ -52,7 +49,7 @@ export function getTextOffsetByRadius(radiusScale, getRadius, mapState) {
           xMult * (getRadius * pixelRadius + padding),
           yMult * (getRadius * pixelRadius + padding + sizeOffset)
         ];
-  }
+  };
 }
 
 export const textLabelAccessor = textLabel => d => {
@@ -85,4 +82,4 @@ export const formatTextLabelData = ({textLabel, triggerChanged, oldLayerData, da
       getText
     };
   });
-}
+};

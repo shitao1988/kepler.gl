@@ -21,6 +21,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import get from 'lodash.get';
 
 import SidebarFactory from './side-panel/side-bar';
 import PanelHeaderFactory from './side-panel/panel-header';
@@ -29,6 +30,7 @@ import FilterManagerFactory from './side-panel/filter-manager';
 import InteractionManagerFactory from './side-panel/interaction-manager';
 import MapManagerFactory from './side-panel/map-manager';
 import PanelToggleFactory from './side-panel/panel-toggle';
+import CustomPanelsFactory from './side-panel/custom-panel';
 
 import {
   ADD_DATA_ID,
@@ -39,7 +41,7 @@ import {
   EXPORT_MAP_ID,
   SAVE_MAP_ID,
   SHARE_MAP_ID,
-  PANELS
+  SIDEBAR_PANELS
 } from 'constants/default-settings';
 
 const SidePanelContent = styled.div`
@@ -66,7 +68,8 @@ SidePanelFactory.deps = [
   LayerManagerFactory,
   FilterManagerFactory,
   InteractionManagerFactory,
-  MapManagerFactory
+  MapManagerFactory,
+  CustomPanelsFactory
 ];
 
 /**
@@ -81,9 +84,13 @@ export default function SidePanelFactory(
   LayerManager,
   FilterManager,
   InteractionManager,
-  MapManager
+  MapManager,
+  CustomPanels
 ) {
-  return class SidePanel extends PureComponent {
+  const customPanels = get(CustomPanels, ['defaultProps', 'panels']) || [];
+  const getCustomPanelProps = get(CustomPanels, ['defaultProps', 'getProps']) || (() => ({}));
+
+  class SidePanel extends PureComponent {
     static propTypes = {
       filters: PropTypes.arrayOf(PropTypes.any).isRequired,
       interactionConfig: PropTypes.object.isRequired,
@@ -95,8 +102,19 @@ export default function SidePanelFactory(
       datasets: PropTypes.object.isRequired,
       visStateActions: PropTypes.object.isRequired,
       mapStyleActions: PropTypes.object.isRequired,
-      availableProviders: PropTypes.object
+      availableProviders: PropTypes.object,
+      panels: PropTypes.arrayOf(PropTypes.object)
     };
+
+    static defaultProps = {
+      panels: SIDEBAR_PANELS,
+      uiState: {},
+      visStateActions: {},
+      mapStyleActions: {},
+      uiStateActions: {},
+      availableProviders: {}
+    };
+
     /* component private functions */
     _onOpenOrClose = () => {
       this.props.uiStateActions.toggleSidePanel(
@@ -136,6 +154,7 @@ export default function SidePanelFactory(
     render() {
       const {
         appName,
+        appWebsite,
         version,
         datasets,
         filters,
@@ -148,19 +167,19 @@ export default function SidePanelFactory(
         visStateActions,
         mapStyleActions,
         uiStateActions,
-        availableProviders = {}
+        availableProviders
       } = this.props;
 
       const {activeSidePanel} = uiState;
       const isOpen = Boolean(activeSidePanel);
+      const panels = [...this.props.panels, ...customPanels];
 
       const layerManagerActions = {
         addLayer: visStateActions.addLayer,
         layerConfigChange: visStateActions.layerConfigChange,
         layerColorUIChange: visStateActions.layerColorUIChange,
         layerTextLabelChange: visStateActions.layerTextLabelChange,
-        layerVisualChannelConfigChange:
-          visStateActions.layerVisualChannelConfigChange,
+        layerVisualChannelConfigChange: visStateActions.layerVisualChannelConfigChange,
         layerTypeChange: visStateActions.layerTypeChange,
         layerVisConfigChange: visStateActions.layerVisConfigChange,
         updateLayerBlending: visStateActions.updateLayerBlending,
@@ -207,6 +226,7 @@ export default function SidePanelFactory(
             <PanelHeader
               appName={appName}
               version={version}
+              appWebsite={appWebsite}
               visibleDropdown={uiState.visibleDropdown}
               showExportDropdown={uiStateActions.showExportDropdown}
               hideExportDropdown={uiStateActions.hideExportDropdown}
@@ -218,14 +238,14 @@ export default function SidePanelFactory(
               onShareMap={availableProviders.hasShare ? this._onClickShareMap : null}
             />
             <PanelToggle
-              panels={PANELS}
+              panels={panels}
               activePanel={activeSidePanel}
               togglePanel={uiStateActions.toggleSidePanel}
             />
             <SidePanelContent className="side-panel__content">
               <div>
                 <PanelTitle className="side-panel__content__title">
-                  {(PANELS.find(({id}) => id === activeSidePanel) || {}).label}
+                  {(panels.find(({id}) => id === activeSidePanel) || {}).label}
                 </PanelTitle>
                 {activeSidePanel === 'layer' && (
                   <LayerManager
@@ -254,16 +274,21 @@ export default function SidePanelFactory(
                   />
                 )}
                 {activeSidePanel === 'map' && (
-                  <MapManager
-                    {...mapManagerActions}
-                    mapStyle={this.props.mapStyle}
-                  />
+                  <MapManager {...mapManagerActions} mapStyle={this.props.mapStyle} />
                 )}
+                {customPanels.length && customPanels.find(p => p.id === activeSidePanel) ? (
+                  <CustomPanels
+                    {...getCustomPanelProps(this.props)}
+                    activeSidePanel={activeSidePanel}
+                  />
+                ) : null}
               </div>
             </SidePanelContent>
           </Sidebar>
         </div>
       );
     }
-  };
+  }
+
+  return SidePanel;
 }
