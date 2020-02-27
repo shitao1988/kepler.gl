@@ -47,6 +47,7 @@ export function CustomPanelHeaderFactory(...deps) {
       {
         ...defaultActionItems.find(item => item.id === 'save'),
         label: null,
+        id: 'save',
         tooltip: '分享'
       }
     ]

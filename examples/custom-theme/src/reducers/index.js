@@ -21,7 +21,7 @@
 import {combineReducers} from 'redux';
 import {handleActions} from 'redux-actions';
 
-import keplerGlReducer from 'kepler.gl/reducers';
+import keplerGlReducer from '@shitao1988/swsk-kepler-gl/reducers';
 
 import {INIT} from '../actions';
 

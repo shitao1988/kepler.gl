@@ -22,7 +22,7 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import window from 'global/window';
 import {connect} from 'react-redux';
-import KeplerGl from 'kepler.gl';
+import KeplerGl from '@shitao1988/swsk-kepler-gl';
 
 const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
@@ -36,6 +36,7 @@ const theme = {
   dropdownListBgd: '#ffffff',
   textColorHl: '#2473bd',
   inputBgd: '#f7f7f7',
+  primaryBtnColor:'#1869b5',
   inputBgdHover: '#ffffff',
   inputBgdActive: '#ffffff',
   dropdownListHighlightBg: '#f0f0f0',
@@ -78,7 +79,7 @@ function App(props) {
   return (
     <div>
       <StyleSwitch>
-        <label htmlFor="custom-theme">Custom theme</label>
+        <label htmlFor="custom-theme">切换主题</label>
         <input
           type="checkbox"
           checked={customTheme}
@@ -87,7 +88,7 @@ function App(props) {
         />
       </StyleSwitch>
       <KeplerGl
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxApiAccessToken="pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA"
         id="map"
         /*
          * Specify path to keplerGl state, because it is not mount at the root
