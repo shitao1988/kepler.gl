@@ -19,12 +19,15 @@
 // THE SOFTWARE.
 
 import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
 import window from 'global/window';
 import {connect} from 'react-redux';
-import KeplerGl from '@shitao1988/swsk-kepler-gl';
+import {replaceMapControl} from './factories/map-control';
+import {replacePanelHeader} from './factories/panel-header';
 
-const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+const KeplerGl = require('@shitao1988/swsk-kepler-gl/components').injectComponents([
+  replaceMapControl(),
+  replacePanelHeader()
+]);
 
 const theme = {
   sidePanelBg: '#ffffff',
@@ -50,17 +53,6 @@ const theme = {
 
 const emptyTheme = {};
 
-const StyleSwitch = styled.div`
-  position: absolute;
-  bottom: 24px;
-  right: 24px;
-  background-color: whitesmoke;
-  padding: 4px;
-  z-index: 1000;
-  border-radius: 3px;
-  border: 1px solid mediumseagreen;
-`;
-
 function App(props) {
   const [customTheme, setTheme] = useState(false);
   const [windowDimension, setDimension] = useState({
@@ -78,15 +70,6 @@ function App(props) {
 
   return (
     <div>
-      <StyleSwitch>
-        <label htmlFor="custom-theme">切换主题</label>
-        <input
-          type="checkbox"
-          checked={customTheme}
-          id="custom-theme"
-          onChange={e => setTheme(e.target.checked)}
-        />
-      </StyleSwitch>
       <KeplerGl
         mapboxApiAccessToken="pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA"
         id="map"
@@ -96,7 +79,7 @@ function App(props) {
         getState={state => state.demo.keplerGl}
         width={windowDimension.width}
         height={windowDimension.height}
-        theme={customTheme ? theme : emptyTheme}
+        theme={props.demo.app.theme==='light' ? theme : emptyTheme}
       />
     </div>
   );

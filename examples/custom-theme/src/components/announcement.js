@@ -18,19 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// CONSTANTS
-export const INIT = 'INIT';
-export const TOGGLE_THEME = 'TOGGLE_THEME';
+import React from 'react';
+import styled from 'styled-components';
 
-// ACTIONS
-export function initApp() {
-  return {
-    type: INIT
-  };
-}
+const StyledText = styled.div`
+  font-size: 12px;
+`;
 
-export function toggleTheme() {
-  return {
-    type: TOGGLE_THEME
-  };
-}
+const StyledLink = styled.a`
+  text-decoration: underline !important;
+  color: white;
+  font-weight: 500;
+
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+const DisableBanner = styled.div`
+  display: inline-block;
+  margin-left: 20px;
+`;
+const FormLink = 'https://www.informationisbeautifulawards.com/showcase/3082-kepler-gl';
+
+const Announcement = ({onDisable}) => (
+  <StyledText>
+    <span>Kepler.gl is shortlisted in the Information is Beautiful Award. </span>
+    <StyledLink target="_blank" href={FormLink}>
+      Vote for us
+    </StyledLink>
+    <span> before Fri 19th Oct!</span>
+    {onDisable ? (
+      <DisableBanner>
+        <StyledLink onClick={onDisable}>Already Voted!</StyledLink>
+      </DisableBanner>
+    ) : null}
+  </StyledText>
+);
+
+export default Announcement;

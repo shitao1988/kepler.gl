@@ -18,19 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// CONSTANTS
-export const INIT = 'INIT';
-export const TOGGLE_THEME = 'TOGGLE_THEME';
+import {PanelHeaderFactory, Icons} from '@shitao1988/swsk-kepler-gl/components';
+import {GITHUB_BUG_REPORT, GITHUB_USER_GUIDE} from '@shitao1988/swsk-kepler-gl/constants';
 
-// ACTIONS
-export function initApp() {
-  return {
-    type: INIT
+export function CustomPanelHeaderFactory(...deps) {
+  const PanelHeader = PanelHeaderFactory(...deps);
+  const defaultActionItems = PanelHeader.defaultProps.actionItems;
+  PanelHeader.defaultProps = {
+    ...PanelHeader.defaultProps,
+    actionItems: [
+      {
+        id: 'docs',
+        iconComponent: Icons.Docs,
+        href: GITHUB_USER_GUIDE,
+        blank: true,
+        tooltip: '用户指南',
+        onClick: () => {}
+      },
+      defaultActionItems.find(item => item.id === 'storage'),
+      {
+        ...defaultActionItems.find(item => item.id === 'save'),
+        label: null,
+        id: 'save',
+        tooltip: '分享'
+      }
+    ]
   };
+  return PanelHeader;
 }
 
-export function toggleTheme() {
-  return {
-    type: TOGGLE_THEME
-  };
+CustomPanelHeaderFactory.deps = PanelHeaderFactory.deps;
+
+export function replacePanelHeader() {
+  return [PanelHeaderFactory, CustomPanelHeaderFactory];
 }

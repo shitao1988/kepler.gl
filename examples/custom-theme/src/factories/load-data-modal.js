@@ -18,19 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// CONSTANTS
-export const INIT = 'INIT';
-export const TOGGLE_THEME = 'TOGGLE_THEME';
+import {LoadDataModalFactory} from '@shitao1988/swsk-kepler-gl/components';
+import LoadDataModal from '../components/load-data-modal/load-data-modal';
+import {withState} from '@shitao1988/swsk-kepler-gl/components';
 
-// ACTIONS
-export function initApp() {
-  return {
-    type: INIT
-  };
-}
+import {loadRemoteMap, loadSample, switchToLoadingMethod} from '../actions';
 
-export function toggleTheme() {
-  return {
-    type: TOGGLE_THEME
-  };
+export const CustomLoadDataModalFactory = () =>
+  withState([], state => ({...state.demo.app}), {
+    onSwitchToLoadingMethod: switchToLoadingMethod,
+    onLoadSample: loadSample,
+    onLoadRemoteMap: loadRemoteMap
+  })(LoadDataModal);
+
+export function replaceLoadDataModal() {
+  return [LoadDataModalFactory, CustomLoadDataModalFactory];
 }

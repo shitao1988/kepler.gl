@@ -23,7 +23,7 @@ import {handleActions} from 'redux-actions';
 
 import keplerGlReducer from '@shitao1988/swsk-kepler-gl/reducers';
 
-import {INIT} from '../actions';
+import {INIT,TOGGLE_THEME} from '../actions';
 
 // INITIAL_APP_STATE
 const initialAppState = {
@@ -36,7 +36,11 @@ export const appReducer = handleActions(
     [INIT]: state => ({
       ...state,
       loaded: true
-    })
+    }),
+    [TOGGLE_THEME]: state => ({
+      ...state,
+      theme: state.theme==='light'?'black':'light'
+    }),
   },
   initialAppState
 );

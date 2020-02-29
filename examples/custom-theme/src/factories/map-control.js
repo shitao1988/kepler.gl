@@ -18,19 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// CONSTANTS
-export const INIT = 'INIT';
-export const TOGGLE_THEME = 'TOGGLE_THEME';
+import {MapControlFactory} from '@shitao1988/swsk-kepler-gl/components';
+import CustomMapControl from '../components/map-control/map-control';
+import {withState} from '@shitao1988/swsk-kepler-gl/components';
+import {toggleTheme} from '../actions';
 
-// ACTIONS
-export function initApp() {
-  return {
-    type: INIT
-  };
-}
 
-export function toggleTheme() {
-  return {
-    type: TOGGLE_THEME
-  };
+export const CustomMapControlFactory = () =>
+  withState([], state => ({...state.demo.app}),{
+    onToggleTheme: toggleTheme
+  })(CustomMapControl);
+
+export function replaceMapControl() {
+  return [MapControlFactory, CustomMapControlFactory];
 }

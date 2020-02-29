@@ -18,19 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// CONSTANTS
-export const INIT = 'INIT';
-export const TOGGLE_THEME = 'TOGGLE_THEME';
+import React from 'react';
+import styled from 'styled-components';
+import {Icons} from 'kepler.gl/components';
 
-// ACTIONS
-export function initApp() {
-  return {
-    type: INIT
-  };
-}
+const StyledBanner = styled.div`
+  align-items: center;
+  background-color: ${props => props.bgColor};
+  color: ${props => props.fontColor};
+  display: flex;
+  height: ${props => props.height}px;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: absolute;
+  transition: top 1s;
+  width: 100%;
+  z-index: 9999;
 
-export function toggleTheme() {
-  return {
-    type: TOGGLE_THEME
-  };
-}
+  svg:hover {
+    cursor: pointer;
+  }
+`;
+
+const Banner = ({
+  bgColor = '#1F7CF4',
+  fontColor = '#FFFFFF',
+  height = 30,
+  children,
+  onClose,
+  show
+}) => (
+  <StyledBanner
+    className="top-banner"
+    bgColor={bgColor}
+    fontColor={fontColor}
+    height={height}
+    style={{top: show ? 0 : `-100px`}}
+  >
+    <div>{children}</div>
+    <Icons.Delete height="14px" onClick={onClose} />
+  </StyledBanner>
+);
+
+export default Banner;
