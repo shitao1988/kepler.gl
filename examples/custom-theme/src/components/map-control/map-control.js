@@ -57,7 +57,7 @@ const ToggleThemeButton = React.memo(({theme, onToggleTheme}) => (
     data-tip
     data-for="action-theme"
   >
-    <ThemeIcon height="21px" />
+    <ThemeIcon height="50px" />
     <MapControlTooltip
       id="action-theme"
       message={theme==='black' ? '切换亮主题' : '切换暗主题'}
