@@ -230,7 +230,7 @@ export default class ColorRangeSelect extends Component {
   }
 }
 
-export const PaletteConfig = ({label, value, config: {type, options}, onChange}) => (
+export const PaletteConfig = ({label, value, config: {type, options}, onChange,renderLabel}) => (
   <StyledPaletteConfig className="color-palette__config" onClick={e => e.stopPropagation()}>
     <div className="color-palette__config__label">
       <PanelLabel>{label}</PanelLabel>

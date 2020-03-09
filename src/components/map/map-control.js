@@ -127,11 +127,11 @@ const LayerSelectorPanel = React.memo(({items, onMapToggleLayer, isActive, toggl
       <Layers height="22px" />
       <MapControlTooltip
         id="toggle-layer"
-        message={isActive ? 'Hide layer panel' : 'Show layer panel'}
+        message={isActive ? '隐藏图层面板' : '显示图层面板'}
       />
     </MapControlButton>
   ) : (
-    <MapControlPanel header="Visible layers" onClick={toggleMenuPanel}>
+    <MapControlPanel header="图层" onClick={toggleMenuPanel}>
       <MapLayerSelector layers={items} onMapToggleLayer={onMapToggleLayer} />
     </MapControlPanel>
   )

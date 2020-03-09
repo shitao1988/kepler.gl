@@ -66,7 +66,7 @@ export const StyledMapControlLegend = styled.div`
 
 export const VisualChannelMetric = ({name}) => (
   <div className="legend--layer__title">
-    <span className="legend--layer_by">by </span>
+    <span className="legend--layer_by">基于 </span>
     <span className="legend--layer_color_field">{name}</span>
   </div>
 );

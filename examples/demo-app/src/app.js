@@ -347,7 +347,7 @@ class App extends Component {
             <AutoSizer>
               {({height, width}) => (
                 <KeplerGl
-                  mapboxApiAccessToken='MapboxAccessToken=pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA'
+                  mapboxApiAccessToken='pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA'
                   id="map"
                   /*
                    * Specify path to keplerGl state, because it is not mount at the root

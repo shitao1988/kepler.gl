@@ -110,11 +110,11 @@ class HeatmapLayer extends MapboxGLLayer {
   getVisualChannelDescription(channel) {
     return channel === 'color'
       ? {
-          label: 'color',
+          label: '颜色',
           measure: 'Density'
         }
       : {
-          label: 'weight',
+          label: '权重',
           measure: this.config.weightField ? this.config.weightField.name : 'Density'
         };
   }
