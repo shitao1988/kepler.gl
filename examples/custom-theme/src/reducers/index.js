@@ -23,6 +23,17 @@ import {handleActions} from 'redux-actions';
 
 import keplerGlReducer from '@shitao1988/swsk-kepler-gl/reducers';
 
+const customizedKeplerGlReducer = keplerGlReducer.initialState({
+  uiState: {
+    // hide side panel when mounted
+    activeSidePanel: "layer",
+    readOnly: false,
+    // hide all modals whtn mounted
+    currentModal: null
+  }
+});
+
+
 import {INIT,TOGGLE_THEME} from '../actions';
 
 // INITIAL_APP_STATE
@@ -48,6 +59,6 @@ export const appReducer = handleActions(
 // export demoReducer to be combined in website app
 export default combineReducers({
   // mount keplerGl reducer
-  keplerGl: keplerGlReducer,
+  keplerGl: customizedKeplerGlReducer,
   app: appReducer
 });

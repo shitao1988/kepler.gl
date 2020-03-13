@@ -21,7 +21,6 @@
 import window from 'global/window';
 import {combineReducers, createStore, applyMiddleware, compose} from 'redux';
 import {enhanceReduxMiddleware} from '@shitao1988/swsk-kepler-gl/middleware';
-
 import demoReducer from './reducers/index';
 
 const reducers = combineReducers({

@@ -23,6 +23,8 @@ import window from 'global/window';
 import {connect} from 'react-redux';
 import {replaceMapControl} from './factories/map-control';
 import {replacePanelHeader} from './factories/panel-header';
+import { addDataToMap, wrapTo} from "@shitao1988/swsk-kepler-gl/actions";
+import { processRowObject, processGeojson } from "@shitao1988/swsk-kepler-gl/processors";
 
 const KeplerGl = require('@shitao1988/swsk-kepler-gl/components').injectComponents([
   replaceMapControl(),
@@ -39,7 +41,7 @@ const theme = {
   dropdownListBgd: '#ffffff',
   textColorHl: '#2473bd',
   inputBgd: '#f7f7f7',
-  primaryBtnColor:'#1869b5',
+  primaryBtnColor: '#1869b5',
   inputBgdHover: '#ffffff',
   inputBgdActive: '#ffffff',
   dropdownListHighlightBg: '#f0f0f0',
@@ -68,6 +70,29 @@ function App(props) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const receiveMessage = event => {
+      console.log(event.data);
+      if (event !== undefined && event.data&&event.data.title) {
+        props.dispatch(
+          wrapTo(
+            "map",
+            addDataToMap({
+              datasets: [
+                {
+                  info: { label: event.data.title, id: event.data.id },
+                  data: processGeojson(event.data)
+                }
+              ]
+            })
+          )
+        );
+      }
+    };
+    window.addEventListener('message', receiveMessage, false);
+    return () => window.removeEventListener('message', receiveMessage);
+  }, []);
+
   return (
     <div>
       <KeplerGl
@@ -79,7 +104,7 @@ function App(props) {
         getState={state => state.demo.keplerGl}
         width={windowDimension.width}
         height={windowDimension.height}
-        theme={props.demo.app.theme==='light' ? theme : emptyTheme}
+        theme={props.demo.app.theme === 'light' ? theme : emptyTheme}
       />
     </div>
   );

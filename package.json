@@ -1,7 +1,7 @@
 {
   "name": "@shitao1988/swsk-kepler-gl",
   "author": "Shan He <shan@uber.com>",
-  "version": "2.0.0",
+  "version": "2.0.4",
   "description": "kepler.gl is a webgl based application to visualize large scale location data in the browser",
   "license": "MIT",
   "main": "dist/index.js",
@@ -59,7 +59,6 @@
   },
   "files": [
     "dist",
-    "src",
     "actions.js",
     "components.js",
     "constants.js",
@@ -124,7 +123,7 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-json-pretty": "^1.7.9",
     "react-lifecycles-compat": "^3.0.4",
-    "react-map-gl": "^5.0.3",
+    "react-map-gl": "^5.2.3",
     "react-map-gl-draw": "0.14.8",
     "react-markdown": "^4.0.6",
     "react-modal": "^3.8.1",

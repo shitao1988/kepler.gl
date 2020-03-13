@@ -20,12 +20,48 @@
 
 import {PanelHeaderFactory, Icons} from '@shitao1988/swsk-kepler-gl/components';
 import {GITHUB_BUG_REPORT, GITHUB_USER_GUIDE} from '@shitao1988/swsk-kepler-gl/constants';
+import React, {useState} from 'react';
+
+import styled from 'styled-components';
+const LogoTitle = styled.div`
+  display: inline-block;
+  margin-left: 6px;
+`;
+
+const LogoName = styled.div`
+  .logo__link {
+    color: ${props => props.theme.activeColor};
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 1.17px;
+  }
+`;
+
+
+const LogoWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+`;
 
 export function CustomPanelHeaderFactory(...deps) {
   const PanelHeader = PanelHeaderFactory(...deps);
   const defaultActionItems = PanelHeader.defaultProps.actionItems;
   PanelHeader.defaultProps = {
     ...PanelHeader.defaultProps,
+    logoComponent:({appName, version}) => (
+      <LogoWrapper className="side-panel-logo">
+        <LogoTitle className="logo__title">
+          <LogoName className="logo__name">
+            <a
+              className="logo__link"
+            >
+              地理可视化
+            </a>
+          </LogoName>
+        </LogoTitle>
+      </LogoWrapper>
+    ),
     actionItems: [
       {
         id: 'docs',

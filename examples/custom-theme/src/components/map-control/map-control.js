@@ -46,7 +46,6 @@ const MapControlTooltip = React.memo(({id, message}) => (
 
 MapControlTooltip.displayName = 'MapControlTooltip';
 
-
 const ToggleThemeButton = React.memo(({theme, onToggleTheme}) => (
   <MapControlButton
     onClick={e => {

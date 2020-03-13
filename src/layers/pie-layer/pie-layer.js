@@ -281,6 +281,8 @@ export default class PieLayer extends Layer {
     const {data} = opts;
     return (
       this.config.isVisible &&
+      data.chartColumns.length&&
+      data.length<50&&
       data.data &&
       data.data.map((item,index) => {
         return (
