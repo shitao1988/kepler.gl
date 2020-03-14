@@ -148,9 +148,7 @@ const MapControlPanel = React.memo(({children, header, onClick, scale = 1, isExp
     }}
   >
     <StyledMapControlPanelHeader>
-      {isExport ? (
-        <KeplerGlLogo version={false} appName="kepler.gl" />
-      ) : (
+      {isExport ? null: (
         <span style={{verticalAlign: 'middle'}}>{header}</span>
       )}
       {isExport ? null : (

@@ -79,7 +79,7 @@ function CustomMapPanel(props) {
 
 const CustomMapControl = props => (
   <StyledMapControlOverlay>
-    <CustomMapPanel {...props} />
+      {!props.isExport?<CustomMapPanel {...props} /> : null}
     <MapControl {...props} />
   </StyledMapControlOverlay>
 );

@@ -79,7 +79,7 @@ const ImagePreview = ({exportImage = {}, width = 400, showDimension}) => {
     <StyledImagePreview>
       {showDimension ? (
         <div className="dimension">
-          {imageW} pixel x {imageH} pixel
+          {imageW} 像素 x {imageH} 像素
         </div>
       ) : null}
       <div className="preview-image" style={imageStyle}>
@@ -89,7 +89,7 @@ const ImagePreview = ({exportImage = {}, width = 400, showDimension}) => {
           </div>
         ) : error ? (
           <div className="preview-image--error">
-            <span> {error.message || 'Generate map image failed!'}</span>
+            <span> {error.message || '生成图片失败!'}</span>
           </div>
         ) : (
           <img className="preview-image-placeholder" src={imageDataUri} />
