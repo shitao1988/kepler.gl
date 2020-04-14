@@ -20,25 +20,40 @@
 
 import React from 'react';
 import test from 'tape';
-import {mountWithTheme} from 'test/helpers/component-utils';
+import {mountWithTheme, IntlWrapper} from 'test/helpers/component-utils';
 import sinon from 'sinon';
-import SaveMapModalFactory from 'components/modals/save-map-modal';
+import SaveMapModalFactory from '../../../../src/components/modals/save-map-modal';
 
-import CloudTile from 'components/modals/cloud-tile';
-import ImagePreview from 'components/common/image-preview';
+import CloudTile from '../../../../src/components/modals/cloud-tile';
+import ImagePreview from '../../../../src/components/common/image-preview';
+import MockProvider from 'test/helpers/mock-provider';
+
+const mockProvider = new MockProvider();
 const SaveMapModal = SaveMapModalFactory();
 
 test('Components -> SaveMapModal.mount', t => {
-  const onUpdateSetting = sinon.spy();
+  const onUpdateImageSetting = sinon.spy();
   const onSetCloudProvider = sinon.spy();
 
   // mount
   t.doesNotThrow(() => {
     mountWithTheme(
-      <SaveMapModal onUpdateSetting={onUpdateSetting} onSetCloudProvider={onSetCloudProvider} />
+      <IntlWrapper>
+        <SaveMapModal
+          onUpdateImageSetting={onUpdateImageSetting}
+          onSetCloudProvider={onSetCloudProvider}
+          cloudProviders={[mockProvider]}
+          currentProvider="taro"
+        />
+      </IntlWrapper>
     );
   }, 'Show not fail without props');
-  t.ok(onUpdateSetting.calledOnce, 'should call onUpdateSetting when mount');
+  t.ok(onUpdateImageSetting.calledOnce, 'should call onUpdateImageSetting when mount');
+  t.deepEqual(
+    onUpdateImageSetting.args,
+    [[{mapW: 100, mapH: 60, ratio: 'CUSTOM', legend: false}]],
+    'should call onUpdateImageSetting when mount'
+  );
   t.ok(onSetCloudProvider.notCalled, 'should not call onSetCloudProvider when mount');
 
   t.end();
@@ -47,29 +62,29 @@ test('Components -> SaveMapModal.mount', t => {
 test('Components -> SaveMapModal.mount with providers', t => {
   const onSetCloudProvider = sinon.spy();
 
-  const mockProvider = {
-    getAccessToken: () => true,
-    name: 'taro'
-  };
   // mount
   t.doesNotThrow(() => {
     mountWithTheme(
-      <SaveMapModal
-        onUpdateSetting={() => {}}
-        onSetCloudProvider={onSetCloudProvider}
-        cloudProviders={[mockProvider]}
-      />
+      <IntlWrapper>
+        <SaveMapModal
+          onUpdateSetting={() => {}}
+          onSetCloudProvider={onSetCloudProvider}
+          cloudProviders={[mockProvider]}
+        />
+      </IntlWrapper>
     );
   }, 'Show not fail mount props');
   t.ok(onSetCloudProvider.calledWithExactly('taro'), 'should set default provider when mount');
 
   const wrapper = mountWithTheme(
-    <SaveMapModal
-      onUpdateSetting={() => {}}
-      onSetCloudProvider={onSetCloudProvider}
-      cloudProviders={[mockProvider]}
-      currentProvider="hello"
-    />
+    <IntlWrapper>
+      <SaveMapModal
+        onUpdateSetting={() => {}}
+        onSetCloudProvider={onSetCloudProvider}
+        cloudProviders={[mockProvider]}
+        currentProvider="hello"
+      />
+    </IntlWrapper>
   );
   t.ok(onSetCloudProvider.calledOnce, 'should not set default provider if it is already set');
 
@@ -87,7 +102,9 @@ test('Components -> SaveMapModal on change input', t => {
   // mount
   t.doesNotThrow(() => {
     wrapper = mountWithTheme(
-      <SaveMapModal onUpdateSetting={() => {}} onSetMapInfo={onSetMapInfo} />
+      <IntlWrapper>
+        <SaveMapModal onUpdateSetting={() => {}} onSetMapInfo={onSetMapInfo} />
+      </IntlWrapper>
     );
   }, 'Show not fail mount props');
 
@@ -106,12 +123,7 @@ test('Components -> SaveMapModal on click provider', t => {
   const onSetCloudProvider = sinon.spy();
   const login = sinon.spy();
   const logout = sinon.spy();
-
-  const mockProvider = {
-    getAccessToken: () => true,
-    name: 'taro',
-    logout
-  };
+  mockProvider.logout = logout;
 
   const mockProvider2 = {
     getAccessToken: () => false,
@@ -123,12 +135,15 @@ test('Components -> SaveMapModal on click provider', t => {
   // mount
   t.doesNotThrow(() => {
     wrapper = mountWithTheme(
-      <SaveMapModal
-        cloudProviders={[mockProvider, mockProvider2]}
-        currentProvider="taro"
-        onUpdateSetting={() => {}}
-        onSetCloudProvider={onSetCloudProvider}
-      />
+      <IntlWrapper>
+        <SaveMapModal
+          cloudProviders={[mockProvider, mockProvider2]}
+          currentProvider="taro"
+          onSetCloudProvider={onSetCloudProvider}
+          onUpdateSetting={() => {}}
+          onUpdateImageSetting={() => {}}
+        />
+      </IntlWrapper>
     );
   }, 'Show not fail mount props');
 
@@ -161,6 +176,33 @@ test('Components -> SaveMapModal on click provider', t => {
   const onSuccessLogout = logout.args[0][0];
   onSuccessLogout();
   t.ok(onSetCloudProvider.calledWithExactly(null), 'should call onSetCloudProvider with null');
+
+  t.end();
+});
+
+test('Components -> SaveMapModal.intl', t => {
+  let wrapper;
+  // mount English version
+  t.doesNotThrow(() => {
+    wrapper = mountWithTheme(
+      <IntlWrapper>
+        <SaveMapModal onUpdateSetting={() => {}} onSetMapInfo={() => {}} />
+      </IntlWrapper>
+    );
+  }, 'Show not fail mount props');
+
+  t.equal(wrapper.find('.title').text(), 'Cloud storage');
+
+  // mount Finnish version
+  t.doesNotThrow(() => {
+    wrapper = mountWithTheme(
+      <IntlWrapper locale={'fi'}>
+        <SaveMapModal onUpdateSetting={() => {}} onSetMapInfo={() => {}} />
+      </IntlWrapper>
+    );
+  }, 'Show not fail mount props');
+
+  t.equal(wrapper.find('.title').text(), 'Pilvitallennus');
 
   t.end();
 });

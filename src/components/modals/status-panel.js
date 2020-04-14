@@ -22,10 +22,9 @@ import React from 'react';
 import styled from 'styled-components';
 import {MapIcon} from 'components/common/icons';
 import {StyledExportSection} from 'components/common/styled-components';
-import NotificationItemFactory from 'components/notification-panel/notification-item';
-import ErrorBoundary from 'components/common/error-boundary';
+import ErrorDisplay from './error-display';
+import {FormattedMessage} from 'react-intl';
 
-const NotificationItem = NotificationItemFactory();
 const StyledUploader = styled.div`
   display: flex;
   align-items: center;
@@ -65,20 +64,7 @@ const Line = () => (
   </StyledSvg>
 );
 
-const ErrorDisplay = ({error}) => (
-  <ErrorBoundary>
-    <NotificationItem
-      notification={{
-        type: 'error',
-        message: error,
-        id: 'cloud-export-error'
-      }}
-      isExpanded
-    />
-  </ErrorBoundary>
-);
-
-const UploadAnimation = props => (
+export const UploadAnimation = props => (
   <StyledUploader>
     <StyledMapIcon>
       <MapIcon height="48px" />
@@ -91,7 +77,13 @@ const UploadAnimation = props => (
 const StatusPanel = ({error, isLoading, providerIcon}) => (
   <StyledExportSection>
     <div className="description">
-      <div className="title">{isLoading ? 'Map Uploading' : error ? 'Error' : null}</div>
+      <div className="title">
+        {isLoading ? (
+          <FormattedMessage id={'modal.statusPanel.mapUploading'} />
+        ) : error ? (
+          <FormattedMessage id={'modal.statusPanel.error'} />
+        ) : null}
+      </div>
     </div>
     <div className="selection">
       {isLoading && <UploadAnimation icon={providerIcon} />}

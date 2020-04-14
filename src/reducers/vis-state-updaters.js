@@ -19,62 +19,58 @@
 // THE SOFTWARE.
 
 import {console as Console} from 'global/window';
-import Task, {disableStackCapturing, withTask} from 'react-palm/tasks';
+import {disableStackCapturing, withTask} from 'react-palm/tasks';
 import cloneDeep from 'lodash.clonedeep';
 import uniq from 'lodash.uniq';
 import get from 'lodash.get';
 import xor from 'lodash.xor';
-
+import copy from 'copy-to-clipboard';
+import {parseFieldValue} from 'utils/data-utils';
 // Tasks
 import {LOAD_FILE_TASK} from 'tasks/tasks';
-
 // Actions
-import {loadFilesErr} from 'actions/vis-state-actions';
-import {addDataToMap} from 'actions';
-
+import {loadFilesErr, loadFileSuccess, loadNextFile} from 'actions/vis-state-actions';
 // Utils
-import {getDefaultInteraction, findFieldsToShow} from 'utils/interaction-utils';
+import {findFieldsToShow, getDefaultInteraction} from 'utils/interaction-utils';
 import {
-  FILTER_UPDATER_PROPS,
-  LIMITED_FILTER_EFFECT_PROPS,
   applyFilterFieldName,
   applyFiltersToDatasets,
-  generatePolygonFilter,
-  filterDatasetCPU,
-  getDefaultFilter,
-  getFilterPlot,
-  getDefaultFilterPlotType,
-  isInRange,
-  getFilterIdInFeature,
   featureToFilterValue,
+  FILTER_UPDATER_PROPS,
+  filterDatasetCPU,
+  generatePolygonFilter,
+  getDefaultFilter,
+  getDefaultFilterPlotType,
+  getFilterIdInFeature,
+  getFilterPlot,
+  isInRange,
+  LIMITED_FILTER_EFFECT_PROPS,
   updateFilterDataId
 } from 'utils/filter-utils';
-import {setFilterGpuMode, assignGpuChannel} from 'utils/gpu-filter-utils';
-import {createNewDataEntry} from 'utils/dataset-utils';
+import {assignGpuChannel, setFilterGpuMode} from 'utils/gpu-filter-utils';
+import {createNewDataEntry, sortDatasetByColumn} from 'utils/dataset-utils';
 import {set, toArray} from 'utils/utils';
 
-import {findDefaultLayer, calculateLayerData} from 'utils/layer-utils/layer-utils';
+import {calculateLayerData, findDefaultLayer} from 'utils/layer-utils/layer-utils';
 
 import {
+  mergeAnimationConfig,
   mergeFilters,
-  mergeLayers,
   mergeInteractions,
   mergeLayerBlending,
-  mergeSplitMaps,
-  mergeAnimationConfig
+  mergeLayers,
+  mergeSplitMaps
 } from './vis-state-merger';
 
 import {
   addNewLayersToSplitMap,
-  removeLayerFromSplitMaps,
-  computeSplitMapLayers
+  computeSplitMapLayers,
+  removeLayerFromSplitMaps
 } from 'utils/split-map-utils';
 
 import {Layer, LayerClasses} from 'layers';
-import {processFileToLoad} from 'utils/file-utils';
 import {DEFAULT_TEXT_LABEL} from 'layers/layer-factory';
-
-import {EDITOR_MODES} from 'constants/default-settings';
+import {EDITOR_MODES, SORT_ORDER} from 'constants/default-settings';
 
 // react-palm
 // disable capture exception for react-palm call to withTask
@@ -799,7 +795,9 @@ export const toggleFilterFeatureUpdater = (state, action) => {
   const isVisible = get(filter, ['value', 'properties', 'isVisible']);
   const newFilter = {
     ...filter,
-    value: featureToFilterValue(filter.value, filter.id, {isVisible: !isVisible})
+    value: featureToFilterValue(filter.value, filter.id, {
+      isVisible: !isVisible
+    })
   };
 
   return {
@@ -1315,35 +1313,58 @@ function closeSpecificMapAtIndex(state, action) {
  * @param {Object} state `visState`
  * @param {Object} action action
  * @param {Array<Object>} action.files array of fileblob
+ * @param {Function} action.onFinish action creator to execute after load file succeed
  * @returns {Object} nextState
  * @public
  */
 export const loadFilesUpdater = (state, action) => {
-  const {files} = action;
-  const filesToLoad = files.map(fileBlob => processFileToLoad(fileBlob));
+  const {files, onFinish = loadFileSuccess} = action;
+  if (!files.length) {
+    return state;
+  }
 
-  // reader -> parser -> augment -> receiveVisData
-  const loadFileTasks = [
-    Task.all(filesToLoad.map(LOAD_FILE_TASK)).bimap(results => {
-      const data = results.reduce(
-        (f, c) => ({
-          // using concat here because the current datasets could be an array or a single item
-          datasets: f.datasets.concat(c.datasets),
-          // we need to deep merge this thing unless we find a better solution
-          // this case will only happen if we allow to load multiple keplergl json files
-          config: {
-            ...f.config,
-            ...(c.config || {})
-          }
-        }),
-        {datasets: [], config: {}, options: {centerMap: true}}
-      );
-      return addDataToMap(data);
-    }, loadFilesErr)
-  ];
-
-  return withTask(state, loadFileTasks);
+  const fileCache = [];
+  return withTask(
+    {
+      ...state,
+      fileLoading: true,
+      fileLoadingProgress: 0
+    },
+    makeLoadFileTask(files.length, files, fileCache, onFinish)
+  );
 };
+
+export function loadNextFileUpdater(state, action) {
+  const {fileCache, filesToLoad, totalCount, onFinish} = action;
+  const fileLoadingProgress = ((totalCount - filesToLoad.length) / totalCount) * 100;
+
+  return withTask(
+    {
+      ...state,
+      fileLoadingProgress
+    },
+    makeLoadFileTask(totalCount, filesToLoad, fileCache, onFinish)
+  );
+}
+
+export function makeLoadFileTask(totalCount, filesToLoad, fileCache, onFinish) {
+  const [file, ...remainingFilesToLoad] = filesToLoad;
+
+  return LOAD_FILE_TASK({file, fileCache}).bimap(
+    // success
+    result =>
+      remainingFilesToLoad.length
+        ? loadNextFile({
+            fileCache: result,
+            filesToLoad: remainingFilesToLoad,
+            totalCount,
+            onFinish
+          })
+        : onFinish(result),
+    // error
+    loadFilesErr
+  );
+}
 
 /**
  * Trigger loading file error
@@ -1457,7 +1478,6 @@ export function updateAllLayerDomainData(state, dataId, updatedFilter) {
 
       const {layerData, layer} = calculateLayerData(newLayer, state, state.layerData[i]);
 
-      // console.log('LayerData', layerData);
       newLayers.push(layer);
       newLayerData.push(layerData);
     } else {
@@ -1565,7 +1585,11 @@ export function setFeaturesUpdater(state, {features = []}) {
   if (filterId) {
     const featureValue = featureToFilterValue(feature, filterId);
     const filterIdx = state.filters.findIndex(fil => fil.id === filterId);
-    return setFilterUpdater(newState, {idx: filterIdx, prop: 'value', value: featureValue});
+    return setFilterUpdater(newState, {
+      idx: filterIdx,
+      prop: 'value',
+      value: featureValue
+    });
   }
 
   return newState;
@@ -1693,7 +1717,65 @@ export function setPolygonFilterLayerUpdater(state, payload) {
     };
   }
 
-  return setFilterUpdater(newState, {idx: filterIdx, prop: 'layerId', value: newLayerId});
+  return setFilterUpdater(newState, {
+    idx: filterIdx,
+    prop: 'layerId',
+    value: newLayerId
+  });
+}
+
+export function sortTableColumnUpdater(state, {dataId, column, mode}) {
+  const dataset = state.datasets[dataId];
+  if (!dataset) {
+    return state;
+  }
+  if (!mode) {
+    const currentMode = get(dataset, ['sortColumn', column]);
+    mode = currentMode
+      ? Object.keys(SORT_ORDER).find(m => m !== currentMode)
+      : SORT_ORDER.ASCENDING;
+  }
+
+  const sorted = sortDatasetByColumn(dataset, column, mode);
+  return set(['datasets', dataId], sorted, state);
+}
+
+export function pinTableColumnUpdater(state, {dataId, column}) {
+  const dataset = state.datasets[dataId];
+  if (!dataset) {
+    return state;
+  }
+  const field = dataset.fields.find(f => f.name === column);
+  if (!field) {
+    return state;
+  }
+
+  let pinnedColumns;
+  if (Array.isArray(dataset.pinnedColumns) && dataset.pinnedColumns.includes(field.name)) {
+    // unpin it
+    pinnedColumns = dataset.pinnedColumns.filter(co => co !== field.name);
+  } else {
+    pinnedColumns = (dataset.pinnedColumns || []).concat(field.name);
+  }
+
+  return set(['datasets', dataId, 'pinnedColumns'], pinnedColumns, state);
+}
+
+export function copyTableColumnUpdater(state, {dataId, column}) {
+  const dataset = state.datasets[dataId];
+  if (!dataset) {
+    return state;
+  }
+  const fieldIdx = dataset.fields.findIndex(f => f.name === column);
+  if (fieldIdx < 0) {
+    return state;
+  }
+  const {type} = dataset.fields[fieldIdx];
+  const text = dataset.allData.map(d => parseFieldValue(d[fieldIdx], type)).join('\n');
+
+  copy(text);
+
+  return state;
 }
 
 /**

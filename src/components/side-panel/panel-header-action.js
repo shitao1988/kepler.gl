@@ -22,6 +22,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styled from 'styled-components';
+import {FormattedMessage} from 'react-intl';
 import {Tooltip} from 'components/common/styled-components';
 
 const HeaderActionWrapper = styled.div`
@@ -84,12 +85,14 @@ export default class PanelHeaderAction extends Component {
         <this.props.IconComponent
           data-tip
           data-for={`${tooltip}_${id}`}
-          height="18px"
+          height="16px"
           onClick={onClick}
         />
         {tooltip ? (
           <Tooltip id={`${tooltip}_${id}`} effect="solid" delayShow={500} type={tooltipType}>
-            <span>{tooltip}</span>
+            <span>
+              <FormattedMessage id={tooltip} />
+            </span>
           </Tooltip>
         ) : null}
       </HeaderActionWrapper>

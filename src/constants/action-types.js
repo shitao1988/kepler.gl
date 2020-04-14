@@ -92,11 +92,16 @@ const ActionTypes = keyMirror({
   TOGGLE_LAYER_FOR_MAP: null,
   SET_FILTER_PLOT: null,
   LOAD_FILES: null,
+  LOAD_NEXT_FILE: null,
   LOAD_FILES_ERR: null,
+  LOAD_FILES_SUCCESS: null,
   LAYER_COLOR_UI_CHANGE: null,
   TOGGLE_FEATURE_LAYER: null,
   APPLY_CPU_FILTER: null,
   SET_MAP_INFO: null,
+  SORT_TABLE_COLUMN: null,
+  PIN_TABLE_COLUMN: null,
+  COPY_TABLE_COLUMN: null,
 
   // mapState
   UPDATE_MAP: null,
@@ -126,6 +131,7 @@ const ActionTypes = keyMirror({
   TOGGLE_MAP_CONTROL: null,
   ADD_NOTIFICATION: null,
   REMOVE_NOTIFICATION: null,
+  SET_LOCALE: null,
 
   // uiState > export image
   SET_EXPORT_IMAGE_SETTING: null,

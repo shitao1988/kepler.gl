@@ -30,11 +30,17 @@ import {replaceLoadDataModal} from './factories/load-data-modal';
 import {replaceMapControl} from './factories/map-control';
 import {replacePanelHeader} from './factories/panel-header';
 import {AUTH_TOKENS} from './constants/default-settings';
-import {loadRemoteMap, loadSampleConfigurations, onExportFileSuccess} from './actions';
+import {
+  loadRemoteMap,
+  loadSampleConfigurations,
+  onExportFileSuccess,
+  onLoadCloudMapSuccess,
+  onLoadCloudMapError
+} from './actions';
 
-import {getCloudProviders} from './cloud-providers';
+import {loadCloudMap} from 'kepler.gl/actions';
+import {CLOUD_PROVIDERS} from './cloud-providers';
 
-const CloudProviders = getCloudProviders();
 const KeplerGl = require('kepler.gl/components').injectComponents([
   replaceLoadDataModal(),
   replaceMapControl(),
@@ -48,6 +54,7 @@ import sampleGeojson from './data/sample-small-geojson';
 import sampleGeojsonPoints from './data/sample-geojson-points';
 import sampleGeojsonConfig from './data/sample-geojson-config';
 import sampleH3Data, {config as h3MapConfig} from './data/sample-hex-id-csv';
+import sampleS2Data, {config as s2MapConfig, dataId as s2DataId} from './data/sample-s2-data';
 import sampleAnimateTrip from './data/sample-animate-trip-data';
 import sampleIconCsv, {config as savedMapConfig} from './data/sample-icon-csv';
 import {addDataToMap, addNotification} from 'kepler.gl/actions';
@@ -97,7 +104,19 @@ class App extends Component {
   componentDidMount() {
     // if we pass an id as part of the url
     // we ry to fetch along map configurations
-    const {params: {id} = {}, location: {query = {}} = {}} = this.props;
+    const {params: {id, provider} = {}, location: {query = {}} = {}} = this.props;
+
+    const cloudProvider = CLOUD_PROVIDERS.find(c => c.name === provider);
+    if (cloudProvider) {
+      this.props.dispatch(
+        loadCloudMap({
+          loadParams: query,
+          provider: cloudProvider,
+          onSuccess: onLoadCloudMapSuccess
+        })
+      );
+      return;
+    }
 
     // Load sample using its id
     if (id) {
@@ -162,6 +181,7 @@ class App extends Component {
     // this._loadTripGeoJson();
     // this._loadIconData();
     // this._loadH3HexagonData();
+    // this._loadS2Data();
     // this._loadScenegraphLayer();
   }
 
@@ -291,6 +311,27 @@ class App extends Component {
     );
   }
 
+  _loadS2Data() {
+    // load s2
+    this.props.dispatch(
+      addDataToMap({
+        datasets: [
+          {
+            info: {
+              label: 'S2 Data',
+              id: s2DataId
+            },
+            data: processCsvData(sampleS2Data)
+          }
+        ],
+        config: s2MapConfig,
+        options: {
+          keepExistingConfig: true
+        }
+      })
+    );
+  }
+
   _toggleCloudModal = () => {
     // TODO: this lives only in the demo hence we use the state for now
     // REFCOTOR using redux
@@ -355,8 +396,10 @@ class App extends Component {
                   getState={keplerGlGetState}
                   width={width}
                   height={height - (showBanner ? BannerHeight : 0)}
-                  cloudProviders={CloudProviders}
+                  cloudProviders={CLOUD_PROVIDERS}
                   onExportToCloudSuccess={onExportFileSuccess}
+                  onLoadCloudMapSuccess={onLoadCloudMapSuccess}
+                  onLoadCloudMapError={onLoadCloudMapError}
                 />
               )}
             </AutoSizer>

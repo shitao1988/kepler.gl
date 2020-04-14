@@ -30,6 +30,18 @@ import {
   scaleLog,
   scalePoint
 } from 'd3-scale';
+import {
+  Layers,
+  FilterFunnel,
+  Settings,
+  CursorClick,
+  Pin,
+  ArrowDown,
+  ArrowUp,
+  Clipboard,
+  Cancel
+} from 'components/common/icons';
+import {getHTMLMapModeTileUrl} from 'utils/utils';
 
 export const ACTION_PREFIX = '@@kepler.gl/';
 export const CLOUDFRONT = 'https://d1a3f4spazzrp4.cloudfront.net/kepler.gl';
@@ -94,15 +106,19 @@ export const EXPORT_MAP_ID = 'exportMap';
  */
 export const SAVE_MAP_ID = 'saveMap';
 /**
+ * Modal id: confirm to overwrite saved map
+ * @constant
+ * @type {string}
+ * @public
+ */
+export const OVERWRITE_MAP_ID = 'overwriteMap';
+/**
  * Modal id: share map url modal
  * @constant
  * @type {string}
  * @public
  */
 export const SHARE_MAP_ID = 'shareMap';
-
-import {Layers, FilterFunnel, Settings, CursorClick} from 'components/common/icons';
-import {getHTMLMapModeTileUrl} from 'utils/utils';
 
 export const KEPLER_GL_NAME = 'kepler.gl';
 
@@ -138,28 +154,60 @@ export const DIMENSIONS = {
  */
 export const THEME = keyMirror({
   light: null,
-  dark: null
+  dark: null,
+  base: null
+});
+
+/**
+ * Localization can be passed to `KeplerGl` via uiState `locale`.
+ * Available languages are `en` and `fi`. Default language is `en`
+ * @constant
+ * @type {string}
+ * @public
+ * @example
+ * ```js
+ * import {combineReducers} from 'redux';
+ * import keplerGlReducer from 'kepler.gl/reducers';
+ * import {LOCALES} from 'kepler.gl/constants';
+ *
+ * const customizedKeplerGlReducer = keplerGlReducer
+ *   .initialState({
+ *     uiState: {
+ *       // use Finnish locale
+ *       locale: LOCALES.fi
+ *     }
+ *   });
+ *
+ * const reducers = combineReducers({
+ *  keplerGl: customizedKeplerGlReducer,
+ *  app: appReducer
+ * });
+ * ```
+ */
+export const LOCALES = keyMirror({
+  en: null,
+  fi: null
 });
 
 export const SIDEBAR_PANELS = [
   {
     id: 'layer',
-    label: 'Layers',
+    label: 'sidebar.panels.layer',
     iconComponent: Layers
   },
   {
     id: 'filter',
-    label: 'Filters',
+    label: 'sidebar.panels.filter',
     iconComponent: FilterFunnel
   },
   {
     id: 'interaction',
-    label: 'Interactions',
+    label: 'sidebar.panels.interaction',
     iconComponent: CursorClick
   },
   {
     id: 'map',
-    label: 'Base map',
+    label: 'sidebar.panels.basemap',
     iconComponent: Settings
   }
 ];
@@ -235,6 +283,12 @@ export const DEFAULT_MAP_STYLES = [
     url: 'mapbox://styles/uberdata/cjfxhlikmaj1b2soyzevnywgs',
     icon: `${ICON_PREFIX}/UBER_MUTED_NIGHT.png`,
     layerGroups: DEFAULT_LAYER_GROUPS
+  },
+  {
+    id: 'satellite',
+    label: 'Satellite',
+    url: `mapbox://styles/mapbox/satellite-v9`,
+    icon: `${ICON_PREFIX}/UBER_SATELLITE.png`
   }
 ];
 
@@ -299,6 +353,51 @@ export const ALL_FIELD_TYPES = keyMirror({
   timestamp: null,
   point: null
 });
+
+// Data Table
+export const SORT_ORDER = keyMirror({
+  ASCENDING: null,
+  DESCENDING: null,
+  UNSORT: null
+});
+
+export const TABLE_OPTION = keyMirror({
+  SORT_ASC: null,
+  SORT_DES: null,
+  UNSORT: null,
+  PIN: null,
+  UNPIN: null,
+  COPY: null
+});
+
+export const TABLE_OPTION_LIST = [
+  {
+    value: TABLE_OPTION.SORT_ASC,
+    display: 'Sort Ascending',
+    icon: ArrowUp,
+    condition: props => props.sortMode !== SORT_ORDER.ASCENDING
+  },
+  {
+    value: TABLE_OPTION.SORT_DES,
+    display: 'Sort Descending',
+    icon: ArrowDown,
+    condition: props => props.sortMode !== SORT_ORDER.DESCENDING
+  },
+  {
+    value: TABLE_OPTION.UNSORT,
+    display: 'Unsort Column',
+    icon: Cancel,
+    condition: props => props.isSorted
+  },
+  {value: TABLE_OPTION.PIN, display: 'Pin Column', icon: Pin, condition: props => !props.isPinned},
+  {
+    value: TABLE_OPTION.UNPIN,
+    display: 'Unpin Column',
+    icon: Cancel,
+    condition: props => props.isPinned
+  },
+  {value: TABLE_OPTION.COPY, display: 'Copy Column', icon: Clipboard}
+];
 
 const ORANGE = '248, 194, 28';
 const PINK = '231, 189, 194';
@@ -553,16 +652,19 @@ export const NO_VALUE_COLOR = [0, 0, 0, 0];
 
 export const LAYER_BLENDINGS = {
   additive: {
+    label: 'layerBlending.additive',
     blendFunc: ['SRC_ALPHA', 'DST_ALPHA'],
     blendEquation: 'FUNC_ADD'
   },
   normal: {
     // reference to
     // https://limnu.com/webgl-blending-youre-probably-wrong/
+    label: 'layerBlending.normal',
     blendFunc: ['SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'ONE', 'ONE_MINUS_SRC_ALPHA'],
     blendEquation: ['FUNC_ADD', 'FUNC_ADD']
   },
   subtractive: {
+    label: 'layerBlending.subtractive',
     blendFunc: ['ONE', 'ONE_MINUS_DST_COLOR', 'SRC_ALPHA', 'DST_ALPHA'],
     blendEquation: ['FUNC_SUBTRACT', 'FUNC_ADD']
   }
@@ -585,18 +687,18 @@ export const EXPORT_IMG_RATIOS = keyMirror({
 export const EXPORT_IMG_RATIO_OPTIONS = [
   {
     id: EXPORT_IMG_RATIOS.SCREEN,
-    label: 'Original Screen',
+    label: 'modal.exportImage.ratioOriginalScreen',
     getSize: (screenW, screenH) => ({width: screenW, height: screenH})
   },
   {
     id: EXPORT_IMG_RATIOS.CUSTOM,
     hidden: true,
-    label: 'Custom',
+    label: 'modal.exportImage.ratioCustom',
     getSize: (mapW, mapH) => ({width: mapW, height: mapH})
   },
   {
     id: EXPORT_IMG_RATIOS.FOUR_BY_THREE,
-    label: '4:3',
+    label: 'modal.exportImage.ratio4_3',
     getSize: (screenW, screenH) => ({
       width: screenW,
       height: Math.round(screenW * 0.75)
@@ -604,7 +706,7 @@ export const EXPORT_IMG_RATIO_OPTIONS = [
   },
   {
     id: EXPORT_IMG_RATIOS.SIXTEEN_BY_NINE,
-    label: '16:9',
+    label: 'modal.exportImage.ratio16_9',
     getSize: (screenW, screenH) => ({
       width: screenW,
       height: Math.round(screenW * 0.5625)
@@ -691,7 +793,7 @@ export const EXPORT_MAP_FORMAT_OPTIONS = Object.entries(EXPORT_MAP_FORMATS).map(
 
 export const EXPORT_HTML_MAP_MODE_OPTIONS = Object.entries(EXPORT_HTML_MAP_MODES).map(entry => ({
   id: entry[0],
-  label: entry[1].toLowerCase(),
+  label: `modal.exportMap.html.${entry[1].toLowerCase()}`,
   available: true,
   url: getHTMLMapModeTileUrl(entry[1])
 }));
@@ -712,15 +814,6 @@ export const DEFAULT_NOTIFICATION_TOPICS = keyMirror({
   file: null
 });
 
-export const TOKEN_MISUSE_WARNING =
-  '* If you do not provide your own token, the map may fail to display at any time when we replace ours to avoid misuse. ';
-export const DISCLAIMER =
-  'You can change the Mapbox token later using the following instructions: ';
-export const MAP_CONFIG_DESCRIPTION =
-  'Map config will be included in the Json file. If you are using kepler.gl in your own app. You can copy this config and pass it to ';
-export const SHARE_DISCLAIMER =
-  'kepler.gl will save your map data to your personal cloud storage, only people with the URL can access your map and data. ' +
-  'You can edit/delete the data file in your cloud account anytime.';
 // Animation
 export const BASE_SPEED = 600;
 export const DEFAULT_TIME_FORMAT = 'MM/DD/YY HH:mm:ssa';
@@ -756,3 +849,16 @@ export const MAP_INFO_CHARACTER = {
   title: 100,
   description: 100
 };
+
+// Load data
+export const LOADING_METHODS = keyMirror({
+  upload: null,
+  storage: null
+});
+
+export const DATASET_FORMATS = keyMirror({
+  row: null,
+  geojson: null,
+  csv: null,
+  keplergl: null
+});

@@ -26,7 +26,8 @@ import {
   EXPORT_HTML_MAP_MODES,
   EXPORT_IMG_RATIOS,
   EXPORT_MAP_FORMATS,
-  RESOLUTIONS
+  RESOLUTIONS,
+  LOCALES
 } from 'constants/default-settings';
 import {createNotification, errorNotification} from 'utils/notifications-utils';
 import {calculateExportImageSize} from 'utils/export-utils';
@@ -83,6 +84,8 @@ const uiStateUpdaters = null;
  * @property {Object} mapLegend Default: `{show: true, active: false}`
  * @property {Object} toggle3d Default: `{show: true}`
  * @property {Object} splitMap Default: `{show: true}`
+ * @property {Object} mapDraw Default: `{show: true, active: false}`
+ * @property {Object} mapLocale Default: `{show: false, active: false}`
  * @public
  */
 const DEFAULT_MAP_CONTROLS_FEATURES = {
@@ -97,7 +100,8 @@ export const DEFAULT_MAP_CONTROLS = [
   'mapLegend',
   'toggle3d',
   'splitMap',
-  'mapDraw'
+  'mapDraw',
+  'mapLocale'
 ].reduce(
   (final, current) => ({
     ...final,
@@ -129,7 +133,7 @@ export const DEFAULT_EXPORT_IMAGE = {
   imageSize: {
     zoomOffset: 0,
     scale: 1,
-    imagW: 0,
+    imageW: 0,
     imageH: 0
   },
   // exporting state
@@ -222,7 +226,9 @@ export const INITIAL_UI_STATE = {
   // ui notifications
   notifications: DEFAULT_NOTIFICATIONS,
   // load files
-  loadFiles: DEFAULT_LOAD_FILES
+  loadFiles: DEFAULT_LOAD_FILES,
+  // Locale of the UI
+  locale: LOCALES.en
 };
 
 /* Updaters */
@@ -633,4 +639,18 @@ export const toggleSplitMapUpdater = state => ({
     }),
     {}
   )
+});
+
+/**
+ * Set the locale of the UI
+ * @memberof uiStateUpdaters
+ * @param {Object} state `uiState`
+ * @param {Object} action
+ * @param {String} action.payload locale
+ * @returns {Object} nextState
+ * @public
+ */
+export const setLocaleUpdater = (state, {payload: {locale}}) => ({
+  ...state,
+  locale
 });

@@ -21,3 +21,6 @@
 import './data-table-modal-test';
 import './save-map-modal-test';
 import './share-map-modal-test';
+import './share-map-modal-test';
+import './load-data-modal-test';
+import './load-storage-map-test';

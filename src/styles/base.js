@@ -29,7 +29,7 @@ export const boxShadow = '0 1px 2px 0 rgba(0,0,0,0.10)';
 export const boxSizing = 'border-box';
 export const borderRadius = '1px';
 export const borderColor = '#3A414C';
-export const borderColorLight = '#F1F1F1';
+export const borderColorLT = '#F1F1F1';
 
 // TEXT
 export const fontFamily = `ff-clan-web-pro, 'Helvetica Neue', Helvetica, sans-serif`;
@@ -50,10 +50,12 @@ export const subtextColorActive = '#FFFFFF';
 
 export const titleTextColor = '#FFFFFF';
 export const textColorHl = '#F0F0F0';
-export const textColorHlLT = '#F1F1F1';
+export const textColorHlLT = '#000000';
 export const activeColor = '#1FBAD6';
+export const activeColorLT = '#2473BD';
 export const activeColorHover = '#108188';
 export const errorColor = '#F9042C';
+export const logoColor = activeColor;
 
 // Button
 export const primaryBtnBgd = '#0F9668';
@@ -72,7 +74,7 @@ export const secondaryBtnBgdHover = '#A0A7B4';
 export const linkBtnBgd = 'transparent';
 export const linkBtnActBgd = linkBtnBgd;
 export const linkBtnColor = '#A0A7B4';
-export const linkBtnActColor = textColorHlLT;
+export const linkBtnActColor = '#F1F1F1';
 export const linkBtnActBgdHover = linkBtnBgd;
 
 export const negativeBtnBgd = errorColor;
@@ -80,6 +82,12 @@ export const negativeBtnActBgd = '#FF193E';
 export const negativeBtnBgdHover = '#FF193E';
 export const negativeBtnColor = '#FFFFFF';
 export const negativeBtnActColor = '#FFFFFF';
+
+export const floatingBtnBgd = '#29323C';
+export const floatingBtnActBgd = '#3A4552';
+export const floatingBtnBgdHover = '#3A4552';
+export const floatingBtnColor = subtextColor;
+export const floatingBtnActColor = subtextColorActive;
 
 // Input
 export const inputBoxHeight = '34px';
@@ -129,8 +137,10 @@ export const selectBorderRadius = '1px';
 export const selectBorder = 0;
 
 export const dropdownListHighlightBg = '#6A7485';
+export const dropdownListHighlightBgLT = '#F8F8F9';
 export const dropdownListShadow = '0 6px 12px 0 rgba(0,0,0,0.16)';
 export const dropdownListBgd = '#3A414C';
+export const dropdownListBgdLT = '#FFFFFF';
 export const dropdownListBorderTop = '#242730';
 export const dropdownWrapperZ = 100;
 // Switch
@@ -180,11 +190,11 @@ export const panelHeaderIconActive = '#A0A7B4';
 export const panelHeaderHeight = 48;
 export const panelBoxShadow = '0 6px 12px 0 rgba(0,0,0,0.16)';
 export const panelBorderRadius = '2px';
-export const panelBackgroundLT = '#f8f8f9';
+export const panelBackgroundLT = '#F8F8F9';
 
 export const panelBorderColor = '#3A414C';
 export const panelBorder = `1px solid ${borderColor}`;
-export const panelBorderLT = `1px solid ${borderColorLight}`;
+export const panelBorderLT = `1px solid ${borderColorLT}`;
 
 export const mapPanelBackgroundColor = '#242730';
 export const mapPanelHeaderBackgroundColor = '#29323C';
@@ -212,6 +222,7 @@ export const modalContentZ = 10002;
 export const modalFooterZ = 10001;
 export const modalTitleZ = 10003;
 export const modalButtonZ = 10005;
+export const modalDropdownBackground = '#FFFFFF';
 
 // Modal Dialog (Dark)
 export const modalDialogBgd = '#3A414C';
@@ -250,16 +261,23 @@ export const notificationPanelWidth = 240;
 export const notificationPanelItemWidth = notificationPanelWidth - 60;
 export const notificationPanelItemHeight = 60;
 
-// Datagrid
-const columnWidth = 200;
-const cellHeaderHeight = 72;
-const cellHeight = 24;
-const cellPaddingSide = 18;
-const extendCellHeight = 2 * cellHeight;
-const extendColumnWidth = 2 * columnWidth;
-const gridDefaultWidth = 800;
-const gridDefaultHeight = 600;
+// Data Table
+const headerRowHeight = 70;
+const rowHeight = 32;
+const headerPaddingTop = 6;
+const headerPaddingBottom = 8;
+const cellPaddingSide = 10;
+const edgeCellPaddingSide = 10;
+const cellFontSize = 10;
 const gridPaddingSide = 24;
+const headerCellBackground = '#FFFFFF';
+const headerCellBorderColor = '#E0E0E0';
+const headerCellIconColor = '#666666';
+const cellBorderColor = '#E0E0E0';
+const evenRowBackground = '#FFFFFF';
+const oddRowBackground = '#F7F7F7';
+const optionButtonColor = '#6A7485';
+const pinnedGridBorderColor = '#E0E0E0';
 
 // Floating Time display
 const timeDisplayBorderRadius = 32;
@@ -619,11 +637,15 @@ const dropdownListAnchor = css`
   padding-left: 3px;
 `;
 
-const dropdownListItem = css`
+const dropdownListSize = css`
   font-size: 11px;
   padding: 3px 9px;
   font-weight: 500;
+  white-space: nowrap;
+`;
 
+const dropdownListItem = css`
+  ${dropdownListSize}
   &.hover,
   &:hover {
     cursor: pointer;
@@ -631,6 +653,22 @@ const dropdownListItem = css`
 
     .list__item__anchor {
       color: ${props => props.theme.textColorHl};
+    }
+  }
+`;
+
+const dropdownListItemLT = css`
+  ${dropdownListSize}
+  color: ${props => props.theme.textColorLT};
+
+  &.hover,
+  &:hover {
+    cursor: pointer;
+    color: ${props => props.theme.textColorHlLT};
+    background-color: ${props => props.theme.dropdownListHighlightBgLT};
+
+    .list__item__anchor {
+      color: ${props => props.theme.textColorHlLT};
     }
   }
 `;
@@ -671,6 +709,12 @@ const dropdownList = css`
   ${props => props.theme.dropdownScrollBar};
 `;
 
+const dropdownListLT = css`
+  ${dropdownList}
+  .list__item {
+    ${props => props.theme.dropdownListItemLT};
+  }
+`;
 const sidePanelScrollBar = css`
   ::-webkit-scrollbar {
     height: ${props => props.theme.sidePanelScrollBarHeight}px;
@@ -798,10 +842,15 @@ export const theme = {
   chickletedInputContainer,
   secondaryChickletedInput,
 
+  borderColor,
+  borderColorLT,
+
   secondaryInput,
   dropdownScrollBar,
   dropdownList,
+  dropdownListLT,
   dropdownListItem,
+  dropdownListItemLT,
   dropdownListAnchor,
   dropdownListHeader,
   dropdownListSection,
@@ -830,7 +879,9 @@ export const theme = {
   boxShadow,
   errorColor,
   dropdownListHighlightBg,
+  dropdownListHighlightBgLT,
   dropdownListBgd,
+  dropdownListBgdLT,
   dropdownListBorderTop,
 
   labelColor,
@@ -936,6 +987,12 @@ export const theme = {
   linkBtnActColor,
   linkBtnActBgdHover,
 
+  floatingBtnBgd,
+  floatingBtnActBgd,
+  floatingBtnBgdHover,
+  floatingBtnColor,
+  floatingBtnActColor,
+
   // Modal
   modalTitleColor,
   modalTitleFontSize,
@@ -955,6 +1012,7 @@ export const theme = {
   modalFooterZ,
   modalTitleZ,
   modalButtonZ,
+  modalDropdownBackground,
 
   // Side Panel
   sidePanelBg,
@@ -997,6 +1055,7 @@ export const theme = {
   titleColorLT,
   tooltipBg,
   tooltipColor,
+  logoColor,
 
   // Bottom Panel
   bottomInnerPdSide,
@@ -1030,17 +1089,23 @@ export const theme = {
   notificationPanelItemWidth,
   notificationPanelItemHeight,
 
-  // datagrid
-  columnWidth,
-  extendColumnWidth,
-  cellHeaderHeight,
-  cellHeight,
+  // Data Table
+  headerRowHeight,
+  rowHeight,
+  headerPaddingTop,
+  headerPaddingBottom,
   cellPaddingSide,
-  extendCellHeight,
-  gridDefaultWidth,
-  gridDefaultHeight,
+  edgeCellPaddingSide,
+  cellFontSize,
   gridPaddingSide,
-
+  optionButtonColor,
+  headerCellBackground,
+  headerCellBorderColor,
+  headerCellIconColor,
+  cellBorderColor,
+  evenRowBackground,
+  oddRowBackground,
+  pinnedGridBorderColor,
   // time display
   timeDisplayBorderRadius,
   timeDisplayHeight,
@@ -1061,35 +1126,139 @@ export const theme = {
 
 export const themeLT = {
   ...theme,
-
   // template
+  activeColor: activeColorLT,
   input: inputLT,
   textColor: textColorLT,
-  sidePanelBg: '#ffffff',
+  sidePanelBg: '#FFFFFF',
+  selectColor: selectColorLT,
   titleTextColor: '#000000',
-  sidePanelHeaderBg: '#f7f7F7',
-  subtextColorActive: '#2473bd',
-  tooltipBg: '#1869b5',
-  tooltipColor: '#ffffff',
-  dropdownListBgd: '#ffffff',
-  textColorHl: '#2473bd',
-  inputBgd: '#f7f7f7',
-  inputBgdHover: '#ffffff',
-  inputBgdActive: '#ffffff',
-  dropdownListHighlightBg: '#f0f0f0',
-  panelBackground: '#f7f7F7',
-  panelBackgroundHover: '#f7f7F7',
-  panelBorderColor: '#D3D8E0',
-  secondaryInputBgd: '#f7f7F7',
-  secondaryInputBgdActive: '#f7f7F7',
-  secondaryInputBgdHover: '#ffffff',
-  panelActiveBg: '#f7f7F7',
-  mapPanelBackgroundColor: '#ffffff',
-  mapPanelHeaderBackgroundColor: '#f7f7F7',
-  sliderBarBgd: '#D3D8E0',
-  secondarySwitchBtnBgd: '#D3D8E0',
-  switchTrackBgd: '#D3D8E0',
+  sidePanelHeaderBg: '#F7F7F7',
+  subtextColorActive: activeColorLT,
+  tooltipBg: '#1869B5',
+  tooltipColor: '#FFFFFF',
+  dropdownListBgd: '#FFFFFF',
+  textColorHl: activeColorLT,
 
-  // button
-  linkBtnActColor: textColorLT
+  inputBgd: '#F7F7F7',
+  inputBgdHover: '#FFFFFF',
+  inputBgdActive: '#FFFFFF',
+
+  dropdownListHighlightBg: '#F0F0F0',
+
+  panelBackground: '#F7F7F7',
+  panelBackgroundHover: '#F7F7F7',
+  panelBorderColor: '#D3D8E0',
+
+  sideBarCloseBtnBgd: '#F7F7F7',
+  sideBarCloseBtnColor: textColorLT,
+  sideBarCloseBtnBgdHover: '#F7F7F7',
+
+  secondaryInputBgd: '#F7F7F7',
+  secondaryInputBgdActive: '#F7F7F7',
+  secondaryInputBgdHover: '#FFFFFF',
+  secondaryInputBorderActiveColor: '#000000',
+  secondaryInputBorderColor: 'none',
+  secondaryInputColor: '#545454',
+
+  panelActiveBg: '#F7F7F7',
+  mapPanelBackgroundColor: '#FFFFFF',
+  mapPanelHeaderBackgroundColor: '#F7F7F7',
+
+  sliderBarColor: '#A0A7B4',
+  sliderBarBgd: '#D3D8E0',
+  sliderHandleColor: '#F7F7F7',
+  sliderHandleHoverColor: '#F7F7F7',
+
+  subtextColor: subtextColorLT,
+  switchBtnBgd: '#F7F7F7',
+  secondarySwitchBtnBgd: '#F7F7F7',
+  secondarySwitchTrackBgd: '#D3D8E0',
+  switchBtnBgdActive: '#F7F7F7',
+  switchTrackBgd: '#D3D8E0',
+  switchTrackBgdActive: activeColorLT,
+
+  // button switch background and hover color
+  primaryBtnBgd: primaryBtnActBgd,
+  primaryBtnActBgd: primaryBtnBgd,
+  primaryBtnBgdHover: primaryBtnBgd,
+
+  secondaryBtnBgd: secondaryBtnActBgd,
+  secondaryBtnActBgd: secondaryBtnBgd,
+  secondaryBtnBgdHover: secondaryBtnBgd,
+
+  floatingBtnBgd: '#F7F7F7',
+  floatingBtnActBgd: '#F7F7F7',
+  floatingBtnBgdHover: '#F7F7F7',
+  floatingBtnColor: subtextColor,
+  floatingBtnActColor: activeColorLT,
+
+  linkBtnActColor: textColorLT,
+
+  rangeBrushBgd: '#D3D8E0',
+  histogramFillInRange: activeColorLT,
+  histogramFillOutRange: '#A0A7B4'
+};
+
+export const themeBS = {
+  ...theme,
+  activeColor: '#E2E2E2',
+  dropdownListBgd: '#FFFFFF',
+  dropdownListBorderTop: 'none',
+  dropdownListHighlightBg: '#F6F6F6',
+  inputBgd: '#E2E2E2',
+  inputBgdActive: '#E2E2E2',
+  inputBgdHover: 'inherit',
+  inputBorderActiveColor: '#000000',
+  inputColor: '#000000',
+  panelActiveBg: '#E2E2E2',
+  panelBackground: '#FFFFFF',
+  panelBackgroundHover: '#EEEEEE',
+  panelBorderColor: '#E2E2E2',
+  primaryBtnBgd: '#E2E2E2',
+  primaryBtnBgdHover: '#333333',
+  primaryBtnColor: '#000000',
+  secondaryBtnActBgd: '#EEEEEE',
+  secondaryBtnActColor: '#000000',
+  secondaryBtnBgd: '#E2E2E2',
+  secondaryBtnBgdHover: '#CBCBCB',
+
+  sideBarCloseBtnBgd: '#E2E2E2',
+  sideBarCloseBtnColor: '#000000',
+  sideBarCloseBtnBgdHover: '#FFFFFF',
+
+  floatingBtnBgd: '#FFFFFF',
+  floatingBtnActBgd: '#EEEEEE',
+  floatingBtnBgdHover: '#EEEEEE',
+  floatingBtnColor: '#757575',
+  floatingBtnActColor: '#000000',
+
+  secondaryBtnColor: '#000000',
+  secondaryInputBgd: '#F6F6F6',
+  secondaryInputBgdActive: '#F6F6F6',
+  secondaryInputBgdHover: '#F6F6F6',
+  secondaryInputBorderActiveColor: '#000000',
+  secondaryInputBorderColor: 'none',
+  secondaryInputColor: '#545454',
+  sidePanelBg: '#F6F6F6',
+  sidePanelHeaderBg: '#FFFFFF',
+  subtextColor: '#AFAFAF',
+  subtextColorActive: '#000000',
+  textColor: '#000000',
+  textColorHl: '#545454',
+  mapPanelBackgroundColor: '#F6F6F6',
+  mapPanelHeaderBackgroundColor: '#FFFFFF',
+  titleTextColor: '#000000',
+  switchBtnBgdActive: '#000000',
+  switchBtnBgd: '#FFFFFF',
+  switchTrackBgdActive: '#E2E2E2',
+  secondarySwitchTrackBgd: '#E2E2E2',
+  switchTrackBgd: '#E2E2E2',
+  secondarySwitchBtnBgd: '#FFFFFF',
+  histogramFillInRange: '#000000',
+  histogramFillOutRange: '#E2E2E2',
+  rangeBrushBgd: '#E2E2E2',
+  sliderBarBgd: '#E2E2E2',
+  sliderHandleColor: '#FFFFFF',
+  sliderBarColor: '#000000'
 };

@@ -276,6 +276,47 @@ export function showDatasetTable(dataId) {
 }
 
 /**
+ * Sort dataset column, for table display
+ * @param {string} dataId
+ * @param {string} column
+ * @param {string} mode
+ */
+export function sortTableColumn(dataId, column, mode) {
+  return {
+    type: ActionTypes.SORT_TABLE_COLUMN,
+    dataId,
+    column,
+    mode
+  };
+}
+
+/**
+ * Pin dataset column, for table display
+ * @param {string} dataId
+ * @param {string} column
+ */
+export function pinTableColumn(dataId, column) {
+  return {
+    type: ActionTypes.PIN_TABLE_COLUMN,
+    dataId,
+    column
+  };
+}
+
+/**
+ * Copy column, for table display
+ * @param {string} dataId
+ * @param {string} column
+ */
+export function copyTableColumn(dataId, column) {
+  return {
+    type: ActionTypes.COPY_TABLE_COLUMN,
+    dataId,
+    column
+  };
+}
+
+/**
  * Add new dataset to `visState`, with option to load a map config along with the datasets
  * @memberof visStateActions
  * @param {Array<Object>|Object} datasets - ***required** datasets can be a dataset or an array of datasets
@@ -506,6 +547,35 @@ export function loadFiles(files) {
   return {
     type: ActionTypes.LOAD_FILES,
     files
+  };
+}
+
+/**
+ * called with next file to load
+ * @param {object} payload
+ * @param {Array<object>} payload.fileCache
+ * @param {Array<object>} payload.filesToLoad
+ * @param {number} payload.totalCount
+ * @param {Function} payload.onFinish - action creator to execute when all files are loaded
+ */
+export function loadNextFile({fileCache, filesToLoad, totalCount, onFinish}) {
+  return {
+    type: ActionTypes.LOAD_NEXT_FILE,
+    fileCache,
+    filesToLoad,
+    totalCount,
+    onFinish
+  };
+}
+
+/**
+ * called when all files are processed and loaded
+ * @param {Array<object>} result
+ */
+export function loadFileSuccess(result) {
+  return {
+    type: ActionTypes.LOAD_FILES_SUCCESS,
+    result
   };
 }
 

@@ -29,12 +29,6 @@ import {classList} from './item-selector/dropdown-list';
 
 const defaultDisplayOption = d => d.name;
 
-const StyledFieldItem = styled.div`
-  .${classList.listItemAnchor} {
-    color: white;
-  }
-`;
-
 const StyledToken = styled.div`
   display: inline-block;
   margin: 0 4px 0 0;
@@ -42,14 +36,14 @@ const StyledToken = styled.div`
 // custom list Item
 export const FieldListItemFactory = (showToken = true) => {
   const FieldListItem = ({value, displayOption = defaultDisplayOption}) => (
-    <StyledFieldItem>
+    <div>
       {showToken ? (
         <StyledToken>
           <FieldToken type={value.type} />
         </StyledToken>
       ) : null}
       <span className={classList.listItemAnchor}>{displayOption(value)}</span>
-    </StyledFieldItem>
+    </div>
   );
 
   return FieldListItem;
@@ -69,7 +63,7 @@ const FieldType = PropTypes.oneOfType([
   })
 ]);
 
-export default class FieldSelector extends Component {
+class FieldSelector extends Component {
   static propTypes = {
     fields: PropTypes.oneOfType([PropTypes.array, PropTypes.arrayOf(FieldType)]),
     onSelect: PropTypes.func.isRequired,
@@ -96,7 +90,7 @@ export default class FieldSelector extends Component {
     multiSelect: false,
     closeOnSelect: true,
     showToken: true,
-    placeholder: 'Select a field'
+    placeholder: 'placeholder.selectField'
   };
 
   fieldsSelector = props => props.fields;
@@ -147,3 +141,5 @@ export default class FieldSelector extends Component {
     );
   }
 }
+
+export default FieldSelector;

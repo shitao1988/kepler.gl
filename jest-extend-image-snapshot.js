@@ -18,17 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {generateHashId} from 'utils/utils';
-import {getFileHandler} from 'processors/file-handler';
+import {toMatchImageSnapshot} from 'jest-image-snapshot';
 
-export const processFileToLoad = file => {
-  return {
-    fileBlob: file,
-    info: {
-      id: generateHashId(4),
-      label: file.name,
-      size: file.size
-    },
-    handler: getFileHandler(file)
-  };
-};
+expect.extend({toMatchImageSnapshot});

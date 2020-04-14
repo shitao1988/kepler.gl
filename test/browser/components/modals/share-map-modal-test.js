@@ -20,7 +20,7 @@
 
 import React from 'react';
 import test from 'tape';
-import {mountWithTheme} from 'test/helpers/component-utils';
+import {IntlWrapper, mountWithTheme} from 'test/helpers/component-utils';
 import sinon from 'sinon';
 import ShareMapUrlModalFactory, {SharingUrl} from 'components/modals/share-map-modal';
 
@@ -33,7 +33,11 @@ test('Components -> ShareMapUrlModal.mount', t => {
 
   // mount
   t.doesNotThrow(() => {
-    mountWithTheme(<ShareMapUrlModal onSetCloudProvider={onSetCloudProvider} />);
+    mountWithTheme(
+      <IntlWrapper>
+        <ShareMapUrlModal onSetCloudProvider={onSetCloudProvider} />
+      </IntlWrapper>
+    );
   }, 'Show not fail without props');
   t.ok(onSetCloudProvider.notCalled, 'should not call onSetCloudProvider when mount');
 
@@ -50,17 +54,21 @@ test('Components -> ShareMapUrlModal.mount with providers', t => {
   // mount
   t.doesNotThrow(() => {
     mountWithTheme(
-      <ShareMapUrlModal onSetCloudProvider={onSetCloudProvider} cloudProviders={[mockProvider]} />
+      <IntlWrapper>
+        <ShareMapUrlModal onSetCloudProvider={onSetCloudProvider} cloudProviders={[mockProvider]} />
+      </IntlWrapper>
     );
   }, 'Show not fail mount props');
   t.ok(onSetCloudProvider.calledWithExactly('taro'), 'should set default provider when mount');
 
   const wrapper = mountWithTheme(
-    <ShareMapUrlModal
-      onSetCloudProvider={onSetCloudProvider}
-      cloudProviders={[mockProvider]}
-      currentProvider="hello"
-    />
+    <IntlWrapper>
+      <ShareMapUrlModal
+        onSetCloudProvider={onSetCloudProvider}
+        cloudProviders={[mockProvider]}
+        currentProvider="hello"
+      />
+    </IntlWrapper>
   );
   t.ok(onSetCloudProvider.calledOnce, 'should not set default provider if it is already set');
 
@@ -79,18 +87,29 @@ test('Components -> ShareMapUrlModal.mount with isLoading', t => {
   let wrapper;
   t.doesNotThrow(() => {
     wrapper = mountWithTheme(
-      <ShareMapUrlModal isLoading onSetCloudProvider={() => {}} cloudProviders={[mockProvider]} />
+      <IntlWrapper>
+        <ShareMapUrlModal
+          isProviderLoading
+          onSetCloudProvider={() => {}}
+          cloudProviders={[mockProvider]}
+        />
+      </IntlWrapper>
     );
-  }, 'Show not fail mount with isLoading');
+  }, 'Show not fail mount with isProviderLoading');
 
-  t.ok(wrapper.find(StatusPanel).length === 1, 'should render StatusPanel when loading');
+  t.ok(
+    wrapper.find(StatusPanel).length === 1,
+    'should render StatusPanel when isProviderLoading=true'
+  );
 
   wrapper = mountWithTheme(
-    <ShareMapUrlModal
-      error="something is wrong"
-      onSetCloudProvider={() => {}}
-      cloudProviders={[mockProvider]}
-    />
+    <IntlWrapper>
+      <ShareMapUrlModal
+        providerError="something is wrong"
+        onSetCloudProvider={() => {}}
+        cloudProviders={[mockProvider]}
+      />
+    </IntlWrapper>
   );
   t.ok(wrapper.find(StatusPanel).length === 1, 'should render StatusPanel when error');
   t.equal(wrapper.find('.notification-item--message').length, 1, 'should render 1 message');
@@ -109,20 +128,21 @@ test('Components -> ShareMapUrlModal.mount with SharingUrl', t => {
   const shareUrl = 'http://taro-and-blue';
   const mockProvider = {
     getAccessToken: () => true,
-    name: 'taro',
-    getMapPermalink: () => shareUrl
+    name: 'taro'
   };
 
   // mount
   let wrapper;
   t.doesNotThrow(() => {
     wrapper = mountWithTheme(
-      <ShareMapUrlModal
-        successInfo={{metaUrl: 'http://somdthing'}}
-        cloudProviders={[mockProvider]}
-        currentProvider="taro"
-        onSetCloudProvider={() => {}}
-      />
+      <IntlWrapper>
+        <ShareMapUrlModal
+          successInfo={{shareUrl}}
+          cloudProviders={[mockProvider]}
+          currentProvider="taro"
+          onSetCloudProvider={() => {}}
+        />
+      </IntlWrapper>
     );
   }, 'Show not fail mount with successInfo');
 
@@ -134,7 +154,7 @@ test('Components -> ShareMapUrlModal.mount with SharingUrl', t => {
       .find('input')
       .props().value,
     shareUrl,
-    'should render with successInfo.metaUrl'
+    'should render with successInfo.shareUrl'
   );
 
   t.end();

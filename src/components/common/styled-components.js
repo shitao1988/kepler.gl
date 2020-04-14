@@ -21,6 +21,7 @@
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import {media} from 'styles/media-breakpoints';
+import classnames from 'classnames';
 
 export const SelectText = styled.span`
   color: ${props => props.theme.labelColor};
@@ -181,9 +182,9 @@ export const Tooltip = styled(ReactTooltip)`
   }
 `;
 
-export const Button = styled.div.attrs({
-  className: 'button'
-})`
+export const Button = styled.div.attrs(props => ({
+  className: classnames('button', props.className)
+}))`
   align-items: center;
   background-color: ${props =>
     props.negative
@@ -192,6 +193,8 @@ export const Button = styled.div.attrs({
       ? props.theme.secondaryBtnBgd
       : props.link
       ? props.theme.linkBtnBgd
+      : props.floating
+      ? props.theme.floatingBtnBgd
       : props.theme.primaryBtnBgd};
   border-radius: ${props => props.theme.primaryBtnRadius};
   color: ${props =>
@@ -201,6 +204,8 @@ export const Button = styled.div.attrs({
       ? props.theme.secondaryBtnColor
       : props.link
       ? props.theme.linkBtnColor
+      : props.floating
+      ? props.theme.floatingBtnColor
       : props.theme.primaryBtnColor};
   cursor: pointer;
   display: inline-flex;
@@ -229,6 +234,8 @@ export const Button = styled.div.attrs({
         ? props.theme.secondaryBtnBgdHover
         : props.link
         ? props.theme.linkBtnActBgdHover
+        : props.floating
+        ? props.theme.floatingBtnBgdHover
         : props.theme.primaryBtnBgdHover};
     color: ${props =>
       props.negative
@@ -237,6 +244,8 @@ export const Button = styled.div.attrs({
         ? props.theme.secondaryBtnActColor
         : props.link
         ? props.theme.linkBtnActColor
+        : props.floating
+        ? props.theme.floatingBtnActColor
         : props.theme.primaryBtnActColor};
   }
 
@@ -283,7 +292,8 @@ export const StyledPanelHeader = styled.div`
 
 export const StyledPanelDropdown = styled.div`
   ${props => props.theme.panelDropdownScrollBar}
-  background-color: ${props => props.theme.panelBackground};
+  background-color: ${props =>
+    props.type === 'light' ? props.theme.modalDropdownBackground : props.theme.panelBackground};
   overflow-y: auto;
   box-shadow: ${props => props.theme.panelBoxShadow};
   border-radius: ${props => props.theme.panelBorderRadius};
@@ -518,12 +528,12 @@ export const StyledFilteredOption = styled.div`
     border: 1px solid ${props => props.theme.primaryBtnBgd};
   }
 
-  .filtered-title {
+  .filter-option-title {
     color: ${props => props.theme.textColorLT};
     font-size: 12px;
     font-weight: 500;
   }
-  .filtered-subtitle {
+  .filter-option-subtitle {
     color: ${props => props.theme.textColor};
     font-size: 11px;
   }
@@ -532,8 +542,9 @@ export const StyledFilteredOption = styled.div`
 export const StyledType = styled.div`
   border-radius: 2px;
   border: 1px solid
-    ${props => (props.selected ? props.theme.primaryBtnBgd : props.theme.selectBorderColorLT)};
-  color: ${props => (props.selected ? props.theme.primaryBtnBgd : props.theme.selectBorderColorLT)};
+    ${props => (props.selected ? props.theme.primaryBtnBgdHover : props.theme.selectBorderColorLT)};
+  color: ${props =>
+    props.selected ? props.theme.primaryBtnBgdHover : props.theme.selectBorderColorLT};
   cursor: pointer;
   font-weight: 500;
   height: 100px;
@@ -558,33 +569,28 @@ export const BottomWidgetInner = styled.div`
   margin-top: ${props => props.theme.bottomPanelGap}px;
 `;
 
-export const MapControlButton = styled.div.attrs({
+export const MapControlButton = styled(Button).attrs({
   className: 'map-control-button'
 })`
-  align-items: center;
-  background-color: ${props =>
-    props.active ? props.theme.panelBackgroundHover : props.theme.panelBackground};
-  border: 0;
   box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.16);
-  color: ${props => props.theme.primaryBtnColor};
-  cursor: pointer;
-  display: flex;
   height: 32px;
-  justify-content: center;
-  margin: 0;
-  outline: none;
-  padding: 0;
-  transition: ${props => props.theme.transition};
   width: 32px;
+  padding: 0;
+  border-radius: 0;
+  background-color: ${props =>
+    props.active ? props.theme.floatingBtnBgdHover : props.theme.floatingBtnBgd};
+  color: ${props =>
+    props.active ? props.theme.floatingBtnActColor : props.theme.floatingBtnColor};
 
-  :focus {
-    outline: none;
+  :hover,
+  :focus,
+  :active,
+  &.active {
+    background-color: ${props => props.theme.floatingBtnBgdHover};
+    color: ${props => props.theme.floatingBtnActColor};
   }
-
-  :hover {
-    cursor: pointer;
-    background-color: ${props => props.theme.secondaryBtnActBgd};
-    color: ${props => props.theme.secondaryBtnActColor};
+  svg {
+    margin-right: 0;
   }
 `;
 

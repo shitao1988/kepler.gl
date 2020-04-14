@@ -24,19 +24,11 @@ import PropTypes from 'prop-types';
 import {createSelector} from 'reselect';
 import {Tooltip} from 'components/common/styled-components';
 import KeplerGlLogo from 'components/common/logo';
-import {
-  Save,
-  DataTable,
-  Save2,
-  Gear,
-  Picture,
-  Db,
-  Map as MapIcon,
-  Share
-} from 'components/common/icons';
+import {Save, DataTable, Save2, Picture, Db, Map as MapIcon, Share} from 'components/common/icons';
 import ClickOutsideCloseDropdown from 'components/side-panel/panel-dropdown';
 import Toolbar from 'components/common/toolbar';
 import ToolbarItem from 'components/common/toolbar-item';
+import {FormattedMessage} from 'react-intl';
 
 const StyledPanelHeader = styled.div.attrs({
   className: 'side-side-panel__header'
@@ -82,7 +74,6 @@ const StyledPanelAction = styled.div.attrs({
 
   :hover {
     cursor: pointer;
-    background-color: ${props => props.theme.secondaryBtnActBgd};
     color: ${props => props.theme.textColorHl};
 
     a {
@@ -91,10 +82,8 @@ const StyledPanelAction = styled.div.attrs({
   }
 `;
 
-// By assigning this style we can position the toolbar in the right place on the screen
 const StyledToolbar = styled(Toolbar)`
   position: absolute;
-  left: 64px;
 `;
 
 export const PanelAction = ({item, onClick}) => (
@@ -105,7 +94,7 @@ export const PanelAction = ({item, onClick}) => (
     </a>
     {item.tooltip ? (
       <Tooltip id={`${item.id}-action`} place="bottom" delayShow={500} effect="solid">
-        <span>{item.tooltip}</span>
+        <FormattedMessage id={item.tooltip} />
       </Tooltip>
     ) : null}
   </StyledPanelAction>
@@ -120,12 +109,13 @@ export const PanelHeaderDropdownFactory = () => {
           show={show}
           onClose={onClose}
         >
-          {items.map(itm => (
+          {items.map(item => (
             <ToolbarItem
-              key={itm.key}
-              label={itm.label}
-              icon={itm.icon}
-              onClick={itm.onClick}
+              id={item.key}
+              key={item.key}
+              label={item.label}
+              icon={item.icon}
+              onClick={item.onClick}
               onClose={onClose}
             />
           ))}
@@ -164,33 +154,33 @@ export const SaveExportDropdownFactory = PanelHeaderDropdown => {
   SaveExportDropdown.defaultProps = {
     items: [
       {
-        label: 'Export Image',
+        label: 'toolbar.exportImage',
         icon: Picture,
         key: 'image',
         onClick: props => props.onExportImage
       },
       {
-        label: 'Export Data',
+        label: 'toolbar.exportData',
         icon: DataTable,
         key: 'data',
         onClick: props => props.onExportData
       },
       {
-        label: 'Export Map',
+        label: 'toolbar.exportMap',
         icon: MapIcon,
         key: 'map',
         onClick: props => props.onExportMap
       },
       {
-        label: 'Save Map',
+        label: 'toolbar.saveMap',
         icon: Save2,
         key: 'save',
         onClick: props => props.onSaveMap
       },
       {
-        label: 'Share Map URL',
+        label: 'toolbar.shareMapURL',
         icon: Share,
-        key: 'save',
+        key: 'share',
         onClick: props => props.onShareMap
       }
     ]
@@ -216,14 +206,14 @@ export const CloudStorageDropdownFactory = PanelHeaderDropdown => {
       {
         label: 'Save',
         icon: Save2,
-        key: 'data',
+        key: 'save',
         onClick: props => props.onSaveToStorage
       },
       {
-        label: 'Settings',
-        icon: Gear,
-        key: 'settings',
-        onClick: props => props.onExportData
+        label: 'Save As',
+        icon: Save2,
+        key: 'saveAs',
+        onClick: props => props.onSaveAsToStorage
       }
     ]
   };
@@ -237,6 +227,7 @@ function PanelHeaderFactory(SaveExportDropdown, CloudStorageDropdown) {
   return class PanelHeader extends Component {
     static propTypes = {
       appName: PropTypes.string,
+      appWebsite: PropTypes.string,
       version: PropTypes.string,
       visibleDropdown: PropTypes.string,
       logoComponent: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
@@ -246,6 +237,7 @@ function PanelHeaderFactory(SaveExportDropdown, CloudStorageDropdown) {
       onExportConfig: PropTypes.func,
       onExportMap: PropTypes.func,
       onSaveToStorage: PropTypes.func,
+      onSaveAsToStorage: PropTypes.func,
       onSaveMap: PropTypes.func,
       onShareMap: PropTypes.func
     };
@@ -256,7 +248,7 @@ function PanelHeaderFactory(SaveExportDropdown, CloudStorageDropdown) {
         {
           id: 'storage',
           iconComponent: Db,
-          tooltip: 'Cloud Storage',
+          tooltip: 'tooltip.cloudStorage',
           onClick: () => {},
           dropdownComponent: CloudStorageDropdown
         },
@@ -273,30 +265,25 @@ function PanelHeaderFactory(SaveExportDropdown, CloudStorageDropdown) {
     render() {
       const {
         appName,
+        appWebsite,
         version,
         actionItems,
-        onSaveToStorage,
-        onSaveMap,
-        onShareMap,
-        onExportImage,
-        onExportData,
-        onExportConfig,
-        onExportMap,
         visibleDropdown,
         showExportDropdown,
-        hideExportDropdown
+        hideExportDropdown,
+        ...dropdownCallbacks
       } = this.props;
       let items = actionItems || [];
 
       // don't render cloud storage icon if onSaveToStorage is not provided
-      if (typeof onSaveToStorage !== 'function') {
+      if (typeof this.props.onSaveToStorage !== 'function') {
         items = actionItems.filter(ai => ai.id !== 'storage');
       }
 
       return (
         <StyledPanelHeader className="side-panel__panel-header">
           <StyledPanelHeaderTop className="side-panel__panel-header__top">
-            <this.props.logoComponent appName={appName} version={version} />
+            <this.props.logoComponent appName={appName} version={version} appWebsite={appWebsite} />
             <StyledPanelTopActions>
               {items.map(item => (
                 <div
@@ -317,13 +304,7 @@ function PanelHeaderFactory(SaveExportDropdown, CloudStorageDropdown) {
                     <item.dropdownComponent
                       onClose={hideExportDropdown}
                       show={visibleDropdown === item.id}
-                      onSaveToStorage={onSaveToStorage}
-                      onSaveMap={onSaveMap}
-                      onShareMap={onShareMap}
-                      onExportData={onExportData}
-                      onExportImage={onExportImage}
-                      onExportConfig={onExportConfig}
-                      onExportMap={onExportMap}
+                      {...dropdownCallbacks}
                     />
                   ) : null}
                 </div>

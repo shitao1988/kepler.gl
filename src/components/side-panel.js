@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 import React, {PureComponent} from 'react';
+import {FormattedMessage} from 'react-intl';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import get from 'lodash.get';
@@ -41,7 +42,8 @@ import {
   EXPORT_MAP_ID,
   SAVE_MAP_ID,
   SHARE_MAP_ID,
-  SIDEBAR_PANELS
+  SIDEBAR_PANELS,
+  OVERWRITE_MAP_ID
 } from 'constants/default-settings';
 
 const SidePanelContent = styled.div`
@@ -103,6 +105,7 @@ export default function SidePanelFactory(
       visStateActions: PropTypes.object.isRequired,
       mapStyleActions: PropTypes.object.isRequired,
       availableProviders: PropTypes.object,
+      mapSaved: PropTypes.string,
       panels: PropTypes.arrayOf(PropTypes.object)
     };
 
@@ -147,10 +150,21 @@ export default function SidePanelFactory(
 
     _onClickExportMap = () => this.props.uiStateActions.toggleModal(EXPORT_MAP_ID);
 
-    _onClickSaveToStorage = () => this.props.uiStateActions.toggleModal(SAVE_MAP_ID);
+    _onClickSaveToStorage = () => {
+      this.props.uiStateActions.toggleModal(this.props.mapSaved ? OVERWRITE_MAP_ID : SAVE_MAP_ID);
+    };
+
+    _onClickSaveAsToStorage = () => {
+      // add (copy) to file name
+      this.props.visStateActions.setMapInfo({
+        title: `${this.props.mapInfo.title || 'Kepler.gl'} (Copy)`
+      });
+      this.props.uiStateActions.toggleModal(SAVE_MAP_ID);
+    };
 
     _onClickShareMap = () => this.props.uiStateActions.toggleModal(SHARE_MAP_ID);
 
+    // eslint-disable-next-line complexity
     render() {
       const {
         appName,
@@ -235,6 +249,11 @@ export default function SidePanelFactory(
               onExportMap={this._onClickExportMap}
               onSaveMap={this.props.onSaveMap}
               onSaveToStorage={availableProviders.hasStorage ? this._onClickSaveToStorage : null}
+              onSaveAsToStorage={
+                availableProviders.hasStorage && this.props.mapSaved
+                  ? this._onClickSaveAsToStorage
+                  : null
+              }
               onShareMap={availableProviders.hasShare ? this._onClickShareMap : null}
             />
             <PanelToggle
@@ -245,7 +264,9 @@ export default function SidePanelFactory(
             <SidePanelContent className="side-panel__content">
               <div>
                 <PanelTitle className="side-panel__content__title">
-                  {(panels.find(({id}) => id === activeSidePanel) || {}).label}
+                  <FormattedMessage
+                    id={(panels.find(({id}) => id === activeSidePanel) || {}).label}
+                  />
                 </PanelTitle>
                 {activeSidePanel === 'layer' && (
                   <LayerManager
@@ -276,7 +297,7 @@ export default function SidePanelFactory(
                 {activeSidePanel === 'map' && (
                   <MapManager {...mapManagerActions} mapStyle={this.props.mapStyle} />
                 )}
-                {customPanels.length && customPanels.find(p => p.id === activeSidePanel) ? (
+                {(customPanels || []).find(p => p.id === activeSidePanel) ? (
                   <CustomPanels
                     {...getCustomPanelProps(this.props)}
                     activeSidePanel={activeSidePanel}
