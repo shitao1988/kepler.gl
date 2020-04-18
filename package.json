@@ -1,6 +1,6 @@
 {
-  "name": "kepler.gl",
-  "author": "Shan He <shan@uber.com>",
+  "name": "@tommy2gis/swsk.kepler.gl",
+  "author": "tommy <573413161@qq.com>",
   "version": "2.1.2",
   "description": "kepler.gl is a webgl based application to visualize large scale location data in the browser",
   "license": "MIT",
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/keplergl/kepler.gl.git"
+    "url": "https://github.com/tommy2gis/kepler.gl.git"
   },
   "scripts": {
     "install:example": "cd examples/demo-app && yarn",
@@ -88,6 +88,7 @@
     "@turf/bbox": "^6.0.1",
     "@turf/boolean-within": "^6.0.1",
     "@turf/helpers": "^6.1.4",
+    "bizcharts": "^3.5.8",
     "classnames": "^2.2.1",
     "colorbrewer": "^1.0.0",
     "copy-to-clipboard": "^3.3.1",

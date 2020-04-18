@@ -21,7 +21,7 @@
 // libraries
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapboxGLMap from 'react-map-gl';
+import MapboxGLMap,{Marker} from 'react-map-gl';
 import DeckGL from '@deck.gl/react';
 import {createSelector} from 'reselect';
 import WebMercatorViewport from 'viewport-mercator-project';
@@ -326,6 +326,19 @@ export default function MapContainerFactory(MapPopover, MapControl) {
       return overlays.concat(layerOverlay || []);
     };
 
+    _renderMarkerOverlay() {
+      const {
+        layerOrder,
+        layers
+      } = this.props;
+      return layerOrder
+          .filter(
+            idx =>
+              layers[idx].overlayType === OVERLAY_TYPE.mapboxglMarker
+          )
+          .reduce(this._renderLayer, [])
+    }
+
     _renderDeckOverlay(layersToRender) {
       const {
         mapState,
@@ -484,6 +497,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
             onMouseMove={this.props.visStateActions.onMouseMove}
           >
             {this._renderDeckOverlay(layersToRender)}
+            {this._renderMarkerOverlay(layersToRender)}
             {this._renderMapboxOverlays(layersToRender)}
             <Editor
               index={index}

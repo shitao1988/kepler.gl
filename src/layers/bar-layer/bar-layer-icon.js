@@ -18,32 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export const LOCALES = {
-    en : 'English',
-    zh : '中文'
-}
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import Base from 'components/common/icons/base';
 
-/**
- * Localization can be passed to `KeplerGl` via uiState `locale`.
- * Available languages are `en` and `fi`. Default language is `en`
- * @constant
- * @type {string}
- * @public
- * @example
- * ```js
- * import {combineReducers} from 'redux';
- * import {LOCALE_CODES} from 'kepler.gl/localization/locales';
- *
- * const customizedKeplerGlReducer = keplerGlReducer
- *   .initialState({
- *     uiState: {
- *       // use Finnish locale
- *       locale: LOCALE_CODES.fi
- *     }
- *   });
- *
- * ```
- */
+class BarLayerIcon extends Component {
+  static propTypes = {
+    height: PropTypes.string,
+    colors: PropTypes.arrayOf(PropTypes.string)
+  };
 
-export const LOCALE_CODES = Object.keys(LOCALES)
-.reduce((acc, key) => ({...acc, [key]: key}), {});
+  static defaultProps = {
+    height: '16px',
+    viewBox: '-50 -50 1100 1100',
+    predefinedClassName: 'bar-layer-icon',
+    totalColor: 6
+  };
+
+  render() {
+    return (
+      <Base {...this.props}>
+       <path d="M888 792H200V168c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v688c0 4.4 3.6 8 8 8h752c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-600-80h56c4.4 0 8-3.6 8-8V560c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v144c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V384c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v320c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V462c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v242c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V304c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v400c0 4.4 3.6 8 8 8z"></path>
+      </Base>
+    );
+  }
+};
+
+export default BarLayerIcon;

@@ -75,10 +75,10 @@ export default {
   },
   sidebar: {
     panels: {
-      layer: 'Layers',
-      filter: 'Filters',
-      interaction: 'Interactions',
-      basemap: 'Base map'
+      layer: '图层',
+      filter: '筛选',
+      interaction: '交互',
+      basemap: '底图'
     }
   },
   layer: {
@@ -111,10 +111,10 @@ export default {
       polygon: 'polygon',
       geojson: 'geojson',
       cluster: 'cluster',
-      pie:'pie',
-      bar:'bar',
       icon: 'icon',
       heatmap: ' heatmap',
+      pie:'pie',
+      bar:'bar',
       h3: 'H3',
       trip: 'trip',
       s2: 'S2',
