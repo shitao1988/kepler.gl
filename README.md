@@ -19,6 +19,12 @@
   </a>
 </p>
 
+
+<h1 align="center">
+  新增饼图和柱状图
+</h1>
+
+
 <h1 align="center">
   kepler.gl | <a href="http://kepler.gl">Website</a> | <a href="http://kepler.gl/#/demo">Demo App</a> | <a href="https://docs.kepler.gl/">Docs</a>
 </h1>

@@ -22,55 +22,55 @@ import {LOCALES} from './locales';
 
 export default {
   property: {
-    weight: 'weight',
-    label: 'label',
-    fillColor: 'fill color',
-    color: 'color',
+    weight: '权重',
+    label: '标签',
+    fillColor: '填充色',
+    color: '颜色',
     strokeColor: 'stroke color',
-    radius: 'radius',
-    outline: 'outline',
+    radius: '半径',
+    outline: '边框',
     stroke: 'stroke',
-    density: 'density',
-    height: 'height',
-    sum: 'sum',
-    pointCount: 'Point Count'
+    density: '密度',
+    height: '高度',
+    sum: '总和',
+    pointCount: '点数量'
   },
   placeholder: {
-    search: 'Search',
-    selectField: 'Select a field',
-    yAxis: 'Y Axis',
-    selectType: 'Select A Type',
-    selectValue: 'Select A Value',
-    enterValue: 'Enter a value',
-    empty: 'empty'
+    search: '查询',
+    selectField: '选择字段',
+    yAxis: 'Y 轴',
+    selectType: '选择类型',
+    selectValue: '选择值',
+    enterValue: '输入值',
+    empty: '空'
   },
   misc: {
     by: '',
-    valuesIn: 'Values in',
-    valueEquals: 'Value equals',
-    dataSource: 'Data Source',
-    brushRadius: 'Brush Radius (km)',
+    valuesIn: '值属于',
+    valueEquals: '值等于',
+    dataSource: '数据源',
+    brushRadius: '毛刷半径 (km)',
     empty: ' '
   },
   mapLayers: {
-    title: 'Map Layers',
-    label: 'Label',
-    road: 'Road',
-    border: 'Border',
-    building: 'Building',
-    water: 'Water',
-    land: 'Land',
-    '3dBuilding': '3d Building'
+    title: '地图图层',
+    label: '标注',
+    road: '道路',
+    border: '边界',
+    building: '建筑',
+    water: '水',
+    land: '陆地',
+    '3dBuilding': '3d 建筑'
   },
   panel: {
     text: {
-      label: 'label',
+      label: '标注',
       labelWithId: 'Label {labelId}',
-      fontSize: 'Font size',
-      fontColor: 'Font color',
-      textAnchor: 'Text anchor',
-      alignment: 'Alignment',
-      addMoreLabel: 'Add More Label'
+      fontSize: '字体大小',
+      fontColor: '字体颜色',
+      textAnchor: '文本 anchor',
+      alignment: '对齐',
+      addMoreLabel: '添加标注'
     }
   },
   sidebar: {
@@ -82,13 +82,13 @@ export default {
     }
   },
   layer: {
-    required: 'Required*',
-    radius: 'Radius',
-    color: 'Color',
-    fillColor: 'Fill Color',
-    outline: 'Outline',
-    weight: 'Weight',
-    propertyBasedOn: '{property} based on',
+    required: '必须*',
+    radius: '半径',
+    color: '颜色',
+    fillColor: '填充色',
+    outline: '边框',
+    weight: '权重',
+    propertyBasedOn: '基于 {property}',
     coverage: 'Coverage',
     stroke: 'Stroke',
     strokeWidth: 'Stroke Width',
@@ -172,22 +172,22 @@ export default {
     howTo: 'How to'
   },
   filterManager: {
-    addFilter: 'Add Filter'
+    addFilter: '添加筛选'
   },
   datasetTitle: {
-    showDataTable: 'Show data table',
-    removeDataset: 'Remove dataset'
+    showDataTable: '显示数据表',
+    removeDataset: '移除数据集'
   },
   datasetInfo: {
-    rowCount: '{rowCount} rows'
+    rowCount: '{rowCount} 行'
   },
   tooltip: {
-    hideLayer: 'hide layer',
-    showLayer: 'show layer',
-    hideFeature: 'Hide Feature',
-    showFeature: 'Show feature',
-    hide: 'hide',
-    show: 'show',
+    hideLayer: '隐藏图层',
+    showLayer: '显示图层',
+    hideFeature: '隐藏要素',
+    showFeature: '显示要素',
+    hide: '隐藏',
+    show: '显示',
     removeLayer: 'Remove layer',
     layerSettings: 'Layer settings',
     closePanel: 'Close current panel',
