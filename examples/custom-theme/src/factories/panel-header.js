@@ -56,7 +56,7 @@ export function CustomPanelHeaderFactory(...deps) {
             <a
               className="logo__link"
             >
-              地理可视化
+              空间可视化
             </a>
           </LogoName>
         </LogoTitle>

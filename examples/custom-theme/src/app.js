@@ -62,6 +62,23 @@ function App(props) {
     height: window.innerHeight
   });
 
+  const mapStyles = [
+    {
+      id: 'dark',
+      label: '天地图道路',
+      url: 'http://localhost:8081/datavisual/roadstyle.json',
+      icon: `http://localhost:8081/datavisual/road.png`,
+      layerGroups: []
+    },
+    {
+      id: 'tdtimg',
+      label: '天地图影像',
+      url: 'http://localhost:8081/datavisual/imgstyle.json',
+      icon: `http://localhost:8081/datavisual/img.png`,
+      layerGroups: []
+    },
+  ];
+
   useEffect(() => {
     const handleResize = () => {
       setDimension({width: window.innerWidth, height: window.innerHeight});
@@ -102,6 +119,8 @@ function App(props) {
          * Specify path to keplerGl state, because it is not mount at the root
          */
         getState={state => state.demo.keplerGl}
+        mapStylesReplaceDefault={true}
+        mapStyles={mapStyles}
         width={windowDimension.width}
         height={windowDimension.height}
         theme={props.demo.app.theme === 'light' ? theme : emptyTheme}
