@@ -17,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 import {default as PieLayer} from './pie-layer/pie-layer';
 import {default as BarLayer} from './bar-layer/bar-layer';
 import {default as PointLayer} from './point-layer/point-layer';

@@ -34,7 +34,7 @@
     "start:open-modal": "npm run install-and-start -- examples/open-modal start-local",
     "start:custom-reducer": "npm run install-and-start -- examples/custom-reducer start-local",
     "start:replace-component": "npm run install-and-start -- examples/replace-component start-local",
-    "start:custom-theme": "npm run install-and-start -- examples/custom-theme start-local",
+    "start:custom-theme": "set MapboxAccessToken=pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA && npm run install-and-start -- examples/custom-theme start-local",
     "start:node-app": "npm run install-and-start -- examples/node-app start-local",
     "start:web": "npm run install-and-start -- website start",
     "start:https": "npm run install-and-start -- examples/demo-app start-local-https",
