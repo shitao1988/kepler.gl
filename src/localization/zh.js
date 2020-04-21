@@ -158,18 +158,18 @@ export default {
     heightRange: 'Height Range'
   },
   layerManager: {
-    addData: 'Add Data',
-    addLayer: 'Add Layer',
-    layerBlending: 'Layer Blending'
+    addData: '添加数据',
+    addLayer: '添加图层',
+    layerBlending: '图层混合'
   },
   mapManager: {
-    mapStyle: 'Map style',
-    addMapStyle: 'Add Map Style',
-    '3dBuildingColor': '3D Building Color'
+    mapStyle: '地图样式',
+    addMapStyle: '添加地图样式',
+    '3dBuildingColor': '3D建筑颜色'
   },
   layerConfiguration: {
     defaultDescription: 'Calculate {property} based on selected field',
-    howTo: 'How to'
+    howTo: '指导'
   },
   filterManager: {
     addFilter: '添加筛选'
