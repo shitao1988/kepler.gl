@@ -20,7 +20,7 @@
 
 export const LOCALES = {
     en : 'English',
-    zh : '中文'
+    zh_cn : '中文'
 }
 
 /**
