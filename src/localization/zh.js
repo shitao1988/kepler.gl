@@ -168,7 +168,7 @@ export default {
     '3dBuildingColor': '3D建筑颜色'
   },
   layerConfiguration: {
-    defaultDescription: 'Calculate {property} based on selected field',
+    defaultDescription: '根据所选字段计算{属性}',
     howTo: '指导'
   },
   filterManager: {
@@ -371,38 +371,38 @@ export default {
     }
   },
   header: {
-    visibleLayers: 'Visible layers',
-    layerLegend: 'Layer Legend'
+    visibleLayers: '可见图层',
+    layerLegend: '图层图例'
   },
   interactions: {
-    tooltip: 'Tooltip',
-    brush: 'Brush',
-    coordinate: 'Coordinates'
+    tooltip: '提示',
+    brush: '笔刷',
+    coordinate: '坐标'
   },
   layerBlending: {
-    title: 'Layer Blending',
-    additive: 'additive',
-    normal: 'normal',
-    subtractive: 'subtractive'
+    title: '图层混合',
+    additive: '加色',
+    normal: '标准',
+    subtractive: '减色'
   },
   columns: {
-    title: 'Columns',
-    lat: 'lat',
-    lng: 'lon',
-    altitude: 'altitude',
-    icon: 'icon',
+    title: '列',
+    lat: '维度',
+    lng: '经度',
+    altitude: '高程',
+    icon: '图标',
     geojson: 'geojson',
     arc: {
-      lat0: 'source lat',
-      lng0: 'source lng',
-      lat1: 'target lat',
-      lng1: 'target lng'
+      lat0: '起点 lat',
+      lng0: '起点 lng',
+      lat1: '终点 lat',
+      lng1: '终点 lng'
     },
     grid: {
-      worldUnitSize: 'Grid Size (km)'
+      worldUnitSize: '格网大小 (km)'
     },
     hexagon: {
-      worldUnitSize: 'Hexagon Radius (km)'
+      worldUnitSize: '蜂窝半径 (km)'
     }
   },
   color: {
