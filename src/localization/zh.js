@@ -406,9 +406,9 @@ export default {
     }
   },
   color: {
-    customPalette: 'Custom Palette',
+    customPalette: '自定义调色板',
     steps: 'steps',
-    type: 'type',
+    type: '类型',
     reversed: 'reversed'
   },
   scale: {
