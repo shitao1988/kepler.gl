@@ -89,19 +89,19 @@ export default {
     outline: '边框',
     weight: '权重',
     propertyBasedOn: '基于 {property}',
-    coverage: 'Coverage',
-    stroke: 'Stroke',
-    strokeWidth: 'Stroke Width',
-    strokeColor: 'Stroke Color',
-    basic: 'Basic',
+    coverage: '覆盖',
+    stroke: '笔画',
+    strokeWidth: '笔画宽度',
+    strokeColor: '笔画颜色',
+    basic: '基本',
     trailLength: 'Trail Length',
-    trailLengthDescription: 'Number of seconds for a path to completely fade out',
-    newLayer: 'new layer',
-    elevationByDescription: 'When off, height is based on count of points',
-    colorByDescription: 'When off, color is based on count of points',
-    aggregateBy: 'Aggregate {field} by',
-    '3DModel': '3D Model',
-    '3DModelOptions': '3D Model Options',
+    trailLengthDescription: '路径淡出时间',
+    newLayer: '新图层',
+    elevationByDescription: '当关闭时，高度以点数量为基础',
+    colorByDescription: '当关闭时，颜色是根据点数量为基础',
+    aggregateBy: '汇总{字段}基于',
+    '3DModel': '3D 模型',
+    '3DModelOptions': '3D 模型选项',
     type: {
       point: '点',
       arc: '弧',
@@ -122,40 +122,40 @@ export default {
     }
   },
   layerVisConfigs: {
-    strokeWidth: 'Stroke Width',
-    strokeWidthRange: 'Stroke Width Range',
-    radius: 'Radius',
-    fixedRadius: 'Fixed Radius to meter',
-    fixedRadiusDescription: 'Map radius to absolute radius in meters, e.g. 5 to 5 meters',
-    radiusRange: 'Radius Range',
-    clusterRadius: 'Cluster Radius in Pixels',
-    radiusRangePixels: 'Radius Range in pixels',
+    strokeWidth: '笔画宽度',
+    strokeWidthRange: '笔画宽度范围',
+    radius: '半径',
+    fixedRadius: '固定半径单位为米',
+    fixedRadiusDescription: '地图半径为绝对半径，单位为米, 如5至5米',
+    radiusRange: '半径范围',
+    clusterRadius: '群集半径，单位为Pixels',
+    radiusRangePixels: '半径范围，单位为像素',
     opacity: '透明度',
-    coverage: 'Coverage',
-    outline: 'Outline',
+    coverage: '填充',
+    outline: '边框',
     colorRange: '色带',
-    stroke: 'Stroke',
-    strokeColor: 'Stroke Color',
-    strokeColorRange: 'Stroke Color range',
-    targetColor: 'Target Color',
-    colorAggregation: 'Color Aggregation',
-    heightAggregation: 'Height Aggregation',
-    resolutionRange: 'Resolution range',
-    sizeScale: 'Size Scale',
-    worldUnitSize: 'World Unit Size',
-    elevationScale: 'Elevation Scale',
-    heightScale: 'Height Scale',
-    coverageRange: 'Coverage Range',
-    highPrecisionRendering: 'High Precision Rendering',
-    highPrecisionRenderingDescription: 'High precision will result in slower performance',
-    height: 'Height',
-    heightDescription: 'Click button at top right of the map to switch to 3d view',
-    fill: 'Fill',
-    enablePolygonHeight: 'Enable Polygon Height',
-    showWireframe: 'Show Wireframe',
-    weightIntensity: 'Weight Intensity',
-    zoomScale: 'Zoom Scale',
-    heightRange: 'Height Range'
+    stroke: '画笔',
+    strokeColor: '画笔颜色',
+    strokeColorRange: '画笔色带',
+    targetColor: '目标颜色',
+    colorAggregation: '颜色聚合',
+    heightAggregation: '高度聚合',
+    resolutionRange: '分辨率范围',
+    sizeScale: '大小尺寸',
+    worldUnitSize: '世界单位大小',
+    elevationScale: '高程比例尺',
+    heightScale: '高度比例尺',
+    coverageRange: '覆盖范围',
+    highPrecisionRendering: '高精度渲染',
+    highPrecisionRenderingDescription: '高精度会导致性能变慢',
+    height: '高度',
+    heightDescription: '点击地图右上方的按钮切换到3D视图',
+    fill: '填充',
+    enablePolygonHeight: '启用多边形高度',
+    showWireframe: '显示线框',
+    weightIntensity: '权重强度',
+    zoomScale: '缩放比例',
+    heightRange: '高度范围'
   },
   layerManager: {
     addData: '添加数据',
@@ -239,32 +239,31 @@ export default {
       defaultConfirm: '确定'
     },
     exportImage: {
-      ratioTitle: 'Ratio',
-      ratioDescription: 'Choose the ratio for various usages.',
-      ratioOriginalScreen: 'Original Screen',
-      ratioCustom: 'Custom',
+      ratioTitle: '比例',
+      ratioDescription: '选择不同用途的比例.',
+      ratioOriginalScreen: '原始画面',
+      ratioCustom: '自定义',
       ratio4_3: '4:3',
       ratio16_9: '16:9',
-      resolutionTitle: 'Resolution',
-      resolutionDescription: 'High resolution is better for prints.',
-      mapLegendTitle: 'Map Legend',
-      mapLegendAdd: 'Add legend on map'
+      resolutionTitle: '分辨率',
+      resolutionDescription: '高分辨率更适合于打印.',
+      mapLegendTitle: '地图图例',
+      mapLegendAdd: '在地图上添加图例'
     },
     exportData: {
-      datasetTitle: 'Dataset',
-      datasetSubtitle: 'Choose the datasets you want to export',
-      allDatasets: 'All',
-      dataTypeTitle: 'Data Type',
-      dataTypeSubtitle: 'Choose the type of data you want to export',
-      filterDataTitle: 'Filter Data',
-      filterDataSubtitle: 'You can choose exporting original data or filtered data',
-      filteredData: 'Filtered data',
-      unfilteredData: 'Unfiltered Data',
-      fileCount: '{fileCount} Files',
-      rowCount: '{rowCount} Rows'
+      datasetTitle: '数据集',
+      datasetSubtitle: '选择你要导出的数据集',
+      allDatasets: '所有',
+      dataTypeTitle: '数据类型',
+      dataTypeSubtitle: '选择你要导出的数据类型',
+      filterDataTitle: '过滤数据',
+      filterDataSubtitle: '你可以选择导出原始数据或过滤后的数据',
+      filteredData: '过滤后的数据',
+      fileCount: '{fileCount} 个文件',
+      rowCount: '{rowCount} 行'
     },
     deleteData: {
-      warning: 'you are going to delete this dataset. It will affect {length} layers'
+      warning: '删除这个数据集。将影响{length}图层'
     },
     addStyle: {
       publishTitle: '1. Publish your style at mapbox or provide access token',
@@ -283,91 +282,91 @@ export default {
       namingTitle: '3. Name your style'
     },
     shareMap: {
-      shareUriTitle: 'Share Map Url',
-      shareUriSubtitle: 'Generate a map url to share with others',
-      cloudTitle: 'Cloud storage',
-      cloudSubtitle: 'Login and upload map data to your personal cloud storage',
+      shareUriTitle: '分享地图Url',
+      shareUriSubtitle: '生成一个地图URL与他人分享',
+      cloudTitle: '云存储',
+      cloudSubtitle: '登录并上传地图数据到个人云端存储',
       shareDisclaimer:
-        'kepler.gl will save your map data to your personal cloud storage, only people with the URL can access your map and data. ' +
-        'You can edit/delete the data file in your cloud account anytime.',
-      gotoPage: 'Go to your Kepler.gl {currentProvider} page'
+        'kepler.gl会把你的地图数据保存到你的个人云存储，只有拥有该URL的人才能访问你的地图和数据. ' +
+        '您可以随时编辑/删除您的云账户中的数据文件.',
+      gotoPage: '转到你的Kepler.gl {currentProvider}页面'
     },
     statusPanel: {
-      mapUploading: 'Map Uploading',
-      error: 'Error'
+      mapUploading: '地图上传',
+      error: '错误'
     },
     saveMap: {
-      title: 'Cloud storage',
-      subtitle: 'Login to save map to your personal cloud storage'
+      title: '云存储',
+      subtitle: '登录后将地图保存到个人云端存储空间'
     },
     exportMap: {
-      formatTitle: 'Map format',
-      formatSubtitle: 'Choose the format to export your map to',
+      formatTitle: '地图格式',
+      formatSubtitle: '选择要导出地图的格式',
       html: {
-        selection: 'Export your map into an interactive html file.',
-        tokenTitle: 'Mapbox access token',
-        tokenSubtitle: 'Use your own Mapbox access token in the html (optional)',
-        tokenPlaceholder: 'Paste your Mapbox access token',
+        selection: '导出你的地图到一个交互式的html文件.',
+        tokenTitle: 'Mapbox访问令牌',
+        tokenSubtitle: '在html中使用你自己的Mapbox访问令牌（可选）',
+        tokenPlaceholder: '粘贴你的Mapbox访问令牌',
         tokenMisuseWarning:
-          '* If you do not provide your own token, the map may fail to display at any time when we replace ours to avoid misuse. ',
-        tokenDisclaimer: 'You can change the Mapbox token later using the following instructions: ',
-        tokenUpdate: 'How to update an existing map token.',
-        modeTitle: 'Map Mode',
-        modeSubtitle1: 'Select the app mode. More ',
-        modeSubtitle2: 'info',
-        modeDescription: 'Allow users to {mode} the map',
-        read: 'read',
-        edit: 'edit'
+          '*如果您没有提供您自己的令牌，当我们更换令牌时，地图可能会无法显示，以避免误用。 ',
+        tokenDisclaimer: '您可以参考下面的说明更改Mapbox令牌: ',
+        tokenUpdate: '如何更新现有地图令牌.',
+        modeTitle: '地图模式',
+        modeSubtitle1: '选择应用模式. 更多 ',
+        modeSubtitle2: '信息',
+        modeDescription: '允许用户对地图{mode}',
+        read: '只读',
+        edit: '编辑'
       },
       json: {
-        configTitle: 'Map Config',
+        configTitle: '地图配置',
         configDisclaimer:
-          'Map config will be included in the Json file. If you are using kepler.gl in your own app. You can copy this config and pass it to ',
+          '地图配置将包含在Json文件中。如果你在自己的应用程序中使用kepler.gl。你可以复制这个配置并将其传递给',
         selection:
-          'Export current map data and config into a single Json file. You can later open the same map by uploading this file to kepler.gl.',
+          '将当前地图数据和配置导出到一个Json文件中。以后你可以通过将此文件上传到kepler.gl以打开相同的地图.',
         disclaimer:
-          '* Map config is coupled with loaded datasets. ‘dataId’ is used to bind layers, filters, and tooltips to a specific dataset. ' +
-          'When passing this config to addDataToMap, make sure the dataset id matches the dataId/s in this config.'
+          '* 地图配置与加载的数据集耦合。`dataId`用于绑定图层、过滤器和工具提示到特定的数据集. ' +
+          '当将此配置传递给addDataToMap时，请确保数据集的id与此配置中的dataId/s相匹配.'
       }
     },
     loadingDialog: {
-      loading: 'Loading...'
+      loading: '加载中...'
     },
     loadData: {
-      upload: 'Load Files',
-      storage: 'Load from Storage'
+      upload: '加载文件',
+      storage: '从存储中加载'
     },
     tripInfo: {
-      title: 'How to enable trip animation',
+      title: '如何启用行程动画',
       description1:
-        'In order to animate the path, the geoJSON data needs to contain `LineString` in its feature geometry, and the coordinates in the LineString need to have 4 elements in the formats of',
+        '为了使路径动画化，geoJSON数据需要在其特征几何中包含`LineString`，LineString中的坐标需要有4个元素，格式为',
       code: ' [longitude, latitude, altitude, timestamp] ',
       description2:
-        'with the last element being a timestamp. Valid timestamp formats include unix in seconds such as `1564184363` or in milliseconds such as `1564184363000`.',
-      example: 'Example:'
+        '最后一个元素是时间戳。有效的时间戳格式包括以秒为单位，如`1564184363`或以毫秒为单位，如`1564184363000`.',
+      example: '例如:'
     },
     iconInfo: {
-      title: 'How to draw icons',
+      title: '如何绘制图标',
       description1:
-        'In your csv, create a column, put the name of the icon you want to draw in it. You can leave the cell empty if you do not want the icon to show for some points. When the column is named',
-      code: 'icon',
-      description2: ' kepler.gl will automatically create a icon layer for you.',
-      example: 'Example:',
+        '在你的csv中，创建一个列，把你想画的图标的名字放在里面。 如果你不想让图标显示在某些点上，你可以把单元格留空。',
+      code: '图标',
+      description2: ' 自动为你创建一个图标图层.',
+      example: '例子:',
       icons: 'Icons'
     },
     storageMapViewer: {
-      lastModified: 'Last modified {lastUpdated} ago',
-      back: 'Back'
+      lastModified: '最后一次修改{lastUpdated}',
+      back: '返回'
     },
     overwriteMap: {
-      title: 'Saving map...',
-      alreadyExists: 'already exists in your {mapSaved}. Would you like to overwrite it?'
+      title: '保存地图...',
+      alreadyExists: '已经存在于你的{mapSaved}中。你想覆盖它吗？'
     },
     loadStorageMap: {
-      back: 'Back',
-      goToPage: 'Go to your Kepler.gl {displayName} page',
-      storageMaps: 'Storage / Maps',
-      noSavedMaps: 'No saved maps yet'
+      back: '返回',
+      goToPage: '转到你的Kepler.gl {displayName}页面',
+      storageMaps: '存储/地图',
+      noSavedMaps: '还没有保存地图'
     }
   },
   header: {
@@ -409,7 +408,7 @@ export default {
     customPalette: '自定义调色板',
     steps: 'steps',
     type: '类型',
-    reversed: 'reversed'
+    reversed: '反置'
   },
   scale: {
     colorScale: 'Color Scale',
@@ -418,22 +417,22 @@ export default {
     scale: 'Scale'
   },
   fileUploader: {
-    message: 'Drag & Drop Your File(s) Here',
+    message: '在这里拖放你的文件',
     chromeMessage:
-      '*Chrome user: Limit file size to 250mb, if need to upload larger file, try Safari',
+      '*Chrome用户。限制文件大小为250MB，如果需要上传更大的文件，请尝试Safari',
     disclaimer:
-      '*kepler.gl is a client-side application with no server backend. Data lives only on your machine/browser. ' +
-      'No information or map data is sent to any server.',
+      '*kepler.gl是一个客户端应用程序，没有服务器后台. 数据只存在于你的机器/浏览器上. ' +
+      '不向任何服务器发送任何信息或地图数据.',
     configUploadMessage:
-      'Upload **CSV**, **GeoJson** or saved map **Json**. Read more about [**supported file formats**]',
-    browseFiles: 'browse your files',
-    uploading: 'Uploading',
-    fileNotSupported: 'File {errorFiles} is not supported.',
-    or: 'or'
+      '上传**CSV**、**GeoJson**或保存的地图**Json**。阅读更多关于[**支持的文件格式**]的信息',
+    browseFiles: '浏览你的文件',
+    uploading: '上传',
+    fileNotSupported: '文件{errorFiles}不支持.',
+    or: '或'
   },
-  density: 'density',
+  density: '密度',
   'Bug Report': 'Bug Report',
-  'User Guide': 'User Guide',
-  Save: 'Save',
-  Share: 'Share'
+  'User Guide': '用户指南',
+  Save: '保存',
+  Share: '分享'
 };
