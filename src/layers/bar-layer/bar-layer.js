@@ -1,0 +1,268 @@
+// Copyright (c) 2020 Uber Technologies, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+import BarLayerIcon from './bar-layer-icon';
+import Layer, {OVERLAY_TYPE} from '../base-layer';
+import React from 'react';
+import {Marker} from 'react-map-gl';
+import {hexToRgb} from 'utils/color-utils';
+import {DEFAULT_LAYER_COLOR, CHANNEL_SCALES} from 'constants/default-settings';
+import {Chart, Geom, Axis, Tooltip, Coord} from 'bizcharts';
+
+export const pointPosAccessor = ({lat, lng, altitude}) => d => [
+  // lng
+  d.data[lng.fieldIdx],
+  // lat
+  d.data[lat.fieldIdx],
+  altitude && altitude.fieldIdx > -1 ? d.data[altitude.fieldIdx] : 0
+];
+
+export const pointRequiredColumns = ['lng','lat'];
+
+
+export const pointVisConfigs = {
+  radius: 'radius',
+  fixedRadius: 'fixedRadius',
+  opacity: 'opacity',
+  outline: 'outline',
+  thickness: 'thickness',
+  strokeColor: 'strokeColor',
+  colorRange: 'colorRange',
+  strokeColorRange: 'strokeColorRange',
+  radiusRange: 'radiusRange',
+  filled: {
+    type: 'boolean',
+    label: '填充色',
+    defaultValue: true,
+    property: 'filled'
+  }
+};
+
+export default class BarLayer extends Layer {
+  constructor(props) {
+    super(props);
+
+    this.registerVisConfig(pointVisConfigs);
+    this.getPositionAccessor = () => pointPosAccessor(this.config.columns);
+  }
+
+  get overlayType() {
+    return OVERLAY_TYPE.mapboxglMarker;
+  }
+
+  get type() {
+    return 'bar';
+  }
+
+  get layerIcon() {
+    return BarLayerIcon;
+  }
+
+
+  get isAggregated() {
+    return false;
+  }
+
+  get requiredLayerColumns() {
+    return pointRequiredColumns;
+  }
+
+
+  get columnPairs() {
+    return this.defaultPointColumnPairs;
+  }
+
+  get noneLayerDataAffectingProps() {
+    return [...super.noneLayerDataAffectingProps, 'radius'];
+  }
+
+  get visualChannels() {
+    return {
+      color: {
+        ...super.visualChannels.color,
+        condition: config => config.visConfig.filled
+      },
+      strokeColor: {
+        property: 'strokeColor',
+        field: 'strokeColorField',
+        scale: 'strokeColorScale',
+        domain: 'strokeColorDomain',
+        range: 'strokeColorRange',
+        key: 'strokeColor',
+        channelScaleType: CHANNEL_SCALES.color,
+        condition: config => config.visConfig.outline
+      },
+      size: {
+        ...super.visualChannels.size,
+        range: 'radiusRange',
+        property: 'radius',
+        channelScaleType: 'radius'
+      }
+    };
+  }
+
+  static findDefaultLayerProps({fieldPairs = []}) {
+    const props = [];
+
+    // Make layer for each pair
+    fieldPairs.forEach(pair => {
+      // find fields for tableFieldIndex
+      const latField = pair.pair.lat;
+      const lngField = pair.pair.lng;
+      const layerName = pair.defaultName;
+
+      const prop = {
+        label: layerName.length ? layerName : 'Bar'
+      };
+
+      // default layer color for begintrip and dropoff point
+      if (latField.value in DEFAULT_LAYER_COLOR) {
+        prop.color = hexToRgb(DEFAULT_LAYER_COLOR[latField.value]);
+      }
+
+      // set the first layer to be visible
+      if (props.length === 0) {
+        prop.isVisible = true;
+      }
+
+      prop.columns = {
+        lat: latField,
+        lng: lngField,
+        altitude: {value: null, fieldIdx: -1, optional: true}
+      };
+
+      props.push(prop);
+    });
+
+    return {props};
+  }
+
+  getDefaultLayerConfig(props = {}) {
+    return {
+      ...super.getDefaultLayerConfig(props),
+
+      // add stroke color visual channel
+      strokeColorField: null,
+      strokeColorDomain: [0, 1],
+      strokeColorScale: 'quantile'
+    };
+  }
+
+  calculateDataAttribute({allData, filteredIndex}, getPosition) {
+    const data = [];
+
+    for (let i = 0; i < filteredIndex.length; i++) {
+      const index = filteredIndex[i];
+      const pos = getPosition({data: allData[index]});
+
+      // if doesn't have point lat or lng, do not add the point
+      // deck.gl can't handle position = null
+      if (pos.every(Number.isFinite)) {
+        data.push({
+          data: allData[index],
+          position: pos,
+          // index is important for filter
+          index
+        });
+      }
+    }
+    return data;
+  }
+
+  formatLayerData(datasets, oldLayerData) {
+    const {chartColumns} = this.config;
+
+    const {gpuFilter} = datasets[this.config.dataId];
+    const {data, triggerChanged} = this.updateData(datasets, oldLayerData);
+    const getPosition = this.getPositionAccessor();
+    return {
+      data,
+      getPosition,
+      getFilterValue: gpuFilter.filterValueAccessor(),
+      chartColumns
+    };
+  }
+  /* eslint-enable complexity */
+
+  updateLayerMeta(allData) {
+    const getPosition = this.getPositionAccessor();
+    const bounds = this.getPointsBounds(allData, d => getPosition({data: d}));
+    this.updateMeta({bounds});
+  }
+
+
+  /**
+   *
+   *
+   * @returns
+   * @memberof BarLayer
+   */
+  renderBarChart(item, chartColumns) {
+    if (!chartColumns.length) {
+      return null;
+    }
+
+    const data = chartColumns.map(col => {
+      return {
+        item: col.field.name,
+        value: item.data[col.field.tableFieldIndex-1]||0
+      };
+    });
+
+    return (
+       <Chart height={100}
+       width={200} data={data} scale={{sales: {
+        tickInterval: 20
+      }}} padding={[0, 0, 30, 0]}
+      forceFit>
+       <Axis name="item" />
+       <Axis name="value" />
+       <Tooltip
+         triggerOn="click"
+       />
+       <Geom type="interval" position="item*value'" />
+     </Chart>
+    );
+  }
+
+  renderLayer(opts) {
+    const {data} = opts;
+    return (
+      this.config.isVisible &&
+      data.chartColumns&&
+      data.length<50&&
+      data.data &&
+      data.data.map((item,index) => {
+        return (
+          <Marker
+            key={index}
+            captureScroll={true}
+            latitude={item.position[1]}
+            longitude={item.position[0]}
+            offsetLeft={-100}
+            offsetTop={-50}
+          >
+           {this.renderBarChart(item, data.chartColumns)}
+          </Marker>
+        );
+      })
+    );
+  }
+}

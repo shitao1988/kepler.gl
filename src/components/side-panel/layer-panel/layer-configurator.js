@@ -37,6 +37,7 @@ import VisConfigSwitch from './vis-config-switch';
 import VisConfigSlider from './vis-config-slider';
 import LayerConfigGroup, {ConfigGroupCollapsibleContent} from './layer-config-group';
 import TextLabelPanel from './text-label-panel';
+import ChartColumnPanel from './chart-column-panel';
 
 import {capitalizeFirstLetter} from 'utils/utils';
 
@@ -100,6 +101,33 @@ export default function LayerConfiguratorFactory(SourceDataSelector) {
 
     _renderIconLayerConfig(props) {
       return this._renderScatterplotLayerConfig(props);
+    }
+
+    _renderPieLayerConfig(props) {
+      return this._renderChartplotLayerConfig(props);
+    }
+
+    _renderBarLayerConfig(props) {
+      return this._renderChartplotLayerConfig(props);
+    }
+
+    _renderChartplotLayerConfig({
+      layer,
+      visConfiguratorProps,
+      layerChannelConfigProps,
+      layerConfiguratorProps
+    }) {
+      return (
+        <StyledLayerVisualConfigurator>
+          <ChartColumnPanel
+            fields={visConfiguratorProps.fields}
+            updateLayerChartColumns={this.props.updateLayerChartColumns}
+            chartColumns={layer.config.chartColumns}
+            colorPalette={visConfiguratorProps.colorPalette}
+            setColorPaletteUI={visConfiguratorProps.setColorPaletteUI}
+          ></ChartColumnPanel>
+        </StyledLayerVisualConfigurator>
+      );
     }
 
     _renderScatterplotLayerConfig({

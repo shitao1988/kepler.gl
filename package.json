@@ -1,6 +1,6 @@
 {
-  "name": "kepler.gl",
-  "author": "Shan He <shan@uber.com>",
+  "name": "@tommy2gis/swsk.kepler.gl",
+  "author": "tommy <573413161@qq.com>",
   "version": "2.1.2",
   "description": "kepler.gl is a webgl based application to visualize large scale location data in the browser",
   "license": "MIT",
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/keplergl/kepler.gl.git"
+    "url": "https://github.com/tommy2gis/kepler.gl.git"
   },
   "scripts": {
     "install:example": "cd examples/demo-app && yarn",
@@ -34,12 +34,12 @@
     "start:open-modal": "npm run install-and-start -- examples/open-modal start-local",
     "start:custom-reducer": "npm run install-and-start -- examples/custom-reducer start-local",
     "start:replace-component": "npm run install-and-start -- examples/replace-component start-local",
-    "start:custom-theme": "npm run install-and-start -- examples/custom-theme start-local",
+    "start:custom-theme": "set MapboxAccessToken=pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA && npm run install-and-start -- examples/custom-theme start-local",
     "start:node-app": "npm run install-and-start -- examples/node-app start-local",
     "start:web": "npm run install-and-start -- website start",
     "start:https": "npm run install-and-start -- examples/demo-app start-local-https",
     "start:e2e": "npm run install-and-start -- examples/demo-app start-local-e2e",
-    "build": "rm -fr dist && babel src --out-dir dist --source-maps inline",
+    "build": "babel src --out-dir dist --source-maps inline",
     "build:umd": "webpack --config ./webpack/umd.js --progress --env.prod",
     "analyze": "npm run analyze:bundle",
     "analyze:bundle": "webpack --config ./webpack/bundle.js --progress --env.prod",
@@ -88,6 +88,7 @@
     "@turf/bbox": "^6.0.1",
     "@turf/boolean-within": "^6.0.1",
     "@turf/helpers": "^6.1.4",
+    "bizcharts": "^3.5.8",
     "classnames": "^2.2.1",
     "colorbrewer": "^1.0.0",
     "copy-to-clipboard": "^3.3.1",

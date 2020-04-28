@@ -111,6 +111,8 @@ export default {
       polygon: 'polygon',
       geojson: 'geojson',
       cluster: 'cluster',
+      pie:'pie',
+      bar:'bar',
       icon: 'icon',
       heatmap: ' heatmap',
       h3: 'H3',
