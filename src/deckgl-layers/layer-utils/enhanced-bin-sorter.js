@@ -18,32 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export const LOCALES = {
-    en : 'English',
-    zh : '中文'
+import {_BinSorter as BinSorter} from '@deck.gl/aggregation-layers';
+
+export default class EnhancedBinSorter extends BinSorter {
+  getValueRange(percentileRange) {
+    if (!this.sortedBins) {
+      this.sortedBins = this.aggregatedBins.sort((a, b) =>
+        a.value > b.value ? 1 : a.value < b.value ? -1 : 0
+      );
+    }
+    if (!this.sortedBins.length) {
+      return [];
+    }
+    let lowerIdx = 0;
+    let upperIdx = this.sortedBins.length - 1;
+
+    if (Array.isArray(percentileRange)) {
+      const idxRange = this._percentileToIndex(percentileRange);
+      lowerIdx = idxRange[0];
+      upperIdx = idxRange[1];
+    }
+
+    return [this.sortedBins[lowerIdx].value, this.sortedBins[upperIdx].value];
+  }
+
+  getValueDomainByScale(scale, [lower = 0, upper = 100] = []) {
+    if (!this.sortedBins) {
+      this.sortedBins = this.aggregatedBins.sort((a, b) =>
+        a.value > b.value ? 1 : a.value < b.value ? -1 : 0
+      );
+    }
+    if (!this.sortedBins.length) {
+      return [];
+    }
+    const indexEdge = this._percentileToIndex([lower, upper]);
+
+    return this._getScaleDomain(scale, indexEdge);
+  }
 }
-
-
-/**
- * Localization can be passed to `KeplerGl` via uiState `locale`.
- * Available languages are `en` and `fi`. Default language is `en`
- * @constant
- * @type {string}
- * @public
- * @example
- * ```js
- * import {combineReducers} from 'redux';
- * import {LOCALE_CODES} from 'kepler.gl/localization/locales';
- *
- * const customizedKeplerGlReducer = keplerGlReducer
- *   .initialState({
- *     uiState: {
- *       // use Finnish locale
- *       locale: LOCALE_CODES.fi
- *     }
- *   });
- *
- * ```
- */
-
-export const LOCALE_CODES = Object.keys(LOCALES).reduce((acc, key) => ({...acc, [key]: key}), {});
