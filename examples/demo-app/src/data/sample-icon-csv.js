@@ -243,9 +243,6 @@ export const config = {
         brush: {
           size: 0.5,
           enabled: false
-        },
-        geocoder: {
-          enabled: false
         }
       },
       layerBlending: 'normal',

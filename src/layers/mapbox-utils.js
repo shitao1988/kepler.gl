@@ -50,7 +50,6 @@ export function generateMapboxLayers(
             data: layerData[index].data,
             isVisible: layer.config.isVisible,
             config: layerData[index].config,
-            hidden: layer.config.hidden,
             sourceId: layerData[index].config.source
           }
         };
