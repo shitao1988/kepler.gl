@@ -30,7 +30,6 @@ export {default as MapContainerFactory} from './map-container';
 export {default as BottomWidgetFactory} from './bottom-widget';
 export {default as ModalContainerFactory} from './modal-container';
 export {default as PlotContainerFactory} from './plot-container';
-export {default as GeocoderPanelFactory} from './geocoder-panel';
 
 // // side panel factories
 export {
