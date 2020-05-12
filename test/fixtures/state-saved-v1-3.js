@@ -355,7 +355,6 @@ mergedLayer0.config = {
       value: null
     }
   },
-  hidden: false,
   isVisible: true,
   colorField: {
     name: 'deliver_radius',
@@ -432,7 +431,6 @@ mergedLayer1.config = {
       fieldIdx: 2
     }
   },
-  hidden: false,
   isVisible: true,
   colorField: null,
   colorDomain: [0, 1],
