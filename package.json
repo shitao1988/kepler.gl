@@ -1,7 +1,7 @@
 {
-  "name": "@tommy2gis/swsk.kepler.gl",
-  "author": "tommy <573413161@qq.com>",
-  "version": "2.1.2",
+  "name": "kepler.gl",
+  "author": "Shan He <shan@uber.com>",
+  "version": "2.2.0",
   "description": "kepler.gl is a webgl based application to visualize large scale location data in the browser",
   "license": "MIT",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/tommy2gis/kepler.gl.git"
+    "url": "https://github.com/keplergl/kepler.gl.git"
   },
   "scripts": {
     "install:example": "cd examples/demo-app && yarn",
@@ -28,18 +28,18 @@
     "test": "npm run lint && npm run test-node && npm run test-browser",
     "cover": "nyc --reporter html --reporter cobertura --reporter json-summary npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter cobertura --reporter=text-lcov | coveralls",
-    "start": "set MapboxAccessToken=pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA && npm run install-and-start -- examples/demo-app start-local",
+    "start": "npm run install-and-start -- examples/demo-app start-local",
     "start:deck": "npm run install-and-start -- examples/demo-app start-local-deck",
     "start:deck-src": "npm run install-and-start -- examples/demo-app start-local-deck-src",
     "start:open-modal": "npm run install-and-start -- examples/open-modal start-local",
     "start:custom-reducer": "npm run install-and-start -- examples/custom-reducer start-local",
     "start:replace-component": "npm run install-and-start -- examples/replace-component start-local",
-    "start:custom-theme": "set MapboxAccessToken=pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA && npm run install-and-start -- examples/custom-theme start-local",
+    "start:custom-theme": "npm run install-and-start -- examples/custom-theme start-local",
     "start:node-app": "npm run install-and-start -- examples/node-app start-local",
     "start:web": "npm run install-and-start -- website start",
     "start:https": "npm run install-and-start -- examples/demo-app start-local-https",
     "start:e2e": "npm run install-and-start -- examples/demo-app start-local-e2e",
-    "build": "babel src --out-dir dist --source-maps inline",
+    "build": "rm -fr dist && babel src --out-dir dist --source-maps inline",
     "build:umd": "webpack --config ./webpack/umd.js --progress --env.prod",
     "analyze": "npm run analyze:bundle",
     "analyze:bundle": "webpack --config ./webpack/bundle.js --progress --env.prod",
@@ -53,7 +53,7 @@
     "web": "(yarn && yarn install:web && yarn start:web)",
     "deploy": "yarn install:web && (cd website && yarn build)",
     "clean": "rm -rf node_modules examples/**/node_modules website/node_modules",
-    "release:patch": "git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
+    "release:patch": "git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
   },
   "files": [
     "dist",
@@ -88,7 +88,6 @@
     "@turf/bbox": "^6.0.1",
     "@turf/boolean-within": "^6.0.1",
     "@turf/helpers": "^6.1.4",
-    "bizcharts": "^3.5.8",
     "classnames": "^2.2.1",
     "colorbrewer": "^1.0.0",
     "copy-to-clipboard": "^3.3.1",
