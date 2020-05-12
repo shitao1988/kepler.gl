@@ -76,7 +76,6 @@ export const config = {
               lng: 'gps_data.lng',
               altitude: null
             },
-            hidden: false,
             isVisible: true,
             visConfig: {
               radius: 39.2,
@@ -138,7 +137,6 @@ export const config = {
               lat: 'gps_data.lat',
               lng: 'gps_data.lng'
             },
-            hidden: false,
             isVisible: true,
             visConfig: {
               opacity: 0.8,
@@ -187,9 +185,6 @@ export const config = {
         },
         brush: {
           size: 0.5,
-          enabled: false
-        },
-        geocoder: {
           enabled: false
         }
       },

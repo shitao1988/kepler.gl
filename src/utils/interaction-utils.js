@@ -24,7 +24,7 @@ import {
   ALL_FIELD_TYPES,
   TRIP_POINT_FIELDS
 } from 'constants/default-settings';
-import {Messages, Crosshairs, CursorClick, Pin} from 'components/common/icons/index';
+import {Messages, Crosshairs, CursorClick} from 'components/common/icons/index';
 
 export function getDefaultInteraction() {
   return {
@@ -36,13 +36,6 @@ export function getDefaultInteraction() {
       config: {
         fieldsToShow: {}
       }
-    },
-    geocoder: {
-      id: 'geocoder',
-      label: 'interactions.geocoder',
-      enabled: false,
-      iconComponent: Pin,
-      position: null
     },
     brush: {
       id: 'brush',
