@@ -143,7 +143,6 @@ function LayerManagerFactory(AddDataButton, LayerPanel, SourceDataCatalog) {
       layerColorUIChange: PropTypes.func.isRequired,
       layerConfigChange: PropTypes.func.isRequired,
       layerTextLabelChange: PropTypes.func.isRequired,
-      layerChartColumnsChange:PropTypes.func.isRequired,
       layerVisualChannelConfigChange: PropTypes.func.isRequired,
       layerTypeChange: PropTypes.func.isRequired,
       layerVisConfigChange: PropTypes.func.isRequired,
@@ -204,7 +203,6 @@ function LayerManagerFactory(AddDataButton, LayerPanel, SourceDataCatalog) {
         layerTypeChange: this.props.layerTypeChange,
         layerVisConfigChange: this.props.layerVisConfigChange,
         layerTextLabelChange: this.props.layerTextLabelChange,
-        layerChartColumnsChange: this.props.layerChartColumnsChange,
         removeLayer: this.props.removeLayer
       };
 
@@ -233,22 +231,25 @@ function LayerManagerFactory(AddDataButton, LayerPanel, SourceDataCatalog) {
               helperClass="sorting-layers"
               useDragHandle
             >
-              {layerOrder.map((layerIdx, index) => (
-                <SortableItem
-                  key={`layer-${layerIdx}`}
-                  index={index}
-                  isSorting={this.state.isSorting}
-                >
-                  <LayerPanel
-                    {...panelProps}
-                    {...layerActions}
-                    sortData={layerIdx}
-                    key={layers[layerIdx].id}
-                    idx={layerIdx}
-                    layer={layers[layerIdx]}
-                  />
-                </SortableItem>
-              ))}
+              {layerOrder.map(
+                (layerIdx, index) =>
+                  !layers[layerIdx].config.hidden && (
+                    <SortableItem
+                      key={`layer-${layerIdx}`}
+                      index={index}
+                      isSorting={this.state.isSorting}
+                    >
+                      <LayerPanel
+                        {...panelProps}
+                        {...layerActions}
+                        sortData={layerIdx}
+                        key={layers[layerIdx].id}
+                        idx={layerIdx}
+                        layer={layers[layerIdx]}
+                      />
+                    </SortableItem>
+                  )
+              )}
             </SortableContainer>
           </SidePanelSection>
           <SidePanelSection>

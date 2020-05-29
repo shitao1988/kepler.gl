@@ -24,8 +24,11 @@ import {
   ALL_FIELD_TYPES,
   TRIP_POINT_FIELDS
 } from 'constants/default-settings';
-import {Messages, Crosshairs, CursorClick} from 'components/common/icons/index';
+import {Messages, Crosshairs, CursorClick, Pin} from 'components/common/icons/index';
 
+/**
+ * @type {typeof import('./interaction-utils').getDefaultInteraction}
+ */
 export function getDefaultInteraction() {
   return {
     tooltip: {
@@ -36,6 +39,13 @@ export function getDefaultInteraction() {
       config: {
         fieldsToShow: {}
       }
+    },
+    geocoder: {
+      id: 'geocoder',
+      label: 'interactions.geocoder',
+      enabled: false,
+      iconComponent: Pin,
+      position: null
     },
     brush: {
       id: 'brush',
@@ -61,6 +71,9 @@ export const BRUSH_CONFIG = {
   range: [0, 50]
 };
 
+/**
+ * @type {typeof import('./interaction-utils').findFieldsToShow}
+ */
 export function findFieldsToShow({fields, id}) {
   // first find default tooltip fields for trips
   const fieldsToShow = DEFAULT_TOOLTIP_FIELDS.reduce((prev, curr) => {

@@ -199,7 +199,6 @@ export default function SidePanelFactory(
         layerConfigChange: visStateActions.layerConfigChange,
         layerColorUIChange: visStateActions.layerColorUIChange,
         layerTextLabelChange: visStateActions.layerTextLabelChange,
-        layerChartColumnsChange:visStateActions.layerChartColumnsChange,
         layerVisualChannelConfigChange: visStateActions.layerVisualChannelConfigChange,
         layerTypeChange: visStateActions.layerTypeChange,
         layerVisConfigChange: visStateActions.layerVisConfigChange,

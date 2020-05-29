@@ -25,7 +25,6 @@ import keplerGlReducer, {combinedUpdaters, uiStateUpdaters} from 'kepler.gl/redu
 import {processGeojson, processCsvData} from 'kepler.gl/processors';
 import KeplerGlSchema from 'kepler.gl/schemas';
 import {EXPORT_MAP_FORMATS} from 'kepler.gl/constants';
-import {LOCALE_CODES} from 'kepler.gl/localization';
 
 import {
   INIT,
@@ -83,7 +82,6 @@ const demoReducer = combineReducers({
     // we are going to set the mapbox access token to be used
     // in the exported file
     uiState: {
-      locale: LOCALE_CODES.zh,
       exportMap: {
         ...DEFAULT_EXPORT_MAP,
         [EXPORT_MAP_FORMATS.HTML]: {

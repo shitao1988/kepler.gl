@@ -112,8 +112,6 @@ export default {
       polygon: 'polygon',
       geojson: 'geojson',
       cluster: 'cluster',
-      pie:'pie',
-      bar:'bar',
       icon: 'icon',
       heatmap: 'heatmap',
       hexagon: 'hexagon',
@@ -124,6 +122,7 @@ export default {
     }
   },
   layerVisConfigs: {
+    angle: 'Angle',
     strokeWidth: 'Stroke Width (Pixels)',
     strokeWidthRange: 'Stroke Width Range',
     radius: 'Radius',
@@ -379,7 +378,8 @@ export default {
   interactions: {
     tooltip: 'Tooltip',
     brush: 'Brush',
-    coordinate: 'Coordinates'
+    coordinate: 'Coordinates',
+    geocoder: 'Geocoder'
   },
   layerBlending: {
     title: 'Layer Blending',
@@ -433,6 +433,9 @@ export default {
     uploading: 'Uploading',
     fileNotSupported: 'File {errorFiles} is not supported.',
     or: 'or'
+  },
+  geocoder: {
+    title: 'Geocoder'
   },
   density: 'density',
   'Bug Report': 'Bug Report',

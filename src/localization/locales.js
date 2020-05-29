@@ -19,16 +19,17 @@
 // THE SOFTWARE.
 
 export const LOCALES = {
-    en : 'English',
-    zh : '中文'
-}
-
+  en: 'English',
+  fi: 'Suomi',
+  pt: 'Português',
+  es: 'Español',
+  ca: 'Català'
+};
 
 /**
  * Localization can be passed to `KeplerGl` via uiState `locale`.
  * Available languages are `en` and `fi`. Default language is `en`
  * @constant
- * @type {string}
  * @public
  * @example
  * ```js

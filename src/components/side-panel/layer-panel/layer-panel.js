@@ -77,10 +77,6 @@ function LayerPanelFactory(LayerConfigurator, LayerPanelHeader) {
       this.props.layerTextLabelChange(this.props.layer, ...args);
     };
 
-    updateLayerChartColumns = (...args) => {
-      this.props.layerChartColumnsChange(this.props.layer, ...args);
-    };
-
     updateLayerVisualChannelConfig = (newConfig, channel, scaleKey) => {
       this.props.layerVisualChannelConfigChange(this.props.layer, newConfig, channel, scaleKey);
     };
@@ -145,7 +141,6 @@ function LayerPanelFactory(LayerConfigurator, LayerPanelHeader) {
               updateLayerConfig={this.updateLayerConfig}
               updateLayerVisualChannelConfig={this.updateLayerVisualChannelConfig}
               updateLayerType={this.updateLayerType}
-              updateLayerChartColumns={this.updateLayerChartColumns}
               updateLayerTextLabel={this.updateLayerTextLabel}
               updateLayerVisConfig={this.updateLayerVisConfig}
             />
