@@ -23,7 +23,7 @@ import {combineReducers} from 'redux';
 import {keplerGlReducer} from 'kepler.gl/reducers';
 
 // TODO: remove this after added middleware to files
-import {enhanceReduxMiddleware} from 'kepler.gl/middleware';
+import {enhanceReduxMiddleware} from 'kepler.gl/dist/middleware';
 
 const customizedKeplerGlReducer = keplerGlReducer.initialState({
   uiState: {

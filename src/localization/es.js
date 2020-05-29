@@ -113,8 +113,7 @@ export default {
       cluster: 'cluster',
       icon: 'icono',
       heatmap: 'concentración',
-      hexagon: 'hexágono',
-      hexagonid: 'H3',
+      h3: 'H3',
       trip: 'viaje',
       s2: 'S2',
       '3d': '3D'

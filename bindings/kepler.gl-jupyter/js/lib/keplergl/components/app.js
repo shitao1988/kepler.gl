@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 import React, {useEffect, useState, useRef} from 'react';
-import styled from 'styled-components';
 const ReactHelmet = require('react-helmet');
 const Helmet = ReactHelmet ? ReactHelmet.Helmet : null;
 
@@ -27,14 +26,12 @@ import {
   SidebarFactory,
   AddDataButtonFactory,
   PanelHeaderFactory,
-  CustomPanelsFactory,
   injectComponents
 } from 'kepler.gl/components';
 
 import CustomPanelHeaderFactory from './panel-header';
 import CustomSidebarFactory from './side-bar';
-import CustomCustomPanelsFactory from './config-panel';
-export const KEPLER_GL_JUPYTER_VERSION = '__PACKAGE_VERSION__';
+export const KEPLER_GL_JUPYTER_VERSION = "__PACKAGE_VERSION__";
 
 const CustomAddDataButtonFactory = () => {
   const CustomAddDataButton = () => <div />;
@@ -44,27 +41,13 @@ const CustomAddDataButtonFactory = () => {
 const KeplerGl = injectComponents([
   [AddDataButtonFactory, CustomAddDataButtonFactory],
   [SidebarFactory, CustomSidebarFactory],
-  [PanelHeaderFactory, CustomPanelHeaderFactory],
-  [CustomPanelsFactory, CustomCustomPanelsFactory]
+  [PanelHeaderFactory, CustomPanelHeaderFactory]
 ]);
 
 const MAPBOX_TOKEN = process.env.MapboxAccessTokenJupyter; // eslint-disable-line
 
-const StyledContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  .kepler-gl .ReactModal__Overlay.ReactModal__Overlay--after-open {
-    position: absolute !important;
-  }
-
-  .kepler-gl .side-panel__content > div {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-  }
-`;
-
 function App() {
+
   const rootElm = useRef(null);
   const [windowDimension, setDimension] = useState({});
 
@@ -93,7 +76,8 @@ function App() {
   }, []);
 
   return (
-    <StyledContainer
+    <div
+      style={{width: '100%', height: `100%`}}
       ref={rootElm}
       className="keplergl-widget-container"
     >
@@ -125,15 +109,23 @@ function App() {
                 body {
                   margin: 0; padding: 0;
                 }
+                .kepler-gl .ReactModal__Overlay.ReactModal__Overlay--after-open {
+                  position: absolute !important;
+                }
+
                 .jupyter-widgets.keplergl-jupyter-widgets {
                   overflow: hidden;
                 }
+
                 .p-Widget.p-Panel.jp-OutputArea-output.jupyter-widgets {
                   overflow: hidden
                 }
                 `}
           </style>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-64694404-19" />
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=UA-64694404-19"
+          />
           <script>{`window.dataLayer=window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-64694404-19', {page_path: '/keplergl-jupyter-widget'});`}</script>
         </Helmet>
       ) : null}
@@ -145,7 +137,7 @@ function App() {
         version={KEPLER_GL_JUPYTER_VERSION}
         getMapboxRef={handleResize}
       />
-    </StyledContainer>
+    </div>
   );
 }
 

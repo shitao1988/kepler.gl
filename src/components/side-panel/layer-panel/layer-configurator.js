@@ -140,7 +140,7 @@ export default function LayerConfiguratorFactory(SourceDataSelector) {
         <StyledLayerVisualConfigurator>
           {/* Fill Color */}
           <LayerConfigGroup
-            {...layer.visConfigSettings.filled || {label: 'layer.color'}}
+            {...layer.visConfigSettings.filled}
             {...visConfiguratorProps}
             collapsible
           >
@@ -182,6 +182,7 @@ export default function LayerConfiguratorFactory(SourceDataSelector) {
                 <VisConfigSlider
                   {...layer.visConfigSettings.thickness}
                   {...visConfiguratorProps}
+                  label="Stroke Width (Pixels)"
                   disabled={!layer.config.visConfig.outline}
                 />
               </ConfigGroupCollapsibleContent>

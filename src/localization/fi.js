@@ -112,9 +112,8 @@ export default {
       geojson: 'geojson',
       cluster: 'klusteri',
       icon: 'kuva',
-      heatmap: 'lämpökartta',
-      hexagon: 'kuusikulmio',
-      hexagonid: 'H3',
+      heatmap: ' lämpökartta',
+      h3: 'H3',
       trip: 'matka',
       s2: 'S2',
       '3d': '3D'
