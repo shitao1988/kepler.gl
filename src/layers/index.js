@@ -18,8 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {default as PieLayer} from './pie-layer/pie-layer';
-import {default as BarLayer} from './bar-layer/bar-layer';
 import {default as PointLayer} from './point-layer/point-layer';
 import {default as ArcLayer} from './arc-layer/arc-layer';
 import {default as LineLayer} from './line-layer/line-layer';
@@ -40,8 +38,6 @@ export {default as Layer} from './base-layer';
 // individual layers
 export const KeplerGlLayers = {
   PointLayer,
-  PieLayer,
-  BarLayer,
   ArcLayer,
   LineLayer,
   GridLayer,
@@ -58,8 +54,6 @@ export const KeplerGlLayers = {
 
 export const LayerClasses = {
   point: PointLayer,
-  pie: PieLayer,
-  bar: BarLayer,
   arc: ArcLayer,
   line: LineLayer,
   grid: GridLayer,
