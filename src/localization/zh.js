@@ -168,7 +168,7 @@ export default {
     '3dBuildingColor': '3D建筑颜色'
   },
   layerConfiguration: {
-    defaultDescription: '根据所选字段计算{属性}',
+    defaultDescription: '根据所选字段计算{property}',
     howTo: '指导'
   },
   filterManager: {
