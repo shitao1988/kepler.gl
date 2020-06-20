@@ -259,6 +259,7 @@ export default {
       filterDataTitle: '过滤数据',
       filterDataSubtitle: '你可以选择导出原始数据或过滤后的数据',
       filteredData: '过滤后的数据',
+      unfilteredData: '全部数据',
       fileCount: '{fileCount} 个文件',
       rowCount: '{rowCount} 行'
     },

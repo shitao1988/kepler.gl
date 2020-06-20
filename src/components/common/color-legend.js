@@ -34,7 +34,7 @@ const RECT_W = 20;
 const StyledLegend = styled.div`
   ${props => props.theme.sidePanelScrollBar};
 
-  max-height: 150px;
+  max-height: 450px;
   overflow-y: auto;
 
   svg {
