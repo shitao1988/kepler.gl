@@ -6,6 +6,7 @@
     "start-local-e2e": "webpack-dev-server --mode development --env.es6",
     "start-local-deck": "webpack-dev-server --mode development --env.es6 --env.deck --progress --hot --open",
     "start-local-deck-src": "webpack-dev-server --mode development --env.es6 --env.deck_src --progress --hot --open",
+    "start-local-loaders-src": "webpack-dev-server --mode development --env.es6 --env.loaders_src --progress --hot --open",
     "start-local-https": "webpack-dev-server --mode development --https --env.es6 --progress --hot --open"
   },
   "dependencies": {
@@ -13,7 +14,7 @@
     "d3-request": "^1.0.6",
     "dropbox": "^4.0.12",
     "global": "^4.3.0",
-    "kepler.gl": "^2.1.2",
+    "kepler.gl": "^2.3.0",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "react": "^16.8.4",

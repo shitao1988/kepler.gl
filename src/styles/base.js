@@ -246,7 +246,7 @@ export const sliderHandleHoverColor = '#FFFFFF';
 export const sliderHandleShadow = '0 2px 4px 0 rgba(0,0,0,0.40)';
 export const sliderInputHeight = 24;
 export const sliderInputWidth = 56;
-export const sliderMarginTopIsRange = 0;
+export const sliderMarginTopIsTime = -12;
 export const sliderMarginTop = 12;
 
 // Plot
@@ -294,6 +294,9 @@ const timeDisplayPadding = '0 24px';
 // Export map modal
 const exportIntraSectionMargin = '8';
 
+// progress bar
+const progressBarColor = primaryBtnBgd;
+const progressBarTrackColor = '#E8E8E8';
 // Action Panel
 export const actionPanelWidth = 110;
 export const actionPanelHeight = 32;
@@ -1085,7 +1088,7 @@ export const theme = {
   sliderHandleShadow,
   sliderInputHeight,
   sliderInputWidth,
-  sliderMarginTopIsRange,
+  sliderMarginTopIsTime,
   sliderMarginTop,
 
   // Plot
@@ -1131,7 +1134,11 @@ export const theme = {
   actionPanelHeight,
 
   // Breakpoints
-  breakPoints
+  breakPoints,
+
+  // progressbar
+  progressBarColor,
+  progressBarTrackColor
 };
 
 export const themeLT = {
