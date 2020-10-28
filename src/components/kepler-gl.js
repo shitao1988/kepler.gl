@@ -336,6 +336,7 @@ function KeplerGlFactory(
         uiState.currentModal === EXPORT_IMAGE_ID ||
         uiState.currentModal === SAVE_MAP_ID ||
         uiState.currentModal === SHARE_MAP_ID ||
+        uiState.currentModal === "CUSTOM_IMAGE_EXPORTING" ||
         uiState.currentModal === OVERWRITE_MAP_ID;
 
       const theme = this.availableThemeSelector(this.props);

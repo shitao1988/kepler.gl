@@ -20,7 +20,7 @@
 
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import {MapControlFactory, Icons, IconRoundSmall, MapControlButton} from 'kepler.gl/components';
+import {MapControlFactory, Icons, IconRoundSmall, MapControlButton} from '@tommy2gis/swsk.kepler.gl/components';
 import ReactMarkdown from 'react-markdown';
 
 const MapControl = MapControlFactory();

@@ -21,10 +21,11 @@
 import {combineReducers} from 'redux';
 import {handleActions} from 'redux-actions';
 
-import keplerGlReducer, {combinedUpdaters, uiStateUpdaters} from 'kepler.gl/reducers';
-import {processGeojson, processCsvData} from 'kepler.gl/processors';
-import KeplerGlSchema from 'kepler.gl/schemas';
-import {EXPORT_MAP_FORMATS} from 'kepler.gl/constants';
+import keplerGlReducer, {combinedUpdaters, uiStateUpdaters} from '@tommy2gis/swsk.kepler.gl/reducers';
+import {processGeojson, processCsvData} from '@tommy2gis/swsk.kepler.gl/processors';
+import {LOCALE_CODES} from '@tommy2gis/swsk.kepler.gl/localization';
+import KeplerGlSchema from '@tommy2gis/swsk.kepler.gl/schemas';
+import {EXPORT_MAP_FORMATS} from '@tommy2gis/swsk.kepler.gl/constants';
 
 import {
   INIT,
@@ -81,7 +82,13 @@ const demoReducer = combineReducers({
     // In order to provide single file export functionality
     // we are going to set the mapbox access token to be used
     // in the exported file
+
     uiState: {
+      activeSidePanel: "layer",
+      readOnly: false,
+      locale: LOCALE_CODES.zh,
+      // hide all modals whtn mounted
+      currentModal: null,
       exportMap: {
         ...DEFAULT_EXPORT_MAP,
         [EXPORT_MAP_FORMATS.HTML]: {

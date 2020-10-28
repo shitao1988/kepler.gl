@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {PanelHeaderFactory, Icons} from 'kepler.gl/components';
-import {BUG_REPORT_LINK, GITHUB_USER_GUIDE} from 'kepler.gl/constants';
+import {PanelHeaderFactory, Icons} from '@tommy2gis/swsk.kepler.gl/components';
+import {BUG_REPORT_LINK, GITHUB_USER_GUIDE} from '@tommy2gis/swsk.kepler.gl/constants';
 
 export function CustomPanelHeaderFactory(...deps) {
   const PanelHeader = PanelHeaderFactory(...deps);

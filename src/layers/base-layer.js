@@ -289,7 +289,7 @@ export default class Layer {
   getDefaultLayerConfig(props = {}) {
     return {
       dataId: props.dataId || null,
-      label: props.label || 'new layer',
+      label: props.label || '新图层',
       color: props.color || colorMaker.next().value,
       columns: props.columns || null,
       isVisible: props.isVisible || false,

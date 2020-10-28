@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {MapControlFactory} from 'kepler.gl/components';
+import {MapControlFactory} from '@tommy2gis/swsk.kepler.gl/components';
 import CustomMapControl from '../components/map-control/map-control';
-import {withState} from 'kepler.gl/components';
+import {withState} from '@tommy2gis/swsk.kepler.gl/components';
 
 export const CustomMapControlFactory = () =>
   withState([], state => ({...state.demo.app}))(CustomMapControl);

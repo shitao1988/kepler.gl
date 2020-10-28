@@ -45,7 +45,7 @@ export default {
     empty: '空'
   },
   misc: {
-    by: '',
+    by: '根据',
     valuesIn: '值属于',
     valueEquals: '值等于',
     dataSource: '数据源',
@@ -407,15 +407,15 @@ export default {
   },
   color: {
     customPalette: '自定义调色板',
-    steps: 'steps',
+    steps: '等级',
     type: '类型',
     reversed: '反置'
   },
   scale: {
-    colorScale: 'Color Scale',
-    sizeScale: 'Size Scale',
+    colorScale: '色阶',
+    sizeScale: '尺寸',
     strokeScale: 'Stroke Scale',
-    scale: 'Scale'
+    scale: '比例'
   },
   fileUploader: {
     message: '在这里拖放你的文件',

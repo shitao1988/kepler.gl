@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --mode development --progress --hot --open",
+    "start": "set MapboxAccessToken=pk.eyJ1Ijoic2hpdGFvMTk4OCIsImEiOiJjaWc3eDJ2eHowMjA5dGpsdzZlcG5uNWQ5In0.nQQjb4DrqnZtY68rOQIjJA && webpack-dev-server --mode development --progress --hot --open",
     "start-prod": "webpack-dev-server -p --progress --hot --open",
     "start-local": "webpack-dev-server --mode development --env.es6 --progress --hot --open",
     "start-local-e2e": "webpack-dev-server --mode development --env.es6",
@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@carto/toolkit": "0.0.1-rc.18",
+    "@tommy2gis/swsk.kepler.gl": "^2.2.0",
+    "autoprefixer": "^9.7.4",
+    "bizcharts": "^4.0.12",
     "d3-request": "^1.0.6",
     "dropbox": "^4.0.12",
     "global": "^4.3.0",
-    "kepler.gl": "^2.1.2",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "react": "^16.8.4",

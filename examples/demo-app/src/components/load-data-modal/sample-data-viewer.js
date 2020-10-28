@@ -22,7 +22,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {format} from 'd3-format';
-import {LoadingDialog} from 'kepler.gl/components';
+import {LoadingDialog} from '@tommy2gis/swsk.kepler.gl/components';
 import {FormattedMessage, IntlProvider} from 'react-intl';
 import {messages} from '../../constants/localization';
 

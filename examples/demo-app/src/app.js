@@ -23,7 +23,7 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import styled, {ThemeProvider} from 'styled-components';
 import window from 'global/window';
 import {connect} from 'react-redux';
-import {theme} from 'kepler.gl/styles';
+import {theme} from '@tommy2gis/swsk.kepler.gl/styles';
 import Banner from './components/banner';
 import Announcement from './components/announcement';
 import {replaceLoadDataModal} from './factories/load-data-modal';
@@ -38,28 +38,14 @@ import {
   onLoadCloudMapError
 } from './actions';
 
-import {loadCloudMap} from 'kepler.gl/actions';
+import {loadCloudMap, updateMap} from '@tommy2gis/swsk.kepler.gl/actions';
 import {CLOUD_PROVIDERS} from './cloud-providers';
 
-const KeplerGl = require('kepler.gl/components').injectComponents([
+const KeplerGl = require('@tommy2gis/swsk.kepler.gl/components').injectComponents([
   replaceLoadDataModal(),
   replaceMapControl(),
   replacePanelHeader()
 ]);
-
-// Sample data
-/* eslint-disable no-unused-vars */
-import sampleTripData, {testCsvData, sampleTripDataConfig} from './data/sample-trip-data';
-import sampleGeojson from './data/sample-small-geojson';
-import sampleGeojsonPoints from './data/sample-geojson-points';
-import sampleGeojsonConfig from './data/sample-geojson-config';
-import sampleH3Data, {config as h3MapConfig} from './data/sample-hex-id-csv';
-import sampleS2Data, {config as s2MapConfig, dataId as s2DataId} from './data/sample-s2-data';
-import sampleAnimateTrip from './data/sample-animate-trip-data';
-import sampleIconCsv, {config as savedMapConfig} from './data/sample-icon-csv';
-import {addDataToMap, addNotification} from 'kepler.gl/actions';
-import {processCsvData, processGeojson} from 'kepler.gl/processors';
-/* eslint-enable no-unused-vars */
 
 const BannerHeight = 30;
 const BannerKey = 'kgHideBanner-iiba';
@@ -128,6 +114,7 @@ class App extends Component {
       // TODO?: validate map url
       this.props.dispatch(loadRemoteMap({dataUrl: query.mapUrl}));
     }
+    this.props.dispatch(updateMap({latitude: 31.5396, longitude: 120.33202658}));
 
     // delay zs to show the banner
     // if (!window.localStorage.getItem(BannerKey)) {
@@ -153,193 +140,6 @@ class App extends Component {
     window.localStorage.setItem(BannerKey, 'true');
   };
 
-  _loadMockNotifications = () => {
-    const notifications = [
-      [{message: 'Welcome to Kepler.gl'}, 3000],
-      [{message: 'Something is wrong', type: 'error'}, 1000],
-      [{message: 'I am getting better', type: 'warning'}, 1000],
-      [{message: 'Everything is fine', type: 'success'}, 1000]
-    ];
-
-    this._addNotifications(notifications);
-  };
-
-  _addNotifications(notifications) {
-    if (notifications && notifications.length) {
-      const [notification, timeout] = notifications[0];
-
-      window.setTimeout(() => {
-        this.props.dispatch(addNotification(notification));
-        this._addNotifications(notifications.slice(1));
-      }, timeout);
-    }
-  }
-
-  _loadSampleData() {
-    this._loadPointData();
-    // this._loadGeojsonData();
-    // this._loadTripGeoJson();
-    // this._loadIconData();
-    // this._loadH3HexagonData();
-    // this._loadS2Data();
-    // this._loadScenegraphLayer();
-  }
-
-  _loadPointData() {
-    this.props.dispatch(
-      addDataToMap({
-        datasets: {
-          info: {
-            label: 'Sample Taxi Trips in New York City',
-            id: 'test_trip_data'
-          },
-          data: sampleTripData
-        },
-        options: {
-          centerMap: true,
-          readOnly: false
-        },
-        config: sampleTripDataConfig
-      })
-    );
-  }
-
-  _loadScenegraphLayer() {
-    this.props.dispatch(
-      addDataToMap({
-        datasets: {
-          info: {
-            label: 'Sample Scenegraph Ducks',
-            id: 'test_trip_data'
-          },
-          data: processCsvData(testCsvData)
-        },
-        config: {
-          version: 'v1',
-          config: {
-            visState: {
-              layers: [
-                {
-                  type: '3D',
-                  config: {
-                    dataId: 'test_trip_data',
-                    columns: {
-                      lat: 'gps_data.lat',
-                      lng: 'gps_data.lng'
-                    },
-                    isVisible: true
-                  }
-                }
-              ]
-            }
-          }
-        }
-      })
-    );
-  }
-
-  _loadIconData() {
-    // load icon data and config and process csv file
-    this.props.dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {
-              label: 'Icon Data',
-              id: 'test_icon_data'
-            },
-            data: processCsvData(sampleIconCsv)
-          }
-        ]
-      })
-    );
-  }
-
-  _loadTripGeoJson() {
-    this.props.dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {label: 'Trip animation'},
-            data: processGeojson(sampleAnimateTrip)
-          }
-        ]
-      })
-    );
-  }
-
-  _loadGeojsonData() {
-    // load geojson
-    this.props.dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {label: 'Bart Stops Geo', id: 'bart-stops-geo'},
-            data: processGeojson(sampleGeojsonPoints)
-          },
-          {
-            info: {label: 'SF Zip Geo', id: 'sf-zip-geo'},
-            data: processGeojson(sampleGeojson)
-          }
-        ],
-        options: {
-          keepExistingConfig: true
-        },
-        config: sampleGeojsonConfig
-      })
-    );
-  }
-
-  _loadH3HexagonData() {
-    // load h3 hexagon
-    this.props.dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {
-              label: 'H3 Hexagons V2',
-              id: 'h3-hex-id'
-            },
-            data: processCsvData(sampleH3Data)
-          }
-        ],
-        config: h3MapConfig,
-        options: {
-          keepExistingConfig: true
-        }
-      })
-    );
-  }
-
-  _loadS2Data() {
-    // load s2
-    this.props.dispatch(
-      addDataToMap({
-        datasets: [
-          {
-            info: {
-              label: 'S2 Data',
-              id: s2DataId
-            },
-            data: processCsvData(sampleS2Data)
-          }
-        ],
-        config: s2MapConfig,
-        options: {
-          keepExistingConfig: true
-        }
-      })
-    );
-  }
-
-  _toggleCloudModal = () => {
-    // TODO: this lives only in the demo hence we use the state for now
-    // REFCOTOR using redux
-    this.setState({
-      cloudModalOpen: !this.state.cloudModalOpen
-    });
-  };
-
   _getMapboxRef = (mapbox, index) => {
     if (!mapbox) {
       // The ref has been unset.
@@ -356,6 +156,23 @@ class App extends Component {
   };
 
   render() {
+    const mapStyles = [
+      {
+        id: 'dark',
+        label: '天地图道路',
+        url: 'http://localhost:8081/mapboxstyle/roadstyle.json',
+        icon: `http://61.177.139.232:8081/mapclient/mapboxstyle/road.png`,
+        layerGroups: []
+      },
+      {
+        id: 'bright',
+        label: '天地图影像',
+        url: 'http://localhost:8081/mapboxstyle/imgstyle.json',
+        icon: `http://61.177.139.232:8088/mapclient/mapboxstyle/img.png`,
+        layerGroups: []
+      }
+    ];
+
     const {showBanner} = this.state;
     return (
       <ThemeProvider theme={theme}>
@@ -395,11 +212,9 @@ class App extends Component {
                    */
                   getState={keplerGlGetState}
                   width={width}
-                  height={height - (showBanner ? BannerHeight : 0)}
-                  cloudProviders={CLOUD_PROVIDERS}
-                  onExportToCloudSuccess={onExportFileSuccess}
-                  onLoadCloudMapSuccess={onLoadCloudMapSuccess}
-                  onLoadCloudMapError={onLoadCloudMapError}
+                  height={height}
+                  mapStylesReplaceDefault={true}
+                  mapStyles={mapStyles}
                 />
               )}
             </AutoSizer>
