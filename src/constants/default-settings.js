@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
+// Copyright (c) 2021 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -225,40 +225,6 @@ export const DEFAULT_LAYER_GROUPS = [
 ];
 
 export const DEFAULT_MAP_STYLES = [
-  {
-    id: 'dark',
-    label: 'Dark',
-    url: 'mapbox://styles/uberdata/cjoqbbf6l9k302sl96tyvka09',
-    icon: `${ICON_PREFIX}/UBER_DARK_V2.png`,
-    layerGroups: DEFAULT_LAYER_GROUPS
-  },
-  {
-    id: 'light',
-    label: 'Light',
-    url: 'mapbox://styles/uberdata/cjoqb9j339k1f2sl9t5ic5bn4',
-    icon: `${ICON_PREFIX}/UBER_LIGHT_V2.png`,
-    layerGroups: DEFAULT_LAYER_GROUPS
-  },
-  {
-    id: 'muted',
-    label: 'Muted Light',
-    url: 'mapbox://styles/uberdata/cjfyl03kp1tul2smf5v2tbdd4',
-    icon: `${ICON_PREFIX}/UBER_MUTED_LIGHT.png`,
-    layerGroups: DEFAULT_LAYER_GROUPS
-  },
-  {
-    id: 'muted_night',
-    label: 'Muted Night',
-    url: 'mapbox://styles/uberdata/cjfxhlikmaj1b2soyzevnywgs',
-    icon: `${ICON_PREFIX}/UBER_MUTED_NIGHT.png`,
-    layerGroups: DEFAULT_LAYER_GROUPS
-  },
-  {
-    id: 'satellite',
-    label: 'Satellite',
-    url: `mapbox://styles/mapbox/satellite-v9`,
-    icon: `${ICON_PREFIX}/UBER_SATELLITE.png`
-  }
 ];
 
 export const GEOJSON_FIELDS = {
