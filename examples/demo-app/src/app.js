@@ -25,7 +25,7 @@ import window from 'global/window';
 import {connect} from 'react-redux';
 import {theme} from '@tommy2gis/swsk.kepler.gl/styles';
 import Banner from './components/banner';
-import Announcement from './components/announcement';
+import Announcement, {FormLink} from './components/announcement';
 import {replaceLoadDataModal} from './factories/load-data-modal';
 import {replaceMapControl} from './factories/map-control';
 import {replacePanelHeader} from './factories/panel-header';
@@ -117,9 +117,9 @@ class App extends Component {
     this.props.dispatch(updateMap({latitude: 31.5396, longitude: 120.33202658}));
 
     // delay zs to show the banner
-    // if (!window.localStorage.getItem(BannerKey)) {
-    //   window.setTimeout(this._showBanner, 3000);
-    // }
+    if (!window.localStorage.getItem(BannerKey)) {
+      window.setTimeout(this._showBanner, 3000);
+    }
     // load sample data
     // this._loadSampleData();
 
@@ -187,7 +187,7 @@ class App extends Component {
           <Banner
             show={this.state.showBanner}
             height={BannerHeight}
-            bgColor="#82368c"
+            bgColor="#2E7CF6"
             onClose={this._hideBanner}
           >
             <Announcement onDisable={this._disableBanner} />
@@ -197,9 +197,9 @@ class App extends Component {
               transition: 'margin 1s, height 1s',
               position: 'absolute',
               width: '100%',
-              height: showBanner ? `calc(100% - ${BannerHeight}px)` : '100%',
-              minHeight: `calc(100% - ${BannerHeight}px)`,
-              marginTop: showBanner ? `${BannerHeight}px` : 0
+              height: '100%',
+              left: 0,
+              top: 0
             }}
           >
             <AutoSizer>
