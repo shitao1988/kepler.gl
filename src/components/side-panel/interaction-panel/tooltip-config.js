@@ -18,22 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {Component} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
+import {FormattedMessage} from 'localization';
+
 import {
   SidePanelSection,
   SBFlexboxNoMargin,
   Button,
   PanelLabel
 } from 'components/common/styled-components';
-import FieldSelector from 'components/common/field-selector';
 import DatasetTagFactory from 'components/side-panel/common/dataset-tag';
 import TooltipChickletFactory from './tooltip-config/tooltip-chicklet';
 import Switch from 'components/common/switch';
 import ItemSelector from 'components/common/item-selector/item-selector';
 import {COMPARE_TYPES} from 'constants/tooltip';
-TooltipConfigFactory.deps = [DatasetTagFactory];
+import FieldSelectorFactory from '../../common/field-selector';
 
 const TooltipConfigWrapper = styled.div`
   .item-selector > div > div {
@@ -66,108 +67,122 @@ const CompareSwitchWrapper = styled.div`
   margin-bottom: 8px;
 `;
 
-function TooltipConfigFactory(DatasetTag) {
-  class TooltipConfig extends Component {
-    render() {
-      const {config, datasets, onChange, intl} = this.props;
-      return (
-        <TooltipConfigWrapper>
-          {Object.keys(config.fieldsToShow).map(dataId => (
-            <SidePanelSection key={dataId}>
-              <SBFlexboxNoMargin>
-                <DatasetTag dataset={datasets[dataId]} />
-                {Boolean(config.fieldsToShow[dataId].length) && (
-                  <ButtonWrapper>
-                    <Button
-                      className="clear-all"
-                      onClick={() => {
-                        const newConfig = {
-                          ...config,
-                          fieldsToShow: {
-                            ...config.fieldsToShow,
-                            [dataId]: []
-                          }
-                        };
-                        onChange(newConfig);
-                      }}
-                      width="48px"
-                      secondary
-                    >
-                      <FormattedMessage id="fieldSelector.clearAll" />
-                    </Button>
-                  </ButtonWrapper>
-                )}
-              </SBFlexboxNoMargin>
-              <FieldSelector
-                fields={datasets[dataId].fields}
-                value={config.fieldsToShow[dataId]}
-                onSelect={fieldsToShow => {
+TooltipConfigFactory.deps = [DatasetTagFactory, FieldSelectorFactory];
+function TooltipConfigFactory(DatasetTag, FieldSelector) {
+  const DatasetTooltipConfig = ({config, onChange, dataset}) => {
+    const dataId = dataset.id;
+    return (
+      <SidePanelSection key={dataId}>
+        <SBFlexboxNoMargin>
+          <DatasetTag dataset={dataset} />
+          {Boolean(config.fieldsToShow[dataId].length) && (
+            <ButtonWrapper>
+              <Button
+                className="clear-all"
+                onClick={() => {
                   const newConfig = {
                     ...config,
                     fieldsToShow: {
                       ...config.fieldsToShow,
-                      [dataId]: fieldsToShow
+                      [dataId]: []
                     }
                   };
                   onChange(newConfig);
                 }}
-                closeOnSelect={false}
-                multiSelect
-                inputTheme="secondary"
-                CustomChickletComponent={TooltipChickletFactory(
-                  dataId,
-                  config,
-                  onChange,
-                  datasets[dataId].fields
-                )}
-              />
-            </SidePanelSection>
-          ))}
-          <CompareSwitchWrapper>
-            <FormattedMessage id="compare.modeLabel" />
-            <Switch
-              checked={config.compareMode}
-              id="compare-mode-toggle"
-              onChange={() => {
-                const newConfig = {
-                  ...config,
-                  compareMode: !config.compareMode
-                };
-                onChange(newConfig);
-              }}
-              secondary
-            />
-          </CompareSwitchWrapper>
-          <SidePanelSection>
-            <PanelLabel>
-              <FormattedMessage id="compare.typeLabel" />
-            </PanelLabel>
-            <ItemSelector
-              disabled={!config.compareMode}
-              displayOption={d =>
-                intl.formatMessage({
-                  id: `compare.types.${d}`
-                })
+                width="54px"
+                secondary
+              >
+                <FormattedMessage id="fieldSelector.clearAll" />
+              </Button>
+            </ButtonWrapper>
+          )}
+        </SBFlexboxNoMargin>
+        <FieldSelector
+          fields={dataset.fields}
+          value={config.fieldsToShow[dataId]}
+          onSelect={selected => {
+            const newConfig = {
+              ...config,
+              fieldsToShow: {
+                ...config.fieldsToShow,
+                [dataId]: selected.map(
+                  f =>
+                    config.fieldsToShow[dataId].find(
+                      tooltipField => tooltipField.name === f.name
+                    ) || {
+                      name: f.name,
+                      // default initial tooltip is null
+                      format: null
+                    }
+                )
               }
-              selectedItems={config.compareType}
-              options={Object.values(COMPARE_TYPES)}
-              multiSelect={false}
-              searchable={false}
-              inputTheme={'secondary'}
-              getOptionValue={d => d}
-              onChange={option => {
-                const newConfig = {
-                  ...config,
-                  compareType: option
-                };
-                onChange(newConfig);
-              }}
-            />
-          </SidePanelSection>
-        </TooltipConfigWrapper>
-      );
-    }
-  }
+            };
+            onChange(newConfig);
+          }}
+          closeOnSelect={false}
+          multiSelect
+          inputTheme="secondary"
+          CustomChickletComponent={TooltipChickletFactory(dataId, config, onChange, dataset.fields)}
+        />
+      </SidePanelSection>
+    );
+  };
+
+  const TooltipConfig = ({config, datasets, onChange, intl}) => {
+    return (
+      <TooltipConfigWrapper>
+        {Object.keys(config.fieldsToShow).map(dataId => (
+          <DatasetTooltipConfig
+            key={dataId}
+            config={config}
+            onChange={onChange}
+            dataset={datasets[dataId]}
+          />
+        ))}
+        <CompareSwitchWrapper>
+          <FormattedMessage id="compare.modeLabel" />
+          <Switch
+            checked={config.compareMode}
+            id="compare-mode-toggle"
+            onChange={() => {
+              const newConfig = {
+                ...config,
+                compareMode: !config.compareMode
+              };
+              onChange(newConfig);
+            }}
+            secondary
+          />
+        </CompareSwitchWrapper>
+        <SidePanelSection>
+          <PanelLabel>
+            <FormattedMessage id="compare.typeLabel" />
+          </PanelLabel>
+          <ItemSelector
+            disabled={!config.compareMode}
+            displayOption={d =>
+              intl.formatMessage({
+                id: `compare.types.${d}`
+              })
+            }
+            selectedItems={config.compareType}
+            options={Object.values(COMPARE_TYPES)}
+            multiSelect={false}
+            searchable={false}
+            inputTheme={'secondary'}
+            getOptionValue={d => d}
+            onChange={option => {
+              const newConfig = {
+                ...config,
+                compareType: option
+              };
+              onChange(newConfig);
+            }}
+          />
+        </SidePanelSection>
+      </TooltipConfigWrapper>
+    );
+  };
 
   return injectIntl(TooltipConfig);
 }

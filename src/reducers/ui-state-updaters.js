@@ -21,6 +21,7 @@
 // @ts-nocheck
 import {
   ADD_DATA_ID,
+  DATA_TABLE_ID,
   DEFAULT_NOTIFICATION_TOPICS,
   DELETE_DATA_ID,
   EXPORT_DATA_TYPE,
@@ -32,6 +33,7 @@ import {
 import {LOCALE_CODES} from 'localization/locales';
 import {createNotification, errorNotification} from 'utils/notifications-utils';
 import {calculateExportImageSize} from 'utils/export-utils';
+import {payload_, apply_, compose_} from './composer-helpers';
 
 export const DEFAULT_ACTIVE_SIDE_PANEL = 'layer';
 export const DEFAULT_MODAL = ADD_DATA_ID;
@@ -140,9 +142,14 @@ export const DEFAULT_EXPORT_IMAGE = {
     imageW: 0,
     imageH: 0
   },
+  // when this is set to true, the mock map viewport will move to the center of data
+  center: false,
   // exporting state
   imageDataUri: '',
+  // exporting: used to attach plot-container to dom
   exporting: false,
+  // processing: used as loading indicator when export image is being produced
+  processing: false,
   error: false
 };
 
@@ -252,6 +259,15 @@ export const INITIAL_UI_STATE = {
 };
 
 /* Updaters */
+/**
+ * @memberof uiStateUpdaters
+
+ */
+export const initUiStateUpdater = (state, action) => ({
+  ...state,
+  ...(action.payload || {}).initialUiState
+});
+
 /**
  * Toggle active side panel
  * @memberof uiStateUpdaters
@@ -380,23 +396,6 @@ export const setExportImageSettingUpdater = (state, {payload: newSetting}) => {
 };
 
 /**
- * Set `exportImage.exporting` to `true`
- * @memberof uiStateUpdaters
- * @param state `uiState`
- * @returns nextState
- * @type {typeof import('./ui-state-updaters').startExportingImageUpdater}
- * @public
- */
-export const startExportingImageUpdater = state => ({
-  ...state,
-  exportImage: {
-    ...state.exportImage,
-    exporting: true,
-    imageDataUri: ''
-  }
-});
-
-/**
  * Set `exportImage.setExportImageDataUri` to a image dataUri
  * @memberof uiStateUpdaters
  * @param state `uiState`
@@ -410,7 +409,7 @@ export const setExportImageDataUriUpdater = (state, {payload: dataUri}) => ({
   ...state,
   exportImage: {
     ...state.exportImage,
-    exporting: false,
+    processing: false,
     imageDataUri: dataUri
   }
 });
@@ -424,7 +423,7 @@ export const setExportImageErrorUpdater = (state, {payload: error}) => ({
   ...state,
   exportImage: {
     ...state.exportImage,
-    exporting: false,
+    processing: false,
     error
   }
 });
@@ -441,9 +440,32 @@ export const cleanupExportImageUpdater = state => ({
     ...state.exportImage,
     exporting: false,
     imageDataUri: '',
-    error: false
+    error: false,
+    processing: false,
+    center: false
   }
 });
+
+/**
+ * Start image exporting flow
+ * @memberof uiStateUpdaters
+ * @param state
+ * @param options
+ * @returns {UiState}
+ * @type {typeof import('./ui-state-updaters').startExportingImage}
+ * @public
+ */
+export const startExportingImageUpdater = (state, {payload: options = {}}) => {
+  const imageSettings = {
+    ...options,
+    exporting: true
+  };
+
+  return compose_([
+    cleanupExportImageUpdater,
+    apply_(setExportImageSettingUpdater, payload_(imageSettings))
+  ])(state);
+};
 
 /**
  * Set selected dataset for export
@@ -574,19 +596,31 @@ export const setExportMapHTMLModeUpdater = (state, {payload: mode}) => ({
 });
 
 /**
- * Add a notification to be displayed
+ * Adds a new notification.
+ * Updates a notification in case of matching ids.
  * @memberof uiStateUpdaters
  * @param state `uiState`
  * @param action
- * @param action.payload
+ * @param action.payload Params of a notification
  * @returns nextState
  * @type {typeof import('./ui-state-updaters').addNotificationUpdater}
  * @public
  */
-export const addNotificationUpdater = (state, {payload}) => ({
-  ...state,
-  notifications: [...(state.notifications || []), createNotification(payload)]
-});
+export const addNotificationUpdater = (state, {payload}) => {
+  let notifications;
+
+  const payloadId = payload?.id;
+  const notificationToUpdate = payloadId ? state.notifications.find(n => n.id === payloadId) : null;
+  if (notificationToUpdate) {
+    notifications = state.notifications.map(n =>
+      n.id === payloadId ? createNotification(payload) : n
+    );
+  } else {
+    notifications = [...(state.notifications || []), createNotification(payload)];
+  }
+
+  return {...state, notifications};
+};
 
 /**
  * Remove a notification
@@ -682,6 +716,16 @@ export const toggleSplitMapUpdater = state => ({
     {}
   )
 });
+
+/**
+ * Toggle modal data
+ * @memberof uiStateUpdaters
+ * @param state
+ * @returns nextState
+ * @type {typeof import('./ui-state-updaters').showDatasetTableUpdater}
+ * @public
+ */
+export const showDatasetTableUpdater = state => toggleModalUpdater(state, {payload: DATA_TABLE_ID});
 
 /**
  * Set the locale of the UI

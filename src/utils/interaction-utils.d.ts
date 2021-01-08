@@ -1,5 +1,14 @@
 import {InteractionConfig, Field, TooltipField, CompareType} from '../reducers/vis-state-updaters';
 
+/**
+ * Minus sign used in tooltip formatting.
+ */
+export const TOOLTIP_MINUS_SIGN: string;
+
+export const BRUSH_CONFIG: {
+  range: [number, number]
+};
+
 export function getDefaultInteraction(): InteractionConfig;
 export function findFieldsToShow(p: {
   fields: Field[];

@@ -204,7 +204,13 @@ export default {
     delete: 'Delete',
     timePlayback: 'Time Playback',
     cloudStorage: 'Cloud Storage',
-    '3DMap': '3D Map'
+    '3DMap': '3D Map',
+    animationByWindow: 'Moving Time Window',
+    animationByIncremental: 'Incremental Time Window',
+    speed: 'speed',
+    play: 'play',
+    pause: 'pause',
+    reset: 'reset'
   },
   toolbar: {
     exportImage: 'Export Image',
@@ -394,6 +400,7 @@ export default {
     altitude: 'altitude',
     icon: 'icon',
     geojson: 'geojson',
+    token: 'token',
     arc: {
       lat0: 'source lat',
       lng0: 'source lng',
@@ -428,14 +435,14 @@ export default {
       '*kepler.gl is a client-side application with no server backend. Data lives only on your machine/browser. ' +
       'No information or map data is sent to any server.',
     configUploadMessage:
-      'Upload **CSV**, **GeoJson** or saved map **Json**. Read more about [**supported file formats**]',
+      'Upload {fileFormatNames} or saved map **Json**. Read more about [**supported file formats**]',
     browseFiles: 'browse your files',
     uploading: 'Uploading',
     fileNotSupported: 'File {errorFiles} is not supported.',
     or: 'or'
   },
   geocoder: {
-    title: 'Geocoder'
+    title: 'Enter an address or coordinates, ex 37.79,-122.40'
   },
   fieldSelector: {
     clearAll: 'Clear All',

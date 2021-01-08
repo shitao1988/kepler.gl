@@ -96,6 +96,10 @@ const demoReducer = combineReducers({
           exportMapboxAccessToken: AUTH_TOKENS.EXPORT_MAPBOX_TOKEN
         }
       }
+    },
+    visState: {
+      loaders: [], // Add additional loaders.gl loaders here
+      loadOptions: {} // Add additional loaders.gl loader options here
     }
   }),
   app: appReducer
@@ -132,7 +136,10 @@ export const loadRemoteResourceSuccess = (state, action) => {
     {
       payload: {
         datasets,
-        config
+        config,
+        options: {
+          centerMap: Boolean(!action.config)
+        }
       }
     }
   );

@@ -18,41 +18,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {_BinSorter as BinSorter} from '@deck.gl/aggregation-layers';
-
-export default class EnhancedBinSorter extends BinSorter {
-  getValueRange(percentileRange) {
-    if (!this.sortedBins) {
-      this.sortedBins = this.aggregatedBins.sort((a, b) =>
-        a.value > b.value ? 1 : a.value < b.value ? -1 : 0
-      );
-    }
-    if (!this.sortedBins.length) {
-      return [];
-    }
-    let lowerIdx = 0;
-    let upperIdx = this.sortedBins.length - 1;
-
-    if (Array.isArray(percentileRange)) {
-      const idxRange = this._percentileToIndex(percentileRange);
-      lowerIdx = idxRange[0];
-      upperIdx = idxRange[1];
-    }
-
-    return [this.sortedBins[lowerIdx].value, this.sortedBins[upperIdx].value];
+/**
+ * Stubbed Typescript types for certain classes in @deck.gl/core
+ * TODO: This is initially focused on fixing things for our own usage;
+ * we should eventually package proper types with the module.
+ */
+declare module '@deck.gl/core' {
+  export class Layer {
+    constructor(any): Layer;
+    id: string;
+    state: any;
+    props: any;
+    context: any;
+    draw(any): void;
+    setState(any): void;
+    setNeedsUpdate(): void;
+    setNeedsRedraw(): void;
+    getShaders(any?): any;
+    getAttributeManager(): any;
+    use64bitPositions(): boolean;
+    finalizeState(): void;
   }
 
-  getValueDomainByScale(scale, [lower = 0, upper = 100] = []) {
-    if (!this.sortedBins) {
-      this.sortedBins = this.aggregatedBins.sort((a, b) =>
-        a.value > b.value ? 1 : a.value < b.value ? -1 : 0
-      );
-    }
-    if (!this.sortedBins.length) {
-      return [];
-    }
-    const indexEdge = this._percentileToIndex([lower, upper]);
-
-    return this._getScaleDomain(scale, indexEdge);
+  export class CompositeLayer extends Layer {
+    getSubLayerAccessor(any): any;
+    getSubLayerProps(any): any;
+    getSubLayerRow(any, any, number): any;
   }
+
+  export class SimpleMeshLayer extends Layer {}
+
+  export const log = any;
+  export const project32: any;
+  export const picking: any;
+
+  export const FlyToInterpolator: any;
+  export const _GlobeView: any;
+  export const MapView: any;
+
+  interface ConstantMap {
+    [key: string]: string;
+  }
+
+  export const COORDINATE_SYSTEM: ConstantMap;
 }

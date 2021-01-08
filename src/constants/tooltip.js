@@ -19,10 +19,12 @@
 // THE SOFTWARE.
 
 export const TOOLTIP_FORMAT_TYPES = {
+  NONE: 'none',
   DATE: 'date',
   DATE_TIME: 'date_time',
   DECIMAL: 'decimal',
-  PERCENTAGE: 'percentage'
+  PERCENTAGE: 'percentage',
+  BOOLEAN: 'boolean'
 };
 
 export const TOOLTIP_KEY = 'format';
@@ -30,7 +32,9 @@ export const TOOLTIP_KEY = 'format';
 export const TOOLTIP_FORMATS = {
   NONE: {
     id: 'NONE',
-    label: 'None'
+    label: 'None',
+    format: null,
+    type: TOOLTIP_FORMAT_TYPES.NONE
   },
   DECIMAL_SHORT: {
     id: 'DECIMAL_SHORT',
@@ -41,7 +45,7 @@ export const TOOLTIP_FORMATS = {
   DECIMAL_SHORT_COMMA: {
     id: 'DECIMAL_SHORT_COMMA',
     label: '12.3k',
-    format: '.3s',
+    format: '.3~s',
     type: TOOLTIP_FORMAT_TYPES.DECIMAL
   },
   DECIMAL_PERCENT_FULL_1: {
@@ -59,7 +63,7 @@ export const TOOLTIP_FORMATS = {
   DECIMAL_PRECENT_REGULAR: {
     id: 'DECIMAL_PRECENT_REGULAR',
     label: '12.345 → 12.35%',
-    format: '%',
+    format: '~%',
     type: TOOLTIP_FORMAT_TYPES.PERCENTAGE
   },
   DECIMAL_DECIMAL_FIXED_2: {
@@ -76,8 +80,8 @@ export const TOOLTIP_FORMATS = {
   },
   DECIMAL_INT: {
     id: 'DECIMAL_INT',
-    label: '12350',
-    format: '.4r',
+    label: '12345 → 12350',
+    format: '.4~r',
     type: TOOLTIP_FORMAT_TYPES.DECIMAL
   },
   DECIMAL_THREE: {
@@ -163,10 +167,22 @@ export const TOOLTIP_FORMATS = {
   },
   DATE_TIME_LTS: {
     // 12:00:00 AM
-    id: 'DATE_TIME',
+    id: 'DATE_TIME_LTS',
     label: '',
     format: 'LTS',
     type: TOOLTIP_FORMAT_TYPES.DATE_TIME
+  },
+  BOOLEAN_NUM: {
+    id: 'BOOLEAN_NUM',
+    label: '0 | 1',
+    format: '01',
+    type: TOOLTIP_FORMAT_TYPES.BOOLEAN
+  },
+  BOOLEAN_Y_N: {
+    id: 'BOOLEAN_Y_N',
+    label: 'yes | no',
+    format: 'yn',
+    type: TOOLTIP_FORMAT_TYPES.BOOLEAN
   }
 };
 

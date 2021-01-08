@@ -23,16 +23,20 @@ export type ActionType = {
   REMOVE_DATASET: string;
   REORDER_LAYER: string;
   SET_FILTER: string;
+  SET_FILTER_ANIMATION_TIME: string;
+  SET_FILTER_ANIMATION_WINDOW: string;
   SHOW_DATASET_TABLE: string;
   UPDATE_LAYER_BLENDING: string;
   UPDATE_VIS_DATA: string;
+  RENAME_DATASET: string;
   TOGGLE_FILTER_ANIMATION: string;
   UPDATE_FILTER_ANIMATION_SPEED: string;
   PLAY_ANIMATION: string;
-  UPDATE_ANIMATION_TIME: string;
+  SET_LAYER_ANIMATION_TIME: string;
   UPDATE_ANIMATION_SPEED: string;
   UPDATE_LAYER_ANIMATION_SPEED: string;
   TOGGLE_LAYER_CONFIG_ACTIVE: string;
+  TOGGLE_LAYER_ANIMATION: string;
   ENLARGE_FILTER: string;
   TOGGLE_FILTER_FEATURE: string;
   SET_VISIBLE_LAYERS_FOR_MAP: string;
@@ -52,7 +56,7 @@ export type ActionType = {
   COPY_TABLE_COLUMN: string;
   NEXT_FILE_BATCH: string;
   PROCESS_FILE_CONTENT: string;
-  
+
   // mapState
   UPDATE_MAP: string;
   FIT_BOUNDS: string;
@@ -116,6 +120,9 @@ export type ActionType = {
   SET_POLYGON_FILTER_LAYER: string;
   DELETE_FEATURE: string;
   TOGGLE_EDITOR_VISIBILITY: string;
+
+  // storage
+  START_SAVE_STORAGE: string;
 };
 
 export const ActionTypes: ActionType;

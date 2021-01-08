@@ -11,11 +11,12 @@ import {
   Feature,
   FeatureValue,
   VisState,
-  Field,
-  LineChart
+  LineChart,
+  TimeRangeFilter
 } from '../reducers/vis-state-updaters';
 import {Layer} from 'layers';
 import {Field} from 'reducers/types';
+import {ParsedConfig} from 'schemas';
 
 export function applyFilterFieldName(
   filter: Filter,
@@ -59,7 +60,7 @@ export function applyFiltersToDatasets(
   datasetIds: string[],
   datasets: Datasets,
   filters: Filter[],
-  layers: Layer[]
+  layers?: Layer[]
 ): Datasets;
 export function getFilterRecord(
   dataId: string,
@@ -160,6 +161,15 @@ export function getFilterPlot(
 export function getFilterIdInFeature(f: FeatureValue): string;
 export function isInRange(v: any, domain: number[]): boolean;
 export function updateFilterDataId(dataId: string): FilterBase;
+export function validateFiltersUpdateDatasets(state: VisState, filtersToValidate: ParsedConfig['visState']['filters']): {
+  validated:  Filter[],
+  failed: Filter[],
+  updatedDatasets: Datasets
+}
+export function isInPolygon(point: number[], polygon: object): boolean;
+export function getIntervalBins(filter: TimeRangeFilter);
+export function getTimeWidgetHintFormatter(domain: [number, number]): string;
+
 
 export const FILTER_UPDATER_PROPS: {
   dataId: string;

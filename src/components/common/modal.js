@@ -20,7 +20,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage} from 'localization';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
@@ -114,6 +114,7 @@ const defaultCancelButton = {
 };
 
 const defaultConfirmButton = {
+  cta: true,
   large: true,
   width: '160px',
   children: 'modal.button.defaultConfirm'

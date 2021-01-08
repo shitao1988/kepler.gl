@@ -31,6 +31,7 @@ TimeRangeFilterPanelFactory.deps = [
 ];
 
 function TimeRangeFilterPanelFactory(FieldPanelWithFieldSelect, TimeRangeFilter) {
+  /** @type {import('./filter-panel-types').FilterPanelComponent} */
   const TimeRangeFilterPanel = React.memo(
     ({
       idx,
@@ -55,7 +56,7 @@ function TimeRangeFilterPanelFactory(FieldPanelWithFieldSelect, TimeRangeFilter)
             active: filter.enlarged
           }
         ],
-        [filter.id, filter.enlargeFilter, enlargeFilter]
+        [filter.id, filter.enlarged, enlargeFilter]
       );
 
       return (

@@ -39,7 +39,12 @@ import {
 } from 'constants/default-settings';
 import {COLOR_RANGES} from 'constants/color-ranges';
 import {DataVizColors} from 'constants/custom-color-ranges';
-import {LAYER_VIS_CONFIGS, DEFAULT_TEXT_LABEL, DEFAULT_COLOR_UI} from './layer-factory';
+import {
+  LAYER_VIS_CONFIGS,
+  DEFAULT_TEXT_LABEL,
+  DEFAULT_COLOR_UI,
+  UNKNOWN_COLOR_KEY
+} from './layer-factory';
 
 import {generateHashId, isPlainObject} from 'utils/utils';
 
@@ -64,8 +69,10 @@ import {hexToRgb, getColorGroupByName, reverseColorRange} from 'utils/color-util
  * @type {number}
  */
 const MAX_SAMPLE_SIZE = 5000;
+const defaultDomain = [0, 1];
 const dataFilterExtension = new DataFilterExtension({filterSize: MAX_GPU_FILTERS});
 const identity = d => d;
+const defaultDataAccessor = d => d.data;
 
 export const OVERLAY_TYPE = keymirror({
   deckgl: null,
@@ -143,7 +150,9 @@ export default class Layer {
         domain: 'colorDomain',
         range: 'colorRange',
         key: 'color',
-        channelScaleType: CHANNEL_SCALES.color
+        channelScaleType: CHANNEL_SCALES.color,
+        nullValue: NO_VALUE_COLOR,
+        defaultValue: config => config.color
       },
       size: {
         property: 'size',
@@ -152,7 +161,9 @@ export default class Layer {
         domain: 'sizeDomain',
         range: 'sizeRange',
         key: 'size',
-        channelScaleType: CHANNEL_SCALES.size
+        channelScaleType: CHANNEL_SCALES.size,
+        nullValue: 0,
+        defaultValue: 1
       }
     };
   }
@@ -363,16 +374,16 @@ export default class Layer {
    * Assign a field pair to column config, return column config
    * @param key - Column Key
    * @param pair - field Pair
-   * @returns {{}} - Column config
+   * @returns {object} - Column config
    */
   assignColumnPairs(key, pair) {
-    if (!this.columnPairs || !this.columnPairs[key]) {
+    if (!this.columnPairs || !this.columnPairs?.[key]) {
       // should not end in this state
       return this.config.columns;
     }
 
-    const {pair: partnerKey, fieldPairKey} = this.columnPairs[key];
-    const {fieldPairKey: partnerFieldPairKey} = this.columnPairs[partnerKey];
+    const {pair: partnerKey, fieldPairKey} = this.columnPairs?.[key];
+    const {fieldPairKey: partnerFieldPairKey} = this.columnPairs?.[partnerKey];
 
     return {
       ...this.config.columns,
@@ -383,9 +394,9 @@ export default class Layer {
 
   /**
    * Calculate a radius zoom multiplier to render points, so they are visible in all zoom level
-   * @param mapState
-   * @param mapState.zoom - actual zoom
-   * @param mapState.zoomOffset - zoomOffset when render in the plot container for export image
+   * @param {object} mapState
+   * @param {number} mapState.zoom - actual zoom
+   * @param {number | void} mapState.zoomOffset - zoomOffset when render in the plot container for export image
    * @returns {number}
    */
   getZoomFactor({zoom, zoomOffset = 0}) {
@@ -394,9 +405,9 @@ export default class Layer {
 
   /**
    * Calculate a elevation zoom multiplier to render points, so they are visible in all zoom level
-   * @param mapState
-   * @param mapState.zoom - actual zoom
-   * @param mapState.zoomOffset - zoomOffset when render in the plot container for export image
+   * @param {object} mapState
+   * @param {number} mapState.zoom - actual zoom
+   * @param {number | void} mapState.zoomOffset - zoomOffset when render in the plot container for export image
    * @returns {number}
    */
   getElevationZoomFactor({zoom, zoomOffset = 0}) {
@@ -439,6 +450,7 @@ export default class Layer {
     Object.values(this.visualChannels).forEach(v => {
       if (
         configToCopy.visConfig[v.range] &&
+        this.visConfigSettings[v.range] &&
         visConfigSettings[v.range].group !== this.visConfigSettings[v.range].group
       ) {
         notToCopy.push(v.range);
@@ -511,10 +523,13 @@ export default class Layer {
   }
 
   getLayerColumns() {
+    const columnValidators = this.columnValidators || {};
     const required = this.requiredLayerColumns.reduce(
       (accu, key) => ({
         ...accu,
-        [key]: {value: null, fieldIdx: -1}
+        [key]: columnValidators[key]
+          ? {value: null, fieldIdx: -1, validator: columnValidators[key]}
+          : {value: null, fieldIdx: -1}
       }),
       {}
     );
@@ -662,8 +677,6 @@ export default class Layer {
 
   /**
    * Check whether layer has all columns
-   *
-   * @param {object} layer
    * @returns {boolean} yes or no
    */
   hasAllColumns() {
@@ -679,7 +692,6 @@ export default class Layer {
   /**
    * Check whether layer has data
    *
-   * @param {object} layer
    * @param {Array | Object} layerData
    * @returns {boolean} yes or no
    */
@@ -687,7 +699,6 @@ export default class Layer {
     if (!layerData) {
       return false;
     }
-
     return Boolean(layerData.data && layerData.data.length);
   }
 
@@ -703,6 +714,78 @@ export default class Layer {
       this.hasLayerData(data) &&
       typeof this.renderLayer === 'function'
     );
+  }
+
+  getColorScale(colorScale, colorDomain, colorRange) {
+    if (Array.isArray(colorRange.colorMap)) {
+      const cMap = new Map();
+      colorRange.colorMap.forEach(([k, v]) => {
+        cMap.set(k, typeof v === 'string' ? hexToRgb(v) : v);
+      });
+
+      const scale = SCALE_FUNC[SCALE_TYPES.ordinal]()
+        .domain(cMap.keys())
+        .range(cMap.values())
+        .unknown(cMap.get(UNKNOWN_COLOR_KEY) || NO_VALUE_COLOR);
+      return scale;
+    }
+
+    return this.getVisChannelScale(colorScale, colorDomain, colorRange.colors.map(hexToRgb));
+  }
+
+  /**
+   * Mapping from visual channels to deck.gl accesors
+   * @param {Function} dataAccessor - access kepler.gl layer data from deck.gl layer
+   * @return {Object} attributeAccessors - deck.gl layer attribute accessors
+   */
+  getAttributeAccessors(dataAccessor = defaultDataAccessor) {
+    const attributeAccessors = {};
+
+    Object.keys(this.visualChannels).forEach(channel => {
+      const {
+        field,
+        fixed,
+        scale,
+        domain,
+        range,
+        accessor,
+        defaultValue,
+        getAttributeValue,
+        nullValue,
+        channelScaleType
+      } = this.visualChannels[channel];
+
+      const shouldGetScale = this.config[field];
+
+      if (shouldGetScale) {
+        const args = [this.config[scale], this.config[domain], this.config.visConfig[range]];
+        const isFixed = fixed && this.config.visConfig[fixed];
+
+        const scaleFunction =
+          channelScaleType === CHANNEL_SCALES.color
+            ? this.getColorScale(...args)
+            : this.getVisChannelScale(...args, isFixed);
+
+        attributeAccessors[accessor] = d =>
+          this.getEncodedChannelValue(
+            scaleFunction,
+            dataAccessor(d),
+            this.config[field],
+            nullValue
+          );
+      } else if (typeof getAttributeValue === 'function') {
+        attributeAccessors[accessor] = getAttributeValue(this.config);
+      } else {
+        attributeAccessors[accessor] =
+          typeof defaultValue === 'function' ? defaultValue(this.config) : defaultValue;
+      }
+
+      if (!attributeAccessors[accessor]) {
+        Console.warn(`Failed to provide accesso function for ${accessor || channel}`);
+      }
+    });
+
+    return attributeAccessors;
   }
 
   getVisChannelScale(scale, domain, range, fixed) {
@@ -798,7 +881,8 @@ export default class Layer {
     }
 
     let data = [];
-    if (!triggerChanged.getData) {
+
+    if (!triggerChanged.getData && oldLayerData && oldLayerData.data) {
       // same data
       data = oldLayerData.data;
     } else {
@@ -811,7 +895,7 @@ export default class Layer {
    * helper function to update one layer domain when state.data changed
    * if state.data change is due ot update filter, newFiler will be passed
    * called by updateAllLayerDomainData
-   * @param {Object} dataset
+   * @param {Object} datasets
    * @param {Object} newFilter
    * @returns {object} layer
    */
@@ -828,7 +912,6 @@ export default class Layer {
       if (!newFilter || scaleType !== SCALE_TYPES.ordinal) {
         const {domain} = channel;
         const updatedDomain = this.calculateLayerDomain(dataset, channel);
-
         this.updateLayerConfig({[domain]: updatedDomain});
       }
     });
@@ -909,9 +992,26 @@ export default class Layer {
     this.updateLayerConfig({[visualChannel.domain]: updatedDomain});
   }
 
+  getVisualChannelUpdateTriggers() {
+    const updateTriggers = {};
+    Object.values(this.visualChannels).forEach(visualChannel => {
+      // field range scale domain
+      const {accessor, field, scale, domain, range, defaultValue, fixed} = visualChannel;
+
+      updateTriggers[accessor] = {
+        [field]: this.config[field],
+        [scale]: this.config[scale],
+        [domain]: this.config[domain],
+        [range]: this.config.visConfig[range],
+        defaultValue: typeof defaultValue === 'function' ? defaultValue(this.config) : defaultValue,
+        ...(fixed ? {[fixed]: this.config.visConfig[fixed]} : {})
+      };
+    });
+    return updateTriggers;
+  }
+
   calculateLayerDomain(dataset, visualChannel) {
     const {allData, filteredIndexForDomain} = dataset;
-    const defaultDomain = [0, 1];
     const {scale} = visualChannel;
     const scaleType = this.config[scale];
 
@@ -955,10 +1055,12 @@ export default class Layer {
     }
   }
 
+  hasHoveredObject(objectInfo) {
+    return this.isLayerHovered(objectInfo) && objectInfo.object ? objectInfo.object : null;
+  }
+
   isLayerHovered(objectInfo) {
-    return (
-      objectInfo && objectInfo.layer && objectInfo.picked && objectInfo.layer.props.id === this.id
-    );
+    return objectInfo?.picked && objectInfo?.layer?.props?.id === this.id;
   }
 
   getRadiusScaleByZoom(mapState, fixedRadius) {
@@ -1005,7 +1107,7 @@ export default class Layer {
       highlightColor: this.config.highlightColor,
       // data filtering
       extensions: [dataFilterExtension],
-      filterRange: gpuFilter.filterRange
+      filterRange: gpuFilter ? gpuFilter.filterRange : undefined
     };
   }
 
@@ -1027,7 +1129,7 @@ export default class Layer {
         accu.push(
           new TextLayer({
             ...sharedProps,
-            id: `${this.id}-label-${textLabel[i].field.name}`,
+            id: `${this.id}-label-${textLabel[i].field?.name}`,
             data: data.data,
             getText: d.getText,
             getPosition,
@@ -1046,7 +1148,7 @@ export default class Layer {
             getFilterValue: data.getFilterValue,
             updateTriggers: {
               ...updateTriggers,
-              getText: textLabel[i].field.name,
+              getText: textLabel[i].field?.name,
               getPixelOffset: {
                 ...updateTriggers.getRadius,
                 mapState,
@@ -1062,5 +1164,19 @@ export default class Layer {
       }
       return accu;
     }, []);
+  }
+
+  calculateDataAttribute(dataset, getPosition) {
+    // implemented in subclasses
+    return [];
+  }
+
+  updateLayerMeta(allData, getPosition) {
+    // implemented in subclasses
+  }
+
+  getPositionAccessor() {
+    // implemented in subclasses
+    return () => null;
   }
 }

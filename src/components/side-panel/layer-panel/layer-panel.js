@@ -53,7 +53,7 @@ function LayerPanelFactory(LayerConfigurator, LayerPanelHeader) {
       layerVisConfigChange: PropTypes.func.isRequired,
       layerVisualChannelConfigChange: PropTypes.func.isRequired,
       layerColorUIChange: PropTypes.func.isRequired,
-      updateAnimationTime: PropTypes.func,
+      setLayerAnimationTime: PropTypes.func,
       updateLayerAnimationSpeed: PropTypes.func
     };
 
@@ -124,7 +124,7 @@ function LayerPanelFactory(LayerConfigurator, LayerPanelHeader) {
             layerId={layer.id}
             isVisible={config.isVisible}
             label={config.label}
-            labelRCGColorValues={datasets[config.dataId].color}
+            labelRCGColorValues={config.dataId ? datasets[config.dataId].color : null}
             layerType={layer.type}
             onToggleEnableConfig={this._toggleEnableConfig}
             onToggleVisibility={this._toggleVisibility}

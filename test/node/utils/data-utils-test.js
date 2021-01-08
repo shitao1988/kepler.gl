@@ -123,7 +123,7 @@ test('dataUtils -> getFormatter', t => {
       assert: [134, '100']
     },
     {
-      input: ['%'],
+      input: ['~%'],
       assert: ['12.345', '12.35%']
     },
     {
@@ -151,6 +151,22 @@ test('dataUtils -> getFormatter', t => {
         }
       ],
       assert: [4223, '4,200']
+    },
+    {
+      input: ['01'],
+      assert: [true, '1']
+    },
+    {
+      input: ['01'],
+      assert: [false, '0']
+    },
+    {
+      input: ['yn'],
+      assert: [false, 'no']
+    },
+    {
+      input: ['yn'],
+      assert: [true, 'yes']
     }
   ];
 

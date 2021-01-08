@@ -103,6 +103,7 @@ export async function* readBatch(asyncIterator, fileName) {
   for await (const batch of asyncIterator) {
     // Last batch will have this special type and will provide all the root
     // properties of the parsed document.
+    // Only json parse will have `FINAL_RESULT`
     if (batch.batchType === BATCH_TYPE.FINAL_RESULT) {
       if (batch.container) {
         result = {...batch.container};
@@ -112,8 +113,9 @@ export async function* readBatch(asyncIterator, fileName) {
       if (batch.jsonpath && batch.jsonpath.length > 1) {
         const streamingPath = new _JSONPath(batch.jsonpath);
         streamingPath.setFieldAtPath(result, batches);
-      } else {
-        // The streamed object is a ROW JSON-batch
+      } else if (batch.jsonpath && batch.jsonpath.length === 1) {
+        // The streamed object is a ROW JSON-batch (jsonpath = '$')
+        // row objects
         result = batches;
       }
     } else {
@@ -132,17 +134,16 @@ export async function* readBatch(asyncIterator, fileName) {
   }
 }
 
-export async function readFileInBatches({file, fileCache = []}) {
-  const batchIterator = await parseInBatches(
-    file,
-    [JSONLoader, CSVLoader],
-    {
-      csv: CSV_LOADER_OPTIONS,
-      json: JSON_LOADER_OPTIONS,
-      metadata: true
-    },
-    file.name
-  );
+export async function readFileInBatches({file, fileCache = [], loaders = [], loadOptions = {}}) {
+  loaders = [JSONLoader, CSVLoader, ...loaders];
+  loadOptions = {
+    csv: CSV_LOADER_OPTIONS,
+    json: JSON_LOADER_OPTIONS,
+    metadata: true,
+    ...loadOptions
+  };
+
+  const batchIterator = await parseInBatches(file, loaders, loadOptions);
   const progressIterator = makeProgressIterator(batchIterator, {size: file.size});
 
   return readBatch(progressIterator, file.name);

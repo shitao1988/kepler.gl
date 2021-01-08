@@ -25,6 +25,7 @@ import MapboxGLMap from 'react-map-gl';
 import DeckGL from '@deck.gl/react';
 import {createSelector} from 'reselect';
 import WebMercatorViewport from 'viewport-mercator-project';
+import {errorNotification} from 'utils/notifications-utils';
 
 // components
 import MapPopoverFactory from 'components/map/map-popover';
@@ -38,12 +39,17 @@ import {generateMapboxLayers, updateMapboxLayers} from 'layers/mapbox-utils';
 import {OVERLAY_TYPE} from 'layers/base-layer';
 import {setLayerBlending} from 'utils/gl-utils';
 import {transformRequest} from 'utils/map-style-utils/mapbox-utils';
-import {getLayerHoverProp} from 'utils/layer-utils';
+import {getLayerHoverProp, renderDeckGlLayer} from 'utils/layer-utils';
 
 // default-settings
 import ThreeDBuildingLayer from 'deckgl-layers/3d-building-layer/3d-building-layer';
-import {FILTER_TYPES} from 'constants/default-settings';
+import {
+  FILTER_TYPES,
+  GEOCODER_LAYER_ID,
+  THROTTLE_NOTIFICATION_TIME
+} from 'constants/default-settings';
 
+/** @type {{[key: string]: React.CSSProperties}} */
 const MAP_STYLE = {
   container: {
     display: 'inline-block',
@@ -62,18 +68,30 @@ const TRANSITION_DURATION = 0;
 
 const Attribution = () => (
   <StyledAttrbution>
-    <a href="https://kepler.gl/policy/" target="_blank" rel="noopener noreferrer">
-      © kepler.gl |{' '}
-    </a>
-    <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener noreferrer">
-      © Mapbox |{' '}
-    </a>
-    <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
-      © OpenStreetMap |{' '}
-    </a>
-    <a href="https://www.mapbox.com/map-feedback/" target="_blank" rel="noopener noreferrer">
-      <strong>Improve this map</strong>
-    </a>
+    <div className="attrition-logo">
+      Basemap by:
+      <a
+        className="mapboxgl-ctrl-logo"
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.mapbox.com/"
+        aria-label="Mapbox logo"
+      />
+    </div>
+    <div className="attrition-link">
+      <a href="https://kepler.gl/policy/" target="_blank" rel="noopener noreferrer">
+        © kepler.gl |{' '}
+      </a>
+      <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener noreferrer">
+        © Mapbox |{' '}
+      </a>
+      <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
+        © OpenStreetMap |{' '}
+      </a>
+      <a href="https://www.mapbox.com/map-feedback/" target="_blank" rel="noopener noreferrer">
+        <strong>Improve this map</strong>
+      </a>
+    </div>
   </StyledAttrbution>
 );
 
@@ -92,7 +110,6 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
       filters: PropTypes.arrayOf(PropTypes.any).isRequired,
       mapState: PropTypes.object.isRequired,
       mapControls: PropTypes.object.isRequired,
-      uiState: PropTypes.object.isRequired,
       mapStyle: PropTypes.object.isRequired,
       mousePos: PropTypes.object.isRequired,
       mapboxApiAccessToken: PropTypes.string.isRequired,
@@ -152,7 +169,9 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
           (accu, layer, idx) => ({
             ...accu,
             [layer.id]:
-              layer.shouldRenderLayer(layerData[idx]) && this._isVisibleMapLayer(layer, mapLayers)
+              layer.id !== GEOCODER_LAYER_ID &&
+              layer.shouldRenderLayer(layerData[idx]) &&
+              this._isVisibleMapLayer(layer, mapLayers)
           }),
           {}
         )
@@ -227,8 +246,36 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
       }
     };
 
+    _onDeckInitialized(gl) {
+      if (this.props.onDeckInitialized) {
+        this.props.onDeckInitialized(this._deck, gl);
+      }
+    }
+
     _onBeforeRender = ({gl}) => {
       setLayerBlending(gl, this.props.layerBlending);
+    };
+
+    _onDeckError = (error, layer) => {
+      const errorMessage = `An error in deck.gl: ${error.message} in ${layer.id}`;
+      const notificationId = `${layer.id}-${error.message}`;
+
+      // Throttle error notifications, as React doesn't like too many state changes from here.
+      this._deckGLErrorsElapsed = this._deckGLErrorsElapsed || {};
+      const lastShown = this._deckGLErrorsElapsed[notificationId];
+      if (!lastShown || lastShown < Date.now() - THROTTLE_NOTIFICATION_TIME) {
+        this._deckGLErrorsElapsed[notificationId] = Date.now();
+
+        // Create new error notification or update existing one with same id.
+        // Update is required to preserve the order of notifications as they probably are going to "jump" based on order of errors.
+        const {uiStateActions} = this.props;
+        uiStateActions.addNotification(
+          errorNotification({
+            message: errorMessage,
+            id: notificationId
+          })
+        );
+      }
     };
 
     /* component render functions */
@@ -282,33 +329,36 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
           layersToRender,
           datasets
         });
-        if (layerHoverProp) {
+        if (layerHoverProp && layerPinnedProp) {
           layerHoverProp.primaryData = layerPinnedProp.data;
           layerHoverProp.compareType = interactionConfig.tooltip.config.compareType;
         }
       }
+      const commonProp = {
+        onClose: this._onCloseMapPopover,
+        mapW: mapState.width,
+        mapH: mapState.height,
+        zoom: mapState.zoom
+      };
+
       return (
         <div>
           {hasTooltip && (
             <MapPopover
               {...pinnedPosition}
+              {...commonProp}
               layerHoverProp={layerPinnedProp}
               coordinate={interactionConfig.coordinate.enabled && (pinned || {}).coordinate}
               frozen={Boolean(hasTooltip)}
-              onClose={this._onCloseMapPopover}
-              mapW={mapState.width}
-              mapH={mapState.height}
               isBase={compareMode}
             />
           )}
           {hasComparisonTooltip && (
             <MapPopover
               {...position}
+              {...commonProp}
               layerHoverProp={layerHoverProp}
               coordinate={interactionConfig.coordinate.enabled && coordinate}
-              onClose={this._onCloseMapPopover}
-              mapW={mapState.width}
-              mapH={mapState.height}
             />
           )}
         </div>
@@ -321,41 +371,6 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
       const screenCoord = !viewport || !lngLat ? null : viewport.project(lngLat);
       return screenCoord && {x: screenCoord[0], y: screenCoord[1]};
     }
-
-    _renderLayer = (overlays, idx) => {
-      const {
-        datasets,
-        layers,
-        layerData,
-        hoverInfo,
-        clicked,
-        mapState,
-        interactionConfig,
-        animationConfig
-      } = this.props;
-      const layer = layers[idx];
-      const data = layerData[idx];
-      const {gpuFilter} = datasets[layer.config.dataId] || {};
-
-      const objectHovered = clicked || hoverInfo;
-      const layerCallbacks = {
-        onSetLayerDomain: val => this._onLayerSetDomain(idx, val)
-      };
-
-      // Layer is Layer class
-      const layerOverlay = layer.renderLayer({
-        data,
-        gpuFilter,
-        idx,
-        interactionConfig,
-        layerCallbacks,
-        mapState,
-        animationConfig,
-        objectHovered
-      });
-
-      return overlays.concat(layerOverlay || []);
-    };
 
     _renderDeckOverlay(layersToRender) {
       const {
@@ -379,7 +394,13 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
           .filter(
             idx => layers[idx].overlayType === OVERLAY_TYPE.deckgl && layersToRender[layers[idx].id]
           )
-          .reduce(this._renderLayer, []);
+          .reduce((overlays, idx) => {
+            const layerCallbacks = {
+              onSetLayerDomain: val => this._onLayerSetDomain(idx, val)
+            };
+            const layerOverlay = renderDeckGlLayer(this.props, layerCallbacks, idx);
+            return overlays.concat(layerOverlay || []);
+          }, []);
       }
 
       if (mapStyle.visibleLayerGroups['3d building']) {
@@ -405,11 +426,13 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
           onBeforeRender={this._onBeforeRender}
           onHover={visStateActions.onLayerHover}
           onClick={visStateActions.onLayerClick}
+          onError={this._onDeckError}
           ref={comp => {
             if (comp && comp.deck && !this._deck) {
               this._deck = comp.deck;
             }
           }}
+          onWebGLInitialized={gl => this._onDeckInitialized(gl)}
         />
       );
     }
@@ -456,9 +479,10 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
         mapboxApiAccessToken,
         mapboxApiUrl,
         mapControls,
-        uiState,
+        locale,
         uiStateActions,
         visStateActions,
+        interactionConfig,
         editor,
         index
       } = this.props;
@@ -479,7 +503,8 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
         transformRequest
       };
 
-      const isEdit = uiState.mapControls.mapDraw.active;
+      const isEdit = mapControls.mapDraw.active;
+      const hasGeocoderLayer = layers.find(l => l.id === GEOCODER_LAYER_ID);
 
       return (
         <StyledMapContainer style={MAP_STYLE.container}>
@@ -494,9 +519,9 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
             mapControls={mapControls}
             readOnly={this.props.readOnly}
             scale={mapState.scale || 1}
-            top={0}
+            top={interactionConfig.geocoder && interactionConfig.geocoder.enabled ? 52 : 0}
             editor={editor}
-            locale={uiState.locale}
+            locale={locale}
             onTogglePerspective={mapStateActions.togglePerspective}
             onToggleSplitMap={mapStateActions.toggleSplitMap}
             onMapToggleLayer={this._handleMapToggleLayer}
@@ -515,7 +540,7 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
             onMouseMove={this.props.visStateActions.onMouseMove}
           >
             {this._renderDeckOverlay(layersToRender)}
-            {this._renderMapboxOverlays(layersToRender)}
+            {this._renderMapboxOverlays()}
             <Editor
               index={index}
               datasets={datasets}
@@ -535,11 +560,13 @@ export default function MapContainerFactory(MapPopover, MapControl, Editor) {
               }}
             />
           </MapComponent>
-          {mapStyle.topMapStyle && (
+          {mapStyle.topMapStyle || hasGeocoderLayer ? (
             <div style={MAP_STYLE.top}>
-              <MapComponent {...mapProps} key="top" mapStyle={mapStyle.topMapStyle} />
+              <MapComponent {...mapProps} key="top" mapStyle={mapStyle.topMapStyle}>
+                {this._renderDeckOverlay({[GEOCODER_LAYER_ID]: true})}
+              </MapComponent>
             </div>
-          )}
+          ) : null}
           {this._renderMapPopover(layersToRender)}
           <Attribution />
         </StyledMapContainer>

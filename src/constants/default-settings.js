@@ -43,6 +43,7 @@ import {
 } from 'components/common/icons';
 import {getHTMLMapModeTileUrl} from 'utils/utils';
 import {TOOLTIP_FORMAT_TYPES} from './tooltip';
+import {LAYER_TYPES} from 'layers/types';
 
 export const ACTION_PREFIX = '@@kepler.gl/';
 export const CLOUDFRONT = 'https://d1a3f4spazzrp4.cloudfront.net/kepler.gl';
@@ -137,16 +138,16 @@ export const DIMENSIONS = {
     headerHeight: 96
   },
   mapControl: {
-    width: 204,
+    width: 184,
     padding: 12
   }
 };
 
 /**
  * Theme name that can be passed to `KeplerGl` `prop.theme`.
- * Available themes are `Theme.light` and `Theme.dark`. Default theme is `Theme.dark`
+ * Available themes are `THEME.light` and `THEME.dark`. Default theme is `THEME.dark`
  * @constant
- * @type {string}
+ * @type {object}
  * @public
  * @example
  * ```js
@@ -252,6 +253,7 @@ export const TRIP_ARC_FIELDS = {
 export const FILTER_TYPES = keyMirror({
   range: null,
   select: null,
+  input: null,
   timeRange: null,
   multiSelect: null,
   polygon: null
@@ -344,12 +346,6 @@ const BLUE3 = '0, 172, 237';
 const GREEN = '106, 160, 56';
 const RED = '237, 88, 106';
 
-export const HIGHLIGH_COLOR_3D = [255, 255, 255, 60];
-
-export const FIELD_COLORS = {
-  default: RED
-};
-
 export const FILED_TYPE_DISPLAY = {
   [ALL_FIELD_TYPES.boolean]: {
     label: 'bool',
@@ -386,6 +382,10 @@ export const FILED_TYPE_DISPLAY = {
   }
 };
 
+export const FIELD_COLORS = {
+  default: RED
+};
+export const HIGHLIGH_COLOR_3D = [255, 255, 255, 60];
 export const CHANNEL_SCALES = keyMirror({
   color: null,
   radius: null,
@@ -501,7 +501,11 @@ export const FIELD_OPTS = {
     },
     format: {
       legend: d => d,
-      tooltip: [TOOLTIP_FORMAT_TYPES.DECIMAL, TOOLTIP_FORMAT_TYPES.PERCENTAGE]
+      tooltip: [
+        TOOLTIP_FORMAT_TYPES.NONE,
+        TOOLTIP_FORMAT_TYPES.DECIMAL,
+        TOOLTIP_FORMAT_TYPES.PERCENTAGE
+      ]
     }
   },
   timestamp: {
@@ -512,7 +516,11 @@ export const FIELD_OPTS = {
     },
     format: {
       legend: d => d,
-      tooltip: [TOOLTIP_FORMAT_TYPES.DATE, TOOLTIP_FORMAT_TYPES.DATE_TIME]
+      tooltip: [
+        TOOLTIP_FORMAT_TYPES.NONE,
+        TOOLTIP_FORMAT_TYPES.DATE,
+        TOOLTIP_FORMAT_TYPES.DATE_TIME
+      ]
     }
   },
   integer: {
@@ -523,7 +531,11 @@ export const FIELD_OPTS = {
     },
     format: {
       legend: d => d,
-      tooltip: [TOOLTIP_FORMAT_TYPES.DECIMAL, TOOLTIP_FORMAT_TYPES.PERCENTAGE]
+      tooltip: [
+        TOOLTIP_FORMAT_TYPES.NONE,
+        TOOLTIP_FORMAT_TYPES.DECIMAL,
+        TOOLTIP_FORMAT_TYPES.PERCENTAGE
+      ]
     }
   },
   boolean: {
@@ -534,7 +546,7 @@ export const FIELD_OPTS = {
     },
     format: {
       legend: d => d,
-      tooltip: []
+      tooltip: [TOOLTIP_FORMAT_TYPES.NONE, TOOLTIP_FORMAT_TYPES.BOOLEAN]
     }
   },
   date: {
@@ -544,7 +556,7 @@ export const FIELD_OPTS = {
     },
     format: {
       legend: d => d,
-      tooltip: [TOOLTIP_FORMAT_TYPES.DATE]
+      tooltip: [TOOLTIP_FORMAT_TYPES.NONE, TOOLTIP_FORMAT_TYPES.DATE]
     }
   },
   geojson: {
@@ -567,19 +579,6 @@ export const CHANNEL_SCALE_SUPPORTED_FIELDS = Object.keys(CHANNEL_SCALES).reduce
   }),
   {}
 );
-
-// TODO: shan delete use of LAYER_TYPES
-export const LAYER_TYPES = keyMirror({
-  point: null,
-  arc: null,
-  cluster: null,
-  line: null,
-  grid: null,
-  geojson: null,
-  icon: null,
-  heatmap: null,
-  hexagon: null
-});
 
 export const DEFAULT_LAYER_COLOR = {
   tripArc: '#9226C6',
@@ -757,16 +756,51 @@ export const DEFAULT_NOTIFICATION_TOPICS = keyMirror({
   file: null
 });
 
+// Minimum time between identical notifications about deck.gl errors
+export const THROTTLE_NOTIFICATION_TIME = 2500;
+
 // Animation
 export const BASE_SPEED = 600;
 export const FPS = 60;
-export const ANIMATION_TYPE = keyMirror({
-  interval: null,
-  continuous: null
+
+/**
+ * 4 Animation Window Types
+ * 1. free
+ *  |->  |->
+ * Current time is a fixed range, animation controller calls next animation frames continuously to animation a moving window
+ * The increment id based on domain / BASE_SPEED * SPEED
+ *
+ * 2. incremental
+ * |    |->
+ * Same as free, current time is a growing range, only the max value of range increment during animation.
+ * The increment is also based on domain / BASE_SPEED * SPEED
+ *
+ * 3. point
+ * o -> o
+ * Current time is a point, animation controller calls next animation frame continuously to animation a moving point
+ * The increment is based on domain / BASE_SPEED * SPEED
+ *
+ * 4. interval
+ * o ~> o
+ * Current time is a point. An array of sorted time steps need to be provided.
+ * animation controller calls next animation at a interval when the point jumps to the next step
+ */
+export const ANIMATION_WINDOW = keyMirror({
+  free: null,
+  incremental: null,
+  point: null,
+  interval: null
 });
 export const DEFAULT_TIME_FORMAT = 'MM/DD/YY HH:mm:ssa';
 export const SPEED_CONTROL_RANGE = [0, 10];
 export const SPEED_CONTROL_STEP = 0.001;
+
+// Geocoder
+export const GEOCODER_DATASET_NAME = 'geocoder_dataset';
+export const GEOCODER_LAYER_ID = 'geocoder_layer';
+export const GEOCODER_GEO_OFFSET = 0.05;
+export const GEOCODER_ICON_COLOR = [255, 0, 0];
+export const GEOCODER_ICON_SIZE = 80;
 
 // We could use directly react-map-gl-draw EditorMode but this would
 // create a direct dependency with react-map-gl-draw
@@ -782,7 +816,8 @@ export const EDITOR_AVAILABLE_LAYERS = [
   LAYER_TYPES.point,
   LAYER_TYPES.hexagon,
   LAYER_TYPES.arc,
-  LAYER_TYPES.line
+  LAYER_TYPES.line,
+  LAYER_TYPES.hexagonId
 ];
 // GPU Filtering
 /**

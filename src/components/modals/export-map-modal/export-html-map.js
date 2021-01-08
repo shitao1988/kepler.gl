@@ -19,15 +19,13 @@
 // THE SOFTWARE.
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import {StyledExportSection, StyledType} from 'components/common/styled-components';
+import {StyledExportSection, StyledType, CheckMark} from 'components/common/styled-components';
 import {StyledExportMapSection, StyledWarning, ExportMapLink} from './components';
 import {EXPORT_HTML_MAP_MODE_OPTIONS} from 'constants/default-settings';
 import {EXPORT_HTML_MAP_DOC, EXPORT_HTML_MAP_MODES_DOC} from 'constants/user-guides';
 import styled from 'styled-components';
-import {FormattedMessage, injectIntl} from 'react-intl';
-
-const NO_OP = () => {};
+import {injectIntl} from 'react-intl';
+import {FormattedMessage} from 'localization';
 
 const ExportMapStyledExportSection = styled(StyledExportSection)`
   .disclaimer {
@@ -62,15 +60,11 @@ const BigStyledTile = styled(StyledType)`
   }
 `;
 
-const exportHtmlPropTypes = {
-  options: PropTypes.object,
-  onEditUserMapboxAccessToken: PropTypes.func.isRequired
-};
-
-const ExportHtmlMap = React.memo(
-  ({
-    onChangeExportMapHTMLMode = NO_OP,
-    onEditUserMapboxAccessToken = NO_OP,
+function ExportHtmlMapFactory() {
+  /** @type {typeof import('./export-html-map').ExportHtmlMap} */
+  const ExportHtmlMap = ({
+    onChangeExportMapHTMLMode = mode => {},
+    onEditUserMapboxAccessToken = token => {},
     options = {},
     intl
   }) => (
@@ -135,18 +129,17 @@ const ExportHtmlMap = React.memo(
                   values={{mode: intl.formatMessage({id: mode.label})}}
                 />
               </p>
+              {options.mode === mode.id && <CheckMark />}
             </BigStyledTile>
           ))}
         </div>
       </ExportMapStyledExportSection>
     </div>
-  )
-);
+  );
 
-ExportHtmlMap.propTypes = exportHtmlPropTypes;
+  ExportHtmlMap.displayName = 'ExportHtmlMap';
 
-ExportHtmlMap.displayName = 'ExportHtmlMap';
-
-const ExportHtmlMapFactory = () => injectIntl(ExportHtmlMap);
+  return injectIntl(ExportHtmlMap);
+}
 
 export default ExportHtmlMapFactory;

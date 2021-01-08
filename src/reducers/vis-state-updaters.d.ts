@@ -3,6 +3,10 @@ import {AddDataToMapOptions, ReceiveMapConfigPayload} from '../actions/actions';
 import {ParsedConfig} from '../schemas';
 import * as VisStateActions from 'actions/vis-state-actions';
 import ActionTypes from 'constants/action-types';
+import {LoaderObject} from '@loaders.gl/loader-utils';
+import {VisStateMergers} from './vis-state-merger';
+import KeplerGLSchema from 'schemas';
+import {LayerClassesType, Layer} from 'layers';
 
 export type HistogramBin = {
   x0: number | undefined;
@@ -104,6 +108,10 @@ export type TimeRangeFilter = FilterBase &
     fieldType: 'timestamp';
     fixedDomain: true;
     value: [number, number];
+    bins?: Object;
+    plotType: {
+      [key: string]: any;
+    };
   };
 
 export type PolygonFilter = FilterBase & {
@@ -136,6 +144,7 @@ export type Field = {
   tableFieldIndex: number;
   type: string;
   filterProps?: any;
+  metadata?: any;
 };
 
 export type GpuFilter = {
@@ -220,6 +229,7 @@ export type AnimationConfig = {
   domain: number[] | null;
   currentTime: number | null;
   speed: number;
+  isAnimating?: boolean;
 };
 
 export type BaseInteraction = {
@@ -233,7 +243,7 @@ export type TooltipField = {
   format: string | null;
 };
 export type CompareType = string | null;
-export type Tooltip = BaseInteraction & {
+export type TooltipInfo = BaseInteraction & {
   config: {
     fieldsToShow: {
       [key: string]: TooltipField[];
@@ -254,7 +264,7 @@ export type Coordinate = BaseInteraction & {
   position: number[] | null;
 };
 export type InteractionConfig = {
-  tooltip: Tooltip;
+  tooltip: TooltipInfo;
   geocoder: Geocoder;
   brush: Brush;
   coordinate: Coordinate;
@@ -263,13 +273,11 @@ export type MapInfo = {
   title: string;
   description: string;
 };
-export type FileLoading =
-  | {
-      filesToLoad: any[];
-      onFinish: (payload: any) => any;
-      fileCache: any[];
-    }
-  | false;
+export type FileLoading = {
+  filesToLoad: FileList;
+  onFinish: (payload: any) => any;
+  fileCache: any[];
+};
 export type FileLoadingProgress = {
   [key: string]: {
     percent: number;
@@ -295,16 +303,19 @@ export type VisState = {
   hoverInfo: any;
   clicked: any;
   mousePos: any;
-  layerClasses: {
-    [key: string]: any;
-  };
+  layerClasses: LayerClassesType;
   animationConfig: AnimationConfig;
   editor: Editor;
   splitMaps: SplitMap[];
-  splitMapsToBeMerged?: SplitMap[];
+  splitMapsToBeMerged: SplitMap[];
+  fileLoading: FileLoading | false;
+  fileLoadingProgress: FileLoadingProgress;
+  loaders: LoaderObject[];
+  loadOptions: object;
   initialState?: Partial<VisState>;
-  fileLoading?: FileLoading;
-  fileLoadingProgress?: FileLoadingProgress;
+  mergers: VisStateMergers;
+  schema: KeplerGLSchema;
+  preserveLayerOrder?: number[];
 };
 
 export function addDefaultLayers(
@@ -330,6 +341,15 @@ export function layerTextLabelChangeUpdater(
   state: VisState,
   action: VisStateActions.LayerTextLabelChangeUpdaterAction
 ): VisState;
+export function layerDataIdChangeUpdater(
+  state: VisState,
+  action: {
+    oldLayer: Layer;
+    newConfig: {
+      dataId: string;
+    };
+  }
+): VisState;
 export function layerTypeChangeUpdater(
   state: VisState,
   action: VisStateActions.LayerTypeChangeUpdaterAction
@@ -350,6 +370,10 @@ export function updateLayerBlendingUpdater(
   state: VisState,
   action: VisStateActions.UpdateLayerBlendingUpdaterAction
 ): VisState;
+export function toggleLayerAnimationUpdater(
+  state: VisState,
+  action: VisStateActions.ToggleLayerAnimationUpdaterAction
+): VisState;
 export function interactionConfigChangeUpdater(
   state: VisState,
   action: VisStateActions.InteractionConfigChangeUpdaterAction
@@ -357,6 +381,14 @@ export function interactionConfigChangeUpdater(
 export function setFilterUpdater(
   state: VisState,
   action: VisStateActions.SetFilterUpdaterAction
+): VisState;
+export function setFilterAnimationTimeUpdater(
+  state: VisState,
+  action: VisStateActions.setFilterAnimationTimeUpdaterAction
+): VisState;
+export function setFilterAnimationWindowUpdater(
+  state: VisState,
+  action: VisStateActions.setFilterAnimationWindowUpdaterAction
 ): VisState;
 export function addFilterUpdater(
   state: VisState,
@@ -402,6 +434,10 @@ export function updateVisDataUpdater(
   state: VisState,
   action: VisStateActions.UpdateVisDataUpdaterAction
 ): VisState;
+export function renameDatasetUpdater(
+  state: VisState,
+  action: VisStateActions.RenameDatasetUpdaterAction
+): VisState;
 export function toggleFilterAnimationUpdater(
   state: VisState,
   action: VisStateActions.ToggleFilterAnimationUpdaterAction
@@ -410,9 +446,9 @@ export function updateFilterAnimationSpeedUpdater(
   state: VisState,
   action: VisStateActions.UpdateFilterAnimationSpeedUpdaterAction
 ): VisState;
-export function updateAnimationTimeUpdater(
+export function setLayerAnimationTimeUpdater(
   state: VisState,
-  action: VisStateActions.UpdateAnimationTimeUpdaterAction
+  action: VisStateActions.setLayerAnimationTimeUpdaterAction
 ): VisState;
 export function updateLayerAnimationSpeedUpdater(
   state: VisState,
@@ -462,10 +498,7 @@ export function loadFilesUpdater(
   state: VisState,
   action: VisStateActions.LoadFilesUpdaterAction
 ): VisState;
-export function loadNextFileUpdater(
-  state: VisState,
-  action: VisStateActions.LoadNextFileUpdaterAction
-): VisState;
+export function loadNextFileUpdater(state: VisState): VisState;
 export function loadFilesSuccessUpdater(
   state: VisState,
   action: VisStateActions.loadFilesSuccessUpdaterAction
@@ -476,15 +509,15 @@ export function loadFilesErrUpdater(
 ): VisState;
 export function loadFileStepSuccessUpdater(
   state: VisState,
-  action: VisStateActions.loadFileStepSuccessAction
+  action: VisStateActions.LoadFileStepSuccessAction
 ): VisState;
 export function nextFileBatchUpdater(
   state: VisState,
-  action: VisStateActions.nextFileBatchUpdaterAction
+  action: VisStateActions.NextFileBatchUpdaterAction
 ): VisState;
 export function processFileContentUpdater(
   state: VisState,
-  action: VisStateActions.processFileContentUpdaterAction
+  action: VisStateActions.ProcessFileContentUpdaterAction
 ): VisState;
 export function setFeaturesUpdater(
   state: VisState,
@@ -523,7 +556,7 @@ export function receiveMapConfigUpdater(
     type?: ActionTypes.RECEIVE_MAP_CONFIG;
     payload: ReceiveMapConfigPayload;
   }
-);
+): VisState;
 export const INITIAL_VIS_STATE: VisState;
 export const DEFAULT_ANIMATION_CONFIG: AnimationConfig;
 export const DEFAULT_EDITOR: Editor;
