@@ -27,8 +27,8 @@ import {Provider} from 'react-redux';
 
 import coreReducer from 'reducers/core';
 import {keplerGlInit} from 'actions/actions';
-import {appInjector} from 'components/container';
 import {
+  appInjector,
   KeplerGlFactory,
   SidePanelFactory,
   MapContainerFactory,
@@ -143,12 +143,15 @@ test('Components -> KeplerGl -> Mount -> Plot', t => {
         ...initialCoreState,
         uiState: {
           ...initialCoreState.uiState,
-          currentModal: EXPORT_IMAGE_ID
+          currentModal: EXPORT_IMAGE_ID,
+          exportImage: {
+            ...initialCoreState.uiState.exportImage,
+            exporting: true
+          }
         }
       }
     }
   };
-
   const store = mockStore(initialStatePlots);
   let wrapper;
 

@@ -20,13 +20,13 @@
 
 import React, {PureComponent} from 'react';
 import styled from 'styled-components';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage} from 'localization';
 
 import {CenterFlexbox, Tooltip} from 'components/common/styled-components';
 import {ArrowRight, Table, Trash} from 'components/common/icons';
 import DatasetTagFactory from 'components/side-panel/common/dataset-tag';
 
-function nop() {}
+function nop(_) {}
 
 const StyledDatasetTitle = styled.div`
   color: ${props => props.theme.textColor};

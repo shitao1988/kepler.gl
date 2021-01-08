@@ -29,7 +29,6 @@ import {
 import {receiveMapConfigUpdater as stateMapConfigUpdater} from './map-state-updaters';
 import {receiveMapConfigUpdater as styleMapConfigUpdater} from './map-style-updaters';
 import {findMapBounds} from 'utils/data-utils';
-import KeplerGlSchema from 'schemas';
 import {isPlainObject} from 'utils/utils';
 import {filesToDataPayload} from 'processors/file-handler';
 import {payload_, apply_, with_, if_, compose_, merge_, pick_} from './composer-helpers';
@@ -88,7 +87,8 @@ export const isValidConfig = config =>
 
 export const defaultAddDataToMapOptions = {
   centerMap: true,
-  keepExistingConfig: false
+  keepExistingConfig: false,
+  autoCreateLayers: true
 };
 
 /**
@@ -129,10 +129,16 @@ export const addDataToMapUpdater = (state, {payload}) => {
 
   if (isValidConfig(config)) {
     // if passed in saved config
-    parsedConfig = KeplerGlSchema.parseSavedConfig(config);
+    parsedConfig = state.visState.schema.parseSavedConfig(config);
   }
   const oldLayers = state.visState.layers;
   const filterNewlyAddedLayers = layers => layers.filter(nl => !oldLayers.find(ol => ol === nl));
+
+  // Returns undefined if not found, to make typescript happy
+  const findMapBoundsIfCentered = layers => {
+    const bounds = options.centerMap && findMapBounds(layers);
+    return bounds ? bounds : undefined;
+  };
 
   return compose_([
     pick_('visState')(
@@ -152,9 +158,7 @@ export const addDataToMapUpdater = (state, {payload}) => {
           payload_({
             config: parsedConfig,
             options,
-            bounds: options.centerMap
-              ? findMapBounds(filterNewlyAddedLayers(visState.layers))
-              : null
+            bounds: findMapBoundsIfCentered(filterNewlyAddedLayers(visState.layers))
           })
         )
       )
@@ -162,7 +166,7 @@ export const addDataToMapUpdater = (state, {payload}) => {
 
     pick_('mapStyle')(apply_(styleMapConfigUpdater, payload_({config: parsedConfig, options}))),
 
-    pick_('uiState')(apply_(uiStateLoadFilesSuccessUpdater)),
+    pick_('uiState')(apply_(uiStateLoadFilesSuccessUpdater, payload_(null))),
 
     pick_('uiState')(apply_(toggleModalUpdater, payload_(null))),
 

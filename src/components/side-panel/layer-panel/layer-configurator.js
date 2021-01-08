@@ -22,31 +22,35 @@
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage} from 'localization';
 
 import {Button, Input, PanelLabel, SidePanelSection} from 'components/common/styled-components';
 import ItemSelector from 'components/common/item-selector/item-selector';
 
-import VisConfigByFieldSelector from './vis-config-by-field-selector';
-import LayerColumnConfig from './layer-column-config';
-import LayerTypeSelector from './layer-type-selector';
+import VisConfigByFieldSelectorFactory from './vis-config-by-field-selector';
+import LayerColumnConfigFactory from './layer-column-config';
+import LayerTypeSelectorFactory from './layer-type-selector';
 import DimensionScaleSelector from './dimension-scale-selector';
 import ColorSelector from './color-selector';
 import SourceDataSelectorFactory from 'components/side-panel/common/source-data-selector';
-import VisConfigSwitch from './vis-config-switch';
+import VisConfigSwitchFactory from './vis-config-switch';
 import VisConfigSliderFactory from './vis-config-slider';
-import LayerConfigGroup, {ConfigGroupCollapsibleContent} from './layer-config-group';
+import LayerConfigGroupFactory, {ConfigGroupCollapsibleContent} from './layer-config-group';
 import TextLabelPanelFactory from './text-label-panel';
 
 import {capitalizeFirstLetter} from 'utils/utils';
 
-import {CHANNEL_SCALE_SUPPORTED_FIELDS, LAYER_TYPES} from 'constants/default-settings';
+import {CHANNEL_SCALE_SUPPORTED_FIELDS} from 'constants/default-settings';
+import {LAYER_TYPES} from 'layers/types';
 
 const StyledLayerConfigurator = styled.div.attrs({
   className: 'layer-panel__config'
 })`
   position: relative;
-  margin-top: 12px;
+  margin-top: ${props => props.theme.layerConfiguratorMargin};
+  padding: ${props => props.theme.layerConfiguratorPadding};
+  border-left: ${props => props.theme.layerConfiguratorBorder} dashed
+    ${props => props.theme.layerConfiguratorBorderColor};
 `;
 
 const StyledLayerVisualConfigurator = styled.div.attrs({
@@ -56,7 +60,10 @@ const StyledLayerVisualConfigurator = styled.div.attrs({
 `;
 
 export const getLayerFields = (datasets, layer) =>
-  datasets[layer.config.dataId] ? datasets[layer.config.dataId].fields : [];
+  layer.config && datasets[layer.config.dataId] ? datasets[layer.config.dataId].fields : [];
+
+export const getLayerDataset = (datasets, layer) =>
+  layer.config && datasets[layer.config.dataId] ? datasets[layer.config.dataId] : null;
 
 export const getLayerConfiguratorProps = props => ({
   layer: props.layer,
@@ -81,13 +88,23 @@ export const getLayerChannelConfigProps = props => ({
 LayerConfiguratorFactory.deps = [
   SourceDataSelectorFactory,
   VisConfigSliderFactory,
-  TextLabelPanelFactory
+  TextLabelPanelFactory,
+  LayerConfigGroupFactory,
+  ChannelByValueSelectorFactory,
+  LayerColumnConfigFactory,
+  LayerTypeSelectorFactory,
+  VisConfigSwitchFactory
 ];
 
 export default function LayerConfiguratorFactory(
   SourceDataSelector,
   VisConfigSlider,
-  TextLabelPanel
+  TextLabelPanel,
+  LayerConfigGroup,
+  ChannelByValueSelector,
+  LayerColumnConfig,
+  LayerTypeSelector,
+  VisConfigSwitch
 ) {
   class LayerConfigurator extends Component {
     static propTypes = {
@@ -486,7 +503,7 @@ export default function LayerConfiguratorFactory(
             )}
             <ConfigGroupCollapsibleContent>
               <ChannelByValueSelector
-                channel={layer.visualChannels.color}
+                channel={layer.visualChannels.sourceColor}
                 {...layerChannelConfigProps}
               />
               <VisConfigSlider {...layer.visConfigSettings.opacity} {...visConfiguratorProps} />
@@ -886,13 +903,15 @@ export default function LayerConfiguratorFactory(
 
     render() {
       const {layer, datasets, updateLayerConfig, layerTypeOptions, updateLayerType} = this.props;
-      const {fields = [], fieldPairs} = layer.config.dataId ? datasets[layer.config.dataId] : {};
+      const {fields = [], fieldPairs = undefined} = layer.config.dataId
+        ? datasets[layer.config.dataId]
+        : {};
       const {config} = layer;
 
       const visConfiguratorProps = getVisConfiguratorProps(this.props);
       const layerConfiguratorProps = getLayerConfiguratorProps(this.props);
       const layerChannelConfigProps = getLayerChannelConfigProps(this.props);
-
+      const dataset = getLayerDataset(datasets, layer);
       const renderTemplate = layer.type && `_render${capitalizeFirstLetter(layer.type)}LayerConfig`;
 
       return (
@@ -902,36 +921,35 @@ export default function LayerConfiguratorFactory(
           ) : null}
           <LayerConfigGroup label={'layer.basic'} collapsible expanded={!layer.hasAllColumns()}>
             <LayerTypeSelector
+              datasets={datasets}
               layer={layer}
               layerTypeOptions={layerTypeOptions}
               onSelect={updateLayerType}
             />
-            <ConfigGroupCollapsibleContent>
-              {Object.keys(datasets).length > 1 && (
-                <SourceDataSelector
-                  datasets={datasets}
-                  id={layer.id}
-                  disabled={layer.type && config.columns}
-                  dataId={config.dataId}
-                  onSelect={value => updateLayerConfig({dataId: value})}
-                />
-              )}
-              <LayerColumnConfig
-                columnPairs={layer.columnPairs}
-                columns={layer.config.columns}
-                assignColumnPairs={layer.assignColumnPairs.bind(layer)}
-                assignColumn={layer.assignColumn.bind(layer)}
-                columnLabels={layer.columnLabels}
-                fields={fields}
-                fieldPairs={fieldPairs}
-                updateLayerConfig={updateLayerConfig}
-                updateLayerType={this.props.updateLayerType}
+            {Object.keys(datasets).length > 1 && (
+              <SourceDataSelector
+                datasets={datasets}
+                id={layer.id}
+                dataId={config.dataId}
+                onSelect={value => updateLayerConfig({dataId: value})}
               />
-            </ConfigGroupCollapsibleContent>
+            )}
+            <LayerColumnConfig
+              columnPairs={layer.columnPairs}
+              columns={layer.config.columns}
+              assignColumnPairs={layer.assignColumnPairs.bind(layer)}
+              assignColumn={layer.assignColumn.bind(layer)}
+              columnLabels={layer.columnLabels}
+              fields={fields}
+              fieldPairs={fieldPairs}
+              updateLayerConfig={updateLayerConfig}
+              updateLayerType={this.props.updateLayerType}
+            />
           </LayerConfigGroup>
           {this[renderTemplate] &&
             this[renderTemplate]({
               layer,
+              dataset,
               visConfiguratorProps,
               layerChannelConfigProps,
               layerConfiguratorProps
@@ -1026,45 +1044,50 @@ export const LayerColorRangeSelector = ({layer, onChange, property = 'colorRange
   </SidePanelSection>
 );
 
-export const ChannelByValueSelector = ({layer, channel, onChange, fields, description}) => {
-  const {
-    channelScaleType,
-    domain,
-    field,
-    key,
-    property,
-    range,
-    scale,
-    defaultMeasure,
-    supportedFieldTypes
-  } = channel;
-  const channelSupportedFieldTypes =
-    supportedFieldTypes || CHANNEL_SCALE_SUPPORTED_FIELDS[channelScaleType];
-  const supportedFields = fields.filter(({type}) => channelSupportedFieldTypes.includes(type));
-  const scaleOptions = layer.getScaleOptions(channel.key);
-  const showScale = !layer.isAggregated && layer.config[scale] && scaleOptions.length > 1;
-  const defaultDescription = 'layerConfiguration.defaultDescription';
+ChannelByValueSelectorFactory.deps = [VisConfigByFieldSelectorFactory];
+export function ChannelByValueSelectorFactory(VisConfigByFieldSelector) {
+  const ChannelByValueSelector = ({layer, channel, onChange, fields, description}) => {
+    const {
+      channelScaleType,
+      domain,
+      field,
+      key,
+      property,
+      range,
+      scale,
+      defaultMeasure,
+      supportedFieldTypes
+    } = channel;
+    const channelSupportedFieldTypes =
+      supportedFieldTypes || CHANNEL_SCALE_SUPPORTED_FIELDS[channelScaleType];
+    const supportedFields = fields.filter(({type}) => channelSupportedFieldTypes.includes(type));
+    const scaleOptions = layer.getScaleOptions(channel.key);
+    const showScale = !layer.isAggregated && layer.config[scale] && scaleOptions.length > 1;
+    const defaultDescription = 'layerConfiguration.defaultDescription';
 
-  return (
-    <VisConfigByFieldSelector
-      channel={channel.key}
-      description={description || defaultDescription}
-      domain={layer.config[domain]}
-      fields={supportedFields}
-      id={layer.id}
-      key={`${key}-channel-selector`}
-      property={property}
-      placeholder={defaultMeasure || 'placeholder.selectField'}
-      range={layer.config.visConfig[range]}
-      scaleOptions={scaleOptions}
-      scaleType={scale ? layer.config[scale] : null}
-      selectedField={layer.config[field]}
-      showScale={showScale}
-      updateField={val => onChange({[field]: val}, key)}
-      updateScale={val => onChange({[scale]: val}, key)}
-    />
-  );
-};
+    return (
+      <VisConfigByFieldSelector
+        channel={channel.key}
+        description={description || defaultDescription}
+        domain={layer.config[domain]}
+        fields={supportedFields}
+        id={layer.id}
+        key={`${key}-channel-selector`}
+        property={property}
+        placeholder={defaultMeasure || 'placeholder.selectField'}
+        range={layer.config.visConfig[range]}
+        scaleOptions={scaleOptions}
+        scaleType={scale ? layer.config[scale] : null}
+        selectedField={layer.config[field]}
+        showScale={showScale}
+        updateField={val => onChange({[field]: val}, key)}
+        updateScale={val => onChange({[scale]: val}, key)}
+      />
+    );
+  };
+
+  return ChannelByValueSelector;
+}
 
 export const AggrScaleSelector = ({channel, layer, onChange}) => {
   const {scale, key} = channel;

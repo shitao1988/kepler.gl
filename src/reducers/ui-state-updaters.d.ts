@@ -17,7 +17,8 @@ export type ExportImage = {
   // exporting state
   imageDataUri: string;
   exporting: boolean;
-  error: boolean;
+  processing: boolean;
+  error: Error;
 };
 
 export type ExportData = {
@@ -129,10 +130,6 @@ export function setExportImageSettingUpdater(
   state: UiState,
   action: UiStateActions.SetExportImageSettingUpdaterAction
 ): UiState;
-export function startExportingImageUpdater(
-  state: UiState,
-  action: UiStateActions.StartExportingImageUpdaterAction
-): UiState;
 export function setExportImageDataUriUpdater(
   state: UiState,
   action: UiStateActions.SetExportImageDataUriUpdaterAction
@@ -144,6 +141,10 @@ export function setExportImageErrorUpdater(
 export function cleanupExportImageUpdater(
   state: UiState,
   action: UiStateActions.CleanupExportImageUpdaterAction
+): UiState;
+export function startExportingImageUpdater(
+  state: UiState,
+  action: UiStateActions.startExportingImage
 ): UiState;
 export function setExportSelectedDatasetUpdater(
   state: UiState,
@@ -173,6 +174,7 @@ export function setExportMapHTMLModeUpdater(
   state: UiState,
   action: UiStateActions.SetExportHTMLMapModeUpdaterAction
 ): UiState;
+export function showDatasetTableUpdater(state: UiState);
 export function setLocaleUpdater(
   state: UiState,
   action: UiStateActions.SetLocaleUpdaterAction
@@ -182,3 +184,10 @@ export function loadFilesUpdater(state: UiState, action: LoadFilesUpdaterAction)
 export function loadFilesErrUpdater(state: UiState, action: LoadFilesErrUpdaterAction): UiState;
 export function loadFilesSuccessUpdater(state: UiState): UiState;
 export function toggleSplitMapUpdater(state: UiState, action: ToggleSplitMapUpdaterAction): UiState;
+export function initUiStateUpdater(
+  state: UiState,
+  action: {
+    type?: ActionTypes.INIT;
+    payload: KeplerGlInitPayload;
+  }
+): UiState;

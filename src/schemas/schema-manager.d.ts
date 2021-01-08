@@ -1,14 +1,17 @@
 import {
   InteractionConfig,
   Filter,
-  Tooltip,
+  TooltipInfo,
   SplitMap,
   AnimationConfig,
   VisState,
-  RGBColor, 
+  RGBColor,
   Merge
 } from 'reducers';
+import {Schema} from './schema';
+
 import {LayerTextLabel} from 'layers/layer-factory';
+import {datasetSchema, visStateSchema, mapStyleSchema, mapStateSchema} from 'schemas';
 
 export type SavedFilter = {
   dataId: Filter['dataId'];
@@ -27,16 +30,16 @@ export type SavedFilter = {
 export type ParsedFilter = Partial<SavedFilter>;
 
 export type SavedInteractionConfig = {
-  tooltip: Tooltip['config'] & {
+  tooltip: TooltipInfo['config'] & {
     enabled: boolean;
   };
-  geocoder: Tooltip['geocoder'] & {
+  geocoder: TooltipInfo['geocoder'] & {
     enabled: boolean;
   };
-  brush: Tooltip['brush'] & {
+  brush: TooltipInfo['brush'] & {
     enabled: boolean;
   };
-  coordinate: Tooltip['coordinate'] & {
+  coordinate: TooltipInfo['coordinate'] & {
     enabled: boolean;
   };
 };
@@ -71,7 +74,7 @@ export type SavedLayer = {
 export type ParsedLayer = {
   id?: string;
   type?: string;
-  config?: Partial<SavedLayer['config']> & SavedVisualChannels;
+  config?: Partial<SavedLayer['config']>;
 };
 
 export type SavedAnimationConfig = {
@@ -121,6 +124,7 @@ export type SavedMapStyle = {
   mapStyles: SavedCustomMapStyle;
 };
 
+/** Schema for v1 saved configuration */
 export type SavedConfigV1 = {
   version: 'v1';
   config: {
@@ -130,7 +134,9 @@ export type SavedConfigV1 = {
   };
 };
 
+/** Schema for a parsed configuration ("normalized" across versions) */
 export type ParsedConfig = {
+  version: string;
   visState?: {
     layers?: ParsedLayer[];
     filters?: ParsedFilter[];
@@ -192,7 +198,17 @@ export type SavedMap = {
 };
 
 export type LoadedMap = {datasets?: ParsedDataset[] | null; config?: ParsedConfig | null};
+export const reducerSchema: {
+  [key: string]: typeof mapStateSchema | typeof visStateSchema | typeof mapStyleSchema;
+};
+
 export class KeplerGLSchema {
+  constructor(prop: {
+    reducers?: typeof reducerSchema;
+    datasets?: typeof datasetSchema;
+    validVersions?: string[];
+    version?: string;
+  });
   save(state: any): SavedMap;
   load(arg1: SavedMap | SavedMap['datasets'] | any, arg1?: SavedMap['cnofig'] | any): LoadedMap;
   getMapInfo(state: any): VisState['mapInfo'];
@@ -203,7 +219,6 @@ export class KeplerGLSchema {
   validateVersion(version: any): string | null;
   hasDataChanged(state: any): boolean;
 }
-
 const KeplerGLSchemaManager: KeplerGLSchema;
 
 export default KeplerGLSchemaManager;

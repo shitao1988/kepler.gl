@@ -14,30 +14,23 @@
     "outDir": "build/dist",
     "sourceMap": true,
     "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "suppressImplicitAnyIndexErrors": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["*"]
+    }
   },
   "include": [
-    "src/actions",
-    "src/cloud-providers",
-    "src/processors",
-    "src/reducers",
-    "src/schemas",
-    "src/utils",
-
-    // TODO: add types
-    // "src/components",
-    // "src/constants",
-    // "src/deckgl-layers",
-    // "src/layers"
-    // "src/localization",
-    // "src/middleware",
-    // "src/tasks"
+    "src"
+  ],
+  "exclude": [
+    "src/deckgl-layers",
+    "src/layers"
   ]
 }

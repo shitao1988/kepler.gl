@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {Layer, LayerClasses} from 'layers';
-import {VisState, Dataset, TooltipField} from 'reducers/vis-state-updaters';
+import {Layer, LayerClassesType} from 'layers';
+import {VisState, Dataset, TooltipField, CompareType} from 'reducers/vis-state-updaters';
 
 export function calculateLayerData(
   layer: Layer,
@@ -39,9 +39,11 @@ export type LayerHoverProp = {
   fields: Field[];
   fieldsToShow: TooltipField[];
   layer: Layer;
+  primaryData?: any[];
+  compareType?: CompareType
 };
 
-export function findDefaultLayer(dataset: Dataset, layerClasses: LayerClasses): Layer[];
+export function findDefaultLayer(dataset: Dataset, layerClasses: LayerClassesType): Layer[];
 export function getLayerHoverProp(arg: {
   interactionConfig: VisState['interactionConfig'];
   hoverInfo: VisState['hoverInfo'];
@@ -49,3 +51,5 @@ export function getLayerHoverProp(arg: {
   layersToRender: LayersToRender;
   datasets: VisState['datasets'];
 }): LayerHoverProp | null;
+
+export function renderDeckGlLayer(props: any, layerCallbacks: {[key]: any}, idx: number);

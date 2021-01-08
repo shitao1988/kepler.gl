@@ -53,6 +53,7 @@ const StyledTable = styled.table`
   }
 `;
 
+/** @type {import('./layer-hover-info').RowComponent} */
 const Row = ({name, value, deltaValue, url}) => {
   // Set 'url' to 'value' if it looks like a url
   if (!url && value && typeof value === 'string' && value.match(/^http/)) {
@@ -119,7 +120,7 @@ const EntryInfoRow = ({item, fields, data, primaryData, compareType}) => {
     compareType
   });
 
-  return <Row name={item.name} value={displayValue} deltaValue={displayDeltaValue} />;
+  return <Row name={field.name} value={displayValue} deltaValue={displayDeltaValue} />;
 };
 
 // TODO: supporting comparative value for aggregated cells as well

@@ -1,5 +1,5 @@
 import {RGBColor, RGBAColor} from '../reducers/types';
-import {Dataset, Field, Datasets} from '../reducers/vis-state-updaters';
+import {Dataset, Field, Filter, Datasets} from '../reducers/vis-state-updaters';
 import {LayerTextLabel, ColorRange, ColorUI} from './layer-factory';
 
 export type LayerVisConfig = {
@@ -45,6 +45,26 @@ export type LayerConfig = {
   };
 };
 
+export type VisualChannel = {
+  property: string;
+  field: string;
+  scale: string;
+  domain: string;
+  range: string;
+  key: string;
+  channelScaleType: string;
+  nullValue: any;
+  defaultMeasure: any;
+  accessor?: string;
+  condition?: (config: any) => boolean;
+  getAttributeValue?: (config: any) => (d: any) => any;
+};
+
+export type VisualChannelDescription = {
+  label: string;
+  measure: string;
+};
+
 export class Layer {
   constructor(
     prop?: {
@@ -55,15 +75,24 @@ export class Layer {
   type: string;
   config: LayerConfig;
   visConfigSettings: any;
+  visualChannels: {[key: string]: VisualChannel};
+  _oldDataUpdateTriggers: any;
   hasAllColumns(): boolean;
   updateLayerConfig(p: Partial<LayerConfig>): Layer;
+  updateLayerDomain(datasets: Datasets, filter?: Filter): Layer;
   updateLayerVisualChannel(dataset: Dataset, channel: string): Layer;
   shouldCalculateLayerData(props: string[]): boolean;
   formatLayerData(datasets: Datasets, oldLayerData?: any);
   updateLayerColorUI(prop: string, newConfig: Partial<ColorUI>): Layer;
+  validateVisualChannel(channel: string): void;
+  isValidToSave(): boolean;
+  getVisualChannelDescription(key: string): VisualChannelDescription;
+  isLayerHovered(objectInfo: any): boolean;
+  hasHoveredObject(objectInfo: any): any | null;
+  getHoverData(object: any, allData?: Dataset['allData'], fields?: Dataset['fields']): any;
 }
 
-export const LayerClasses: {
+export type LayerClassesType = {
   point: Layer;
   arc: Layer;
   line: Layer;
@@ -78,3 +107,4 @@ export const LayerClasses: {
   trip: Layer;
   s2: Layer;
 };
+export const LayerClasses: LayerClassesType;

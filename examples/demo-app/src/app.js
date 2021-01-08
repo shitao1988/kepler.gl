@@ -23,6 +23,7 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import styled, {ThemeProvider} from 'styled-components';
 import window from 'global/window';
 import {connect} from 'react-redux';
+
 import {theme} from 'kepler.gl/styles';
 import Banner from './components/banner';
 import Announcement, {FormLink} from './components/announcement';
@@ -30,12 +31,13 @@ import {replaceLoadDataModal} from './factories/load-data-modal';
 import {replaceMapControl} from './factories/map-control';
 import {replacePanelHeader} from './factories/panel-header';
 import {AUTH_TOKENS} from './constants/default-settings';
+import {messages} from './constants/localization';
+
 import {
   loadRemoteMap,
   loadSampleConfigurations,
   onExportFileSuccess,
-  onLoadCloudMapSuccess,
-  onLoadCloudMapError
+  onLoadCloudMapSuccess
 } from './actions';
 
 import {loadCloudMap} from 'kepler.gl/actions';
@@ -130,9 +132,9 @@ class App extends Component {
     }
 
     // delay zs to show the banner
-    if (!window.localStorage.getItem(BannerKey)) {
-      window.setTimeout(this._showBanner, 3000);
-    }
+    // if (!window.localStorage.getItem(BannerKey)) {
+    //   window.setTimeout(this._showBanner, 3000);
+    // }
     // load sample data
     // this._loadSampleData();
 
@@ -178,7 +180,7 @@ class App extends Component {
   _loadSampleData() {
     this._loadPointData();
     // this._loadGeojsonData();
-    // this._loadTripGeoJson();
+    this._loadTripGeoJson();
     // this._loadIconData();
     // this._loadH3HexagonData();
     // this._loadS2Data();
@@ -396,9 +398,9 @@ class App extends Component {
                   width={width}
                   height={height}
                   cloudProviders={CLOUD_PROVIDERS}
+                  localeMessages={messages}
                   onExportToCloudSuccess={onExportFileSuccess}
                   onLoadCloudMapSuccess={onLoadCloudMapSuccess}
-                  onLoadCloudMapError={onLoadCloudMapError}
                 />
               )}
             </AutoSizer>

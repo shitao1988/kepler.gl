@@ -32,16 +32,18 @@ import {roundValToStep} from 'utils/data-utils';
 const SliderInput = styled(Input)`
   width: ${props => props.theme.sliderInputWidth}px;
   margin-left: ${props => (props.flush ? 0 : props.size === 'tiny' ? 12 : 18)}px;
+  font-size: ${props => props.theme.sliderInputFontSize}; // 10px // 12px;
+  padding: ${props => props.theme.sliderInputPadding}; // 4px 6px; // 6px 12px;
 `;
 
 const SliderWrapper = styled.div`
   display: flex;
   position: relative;
-  align-items: center;
+  align-items: ${props => (!props.isRanged && props.showInput ? 'center' : 'flex-start')};
 `;
 
 const RangeInputWrapper = styled.div`
-  margin-top: 6px;
+  margin-top: 12px;
   display: flex;
   justify-content: space-between;
 `;
@@ -198,12 +200,22 @@ export default function RangeSliderFactory(RangePlot) {
       );
     }
 
+    // eslint-disable-next-line complexity
     render() {
-      const {isRanged, showInput, histogram, range, onChange, sliderHandleWidth, step} = this.props;
+      const {
+        isRanged,
+        showInput,
+        histogram,
+        lineChart,
+        range,
+        onChange,
+        sliderHandleWidth,
+        step
+      } = this.props;
 
-      const height = isRanged && showInput ? '16px' : '24px';
       const {width} = this.state;
       const plotWidth = Math.max(width - sliderHandleWidth, 0);
+      const renderPlot = (histogram && histogram.length) || lineChart;
 
       return (
         <div
@@ -211,7 +223,7 @@ export default function RangeSliderFactory(RangePlot) {
           style={{width: '100%', padding: `0 ${sliderHandleWidth / 2}px`}}
           ref={this.sliderContainer}
         >
-          {histogram && histogram.length ? (
+          {renderPlot ? (
             <RangePlot
               histogram={histogram}
               lineChart={this.props.lineChart}
@@ -220,14 +232,26 @@ export default function RangeSliderFactory(RangePlot) {
               onBrush={(val0, val1) => onChange([val0, val1])}
               marks={this.props.marks}
               range={range}
-              value={this.filterValueSelector(this.props)}
+              value={this.props.plotValue || this.filterValueSelector(this.props)}
               width={plotWidth}
               isRanged={isRanged}
               step={step}
             />
           ) : null}
-          <SliderWrapper style={{height}} className="kg-range-slider__slider">
-            {this.props.xAxis ? <this.props.xAxis width={plotWidth} domain={range} /> : null}
+          <SliderWrapper
+            className="kg-range-slider__slider"
+            isRanged={isRanged}
+            showInput={showInput}
+          >
+            {this.props.xAxis ? (
+              <div style={{height: '30px'}}>
+                <this.props.xAxis
+                  width={plotWidth}
+                  domain={range}
+                  isEnlarged={this.props.isEnlarged}
+                />
+              </div>
+            ) : null}
             <Slider
               marks={this.props.marks}
               showValues={false}
@@ -245,7 +269,6 @@ export default function RangeSliderFactory(RangePlot) {
               }}
               enableBarDrag
             />
-
             {!isRanged && showInput ? this._renderInput('value1') : null}
           </SliderWrapper>
           {isRanged && showInput ? (
