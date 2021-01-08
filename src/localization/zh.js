@@ -26,10 +26,10 @@ export default {
     label: '标签',
     fillColor: '填充色',
     color: '颜色',
-    strokeColor: 'stroke color',
+    strokeColor: '笔划颜色',
     radius: '半径',
     outline: '边框',
-    stroke: 'stroke',
+    stroke: '笔划',
     density: '密度',
     height: '高度',
     sum: '总和',
@@ -68,7 +68,7 @@ export default {
       labelWithId: '标注 {labelId}',
       fontSize: '字体大小',
       fontColor: '字体颜色',
-      textAnchor: '文本 anchor',
+      textAnchor: '文本定点',
       alignment: '对齐',
       addMoreLabel: '添加标注'
     }
@@ -94,7 +94,7 @@ export default {
     strokeWidth: '笔画宽度',
     strokeColor: '笔画颜色',
     basic: '基本',
-    trailLength: 'Trail Length',
+    trailLength: '路径长度',
     trailLengthDescription: '路径淡出时间',
     newLayer: '新图层',
     elevationByDescription: '当关闭时，高度以点数量为基础',
@@ -353,7 +353,7 @@ export default {
       code: '图标',
       description2: ' 自动为你创建一个图标图层.',
       example: '例子:',
-      icons: 'Icons'
+      icons: '图标'
     },
     storageMapViewer: {
       lastModified: '最后一次修改{lastUpdated}',
