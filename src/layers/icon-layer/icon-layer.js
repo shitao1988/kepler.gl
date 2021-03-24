@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
+// Copyright (c) 2021 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -169,7 +169,7 @@ export default class IconLayer extends Layer {
         lng: ptPair.pair.lng,
         icon: {
           value: iconField.name,
-          fieldIdx: iconField.tableFieldIndex - 1
+          fieldIdx: iconField.fieldIdx
         }
       },
       isVisible: true

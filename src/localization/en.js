@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
+// Copyright (c) 2021 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -190,6 +190,7 @@ export default {
     hide: 'hide',
     show: 'show',
     removeLayer: 'Remove layer',
+    duplicateLayer: 'Duplicate layer',
     layerSettings: 'Layer settings',
     closePanel: 'Close current panel',
     switchToDualView: 'Switch to dual map view',
